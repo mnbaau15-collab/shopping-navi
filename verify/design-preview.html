@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>デザイン案の見本（3案）</title>
+  <style>
+    /* ===== このページの外側の見た目 ===== */
+    body { margin: 0; padding: 1rem; background: #e9e9e9; font-family: "Hiragino Sans", sans-serif; color: #222; line-height: 1.6; }
+    .intro { max-width: 60rem; margin: 0 auto 1rem; font-size: 16px; }
+    .mocks { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; }
+    .mock { width: 100%; max-width: 380px; }
+    .tag { margin: 0 0 6px; font-size: 16px; font-weight: bold; }
+    .spec { margin: 8px 0 0; font-size: 14px; background: #fff; border-radius: 8px; padding: 8px 12px; }
+
+    /* ===== 見本の画面（スマホ1画面ぶん）===== */
+    .screen { border-radius: 16px; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--font); font-size: var(--base); line-height: 1.7; border: 2px solid #999; }
+    header { background: var(--main); color: #fff; text-align: center; padding: 1em 0.8em 0.6em; }
+    header h1 { margin: 0; font-size: 1.7em; line-height: 1.3; font-weight: 700; }
+    header p { margin: 0.3em 0 0; }
+    header .art { display: block; width: 7em; height: 5.5em; margin: 0.4em auto 0; }
+    .body { padding: 1em 0.9em 1.2em; }
+    h2 { margin: 0 0 0.6em; text-align: center; font-size: 1.3em; font-weight: 700; }
+    .btn { display: flex; align-items: center; gap: 0.7em; background: var(--main); color: #fff; border-radius: var(--radius); padding: 0.6em 0.8em; margin-bottom: 0.8em; min-height: 4.2em; box-shadow: 0 4px 0 var(--main-dark); }
+    .btn b { display: block; font-size: 1.15em; line-height: 1.4; }
+    .btn small { font-size: 1em; }
+    .ico { flex: none; width: 2.8em; height: 2.8em; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; }
+    .ico svg { width: 2.2em; height: 2em; }
+    .card { background: #fff; border: 3px solid var(--text); border-radius: var(--radius); padding: 0.7em 0.8em; margin-top: 1em; }
+    .card h3 { margin: 0; font-size: 1.3em; line-height: 1.4; }
+    .card .dist { margin: 0.1em 0 0.5em; font-weight: 700; color: var(--main); }
+    .card .btn { margin-bottom: 0; }
+    .note { margin-top: 1em; background: var(--notice); border: 2px solid var(--text); border-radius: 8px; padding: 0.5em 0.7em; }
+
+    /* ===== 案A：やさしい緑の商店街 ===== */
+    .A { --bg: #fffdf7; --text: #1a1a1a; --main: #1b5e20; --main-dark: #0d3b12; --notice: #fff3cd; --radius: 14px; --base: 22px;
+         --font: "BIZ UDPGothic", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", sans-serif; --c1: #c62828; --c2: #ffffff; --c3: #f4c542; --c4: #8d6e63; }
+    /* ===== 案B：あたたかい夕やけ（丸ゴシック） ===== */
+    .B { --bg: #fff6e8; --text: #2b1a0e; --main: #8a3100; --main-dark: #5c2000; --notice: #ffe2a8; --radius: 26px; --base: 22px;
+         --font: "Hiragino Maru Gothic ProN", "BIZ UDPGothic", "Yu Gothic", sans-serif; --c1: #e8590c; --c2: #fff6e8; --c3: #f9c74f; --c4: #8a3100; }
+    /* ===== 案C：すっきり青空（大きめ） ===== */
+    .C { --bg: #e8f4fd; --text: #10243e; --main: #0b3d91; --main-dark: #072a66; --notice: #fff1b8; --radius: 10px; --base: 24px;
+         --font: "Hiragino Sans", "BIZ UDPGothic", "Yu Gothic", sans-serif; --c1: #ffd54f; --c2: #ffffff; --c3: #e53935; --c4: #4fc3f7; }
+    .C header { background: linear-gradient(#0b3d91, #1565c0); }
+    .C h1, .C .btn b, .C h2, .C h3 { font-weight: 800; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== イラスト（自分で描いた図形。外部の画像は使いません） ===== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <!-- お店 -->
+      <symbol id="shop" viewBox="0 0 120 100">
+        <rect x="18" y="42" width="84" height="50" fill="var(--c2)" stroke="var(--c4)" stroke-width="3"/>
+        <rect x="10" y="18" width="20" height="24" fill="var(--c1)"/><rect x="30" y="18" width="20" height="24" fill="var(--c2)"/>
+        <rect x="50" y="18" width="20" height="24" fill="var(--c1)"/><rect x="70" y="18" width="20" height="24" fill="var(--c2)"/>
+        <rect x="90" y="18" width="20" height="24" fill="var(--c1)"/>
+        <circle cx="20" cy="42" r="10" fill="var(--c1)"/><circle cx="60" cy="42" r="10" fill="var(--c1)"/><circle cx="100" cy="42" r="10" fill="var(--c1)"/>
+        <circle cx="40" cy="42" r="10" fill="var(--c2)"/><circle cx="80" cy="42" r="10" fill="var(--c2)"/>
+        <rect x="50" y="60" width="20" height="32" fill="var(--c3)" stroke="var(--c4)" stroke-width="2"/>
+        <rect x="26" y="62" width="18" height="16" fill="#bfe3f5" stroke="var(--c4)" stroke-width="2"/>
+        <rect x="76" y="62" width="18" height="16" fill="#bfe3f5" stroke="var(--c4)" stroke-width="2"/>
+      </symbol>
+      <!-- かご -->
+      <symbol id="basket" viewBox="0 0 120 100">
+        <path d="M35 48 C35 6 85 6 85 48" fill="none" stroke="var(--c4)" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="45" cy="42" r="13" fill="var(--c3)"/><circle cx="72" cy="38" r="12" fill="#43a047"/>
+        <rect x="82" y="34" width="16" height="16" rx="5" fill="var(--c1)"/>
+        <path d="M12 48 H108 L97 92 H23 Z" fill="var(--c1)" stroke="var(--c4)" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M40 52 V88 M60 52 V88 M80 52 V88" stroke="var(--c2)" stroke-width="3" opacity="0.7"/>
+      </symbol>
+      <!-- 地図のピン -->
+      <symbol id="pin" viewBox="0 0 100 100">
+        <path d="M50 94 C50 94 18 60 18 38 A32 32 0 1 1 82 38 C82 60 50 94 50 94 Z" fill="var(--c1)" stroke="var(--c4)" stroke-width="4"/>
+        <circle cx="50" cy="38" r="13" fill="var(--c2)"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="intro">
+    <h1 style="font-size:20px;margin:0 0 4px">デザイン案の見本（3案）</h1>
+    <p style="margin:0">アプリ本体は変えていません。これは見本です。字体は、お使いのパソコンに入っているものが使われます（Windowsでは「BIZ UDPゴシック」、Macでは「ヒラギノ」などになります）。</p>
+  </div>
+
+  <div class="mocks">
+
+    <!-- ======== 案A ======== -->
+    <section class="mock A">
+      <p class="tag">案A　やさしい緑の商店街</p>
+      <div class="screen">
+        <header>
+          <h1>かんたん<br>お買い物ナビ</h1>
+          <svg class="art" role="img" aria-label="お店のイラスト"><use href="#shop"/></svg>
+          <p>近くのお店を、かんたんに さがせます。</p>
+        </header>
+        <div class="body">
+          <h2>どうやって さがしますか？</h2>
+          <div class="btn"><span class="ico"><svg aria-hidden="true"><use href="#pin"/></svg></span><span><b>いまいる場所から さがす</b><small>近いお店の順に 出ます</small></span></div>
+          <div class="btn"><span class="ico"><svg aria-hidden="true"><use href="#shop"/></svg></span><span><b>市や町から さがす</b><small>酒田・遊佐・庄内・三川</small></span></div>
+          <div class="btn"><span class="ico"><svg aria-hidden="true"><use href="#basket"/></svg></span><span><b>お店の名前で さがす</b><small>ひらがなでも さがせます</small></span></div>
+          <div class="card">
+            <h3>（サンプル）〇〇スーパー</h3>
+            <p class="dist">ここから 約 1.2 km</p>
+            <div class="btn"><span class="ico"><svg aria-hidden="true"><use href="#pin"/></svg></span><b>行き方を調べる</b></div>
+          </div>
+          <p class="note">営業時間などは 変わることがあります。</p>
+        </div>
+      </div>
+      <p class="spec"><b>字体</b>：UD（ユニバーサルデザイン）ゴシック系。読み間違えにくい形<br><b>本文</b> 22px／見出し 29px／店名 29px<br><b>色</b>：緑×クリーム（白文字のコントラスト比 7.9：1）<br><b>絵</b>：赤白のひさしのお店。いまのアプリの色を、そのまま活かせます</p>
+    </section>
+
+    <!-- ======== 案B ======== -->
+    <section class="mock B">
+      <p class="tag">案B　あたたかい夕やけ（丸ゴシック）</p>
+      <div class="screen">
+        <header>
+          <h1>かんたん<br>お買い物ナビ</h1>
+          <svg class="art" role="img" aria-label="買い物かごのイラスト"><use href="#basket"/></svg>
+          <p>近くのお店を、かんたんに さがせます。</p>
+        </header>
+        <div class="body">
+          <h2>どうやって さがしますか？</h2>
+          <div class="btn"><span class="ico"><svg aria-hidden="true"><use href="#pin"/></svg></span><span><b>いまいる場所から さがす</b><small>近いお店の順に 出ます</small></span></div>
+          <div class="btn"><span class="ico"><svg aria-hidden="true"><use href="#shop"/></svg></span><span><b>市や町から さがす</b><small>酒田・遊佐・庄内・三川</small></span></div>
+          <div class="btn"><span class="ico"><svg aria-hidden="true"><use href="#basket"/></svg></span><span><b>お店の名前で さがす</b><small>ひらがなでも さがせます</small></span></div>
+          <div class="card">
+            <h3>（サンプル）〇〇スーパー</h3>
+            <p class="dist">ここから 約 1.2 km</p>
+            <div class="btn"><span class="ico"><svg aria-hidden="true"><use href="#pin"/></svg></span><b>行き方を調べる</b></div>
+          </div>
+          <p class="note">営業時間などは 変わることがあります。</p>
+        </div>
+      </div>
+      <p class="spec"><b>字体</b>：丸ゴシック。角が丸く、やさしい印象<br><b>本文</b> 22px／見出し 29px／店名 29px<br><b>色</b>：茶橙×クリーム（白文字のコントラスト比 8.3：1）<br><b>絵</b>：買い物かご。ボタンの角を大きく丸めて、親しみやすくします</p>
+    </section>
+
+    <!-- ======== 案C ======== -->
+    <section class="mock C">
+      <p class="tag">案C　すっきり青空（文字を一番大きく）</p>
+      <div class="screen">
+        <header>
+          <h1>かんたん<br>お買い物ナビ</h1>
+          <svg class="art" role="img" aria-label="地図のピンのイラスト"><use href="#pin"/></svg>
+          <p>近くのお店を、かんたんに さがせます。</p>
+        </header>
+        <div class="body">
+          <h2>どうやって さがしますか？</h2>
+          <div class="btn"><span class="ico"><svg aria-hidden="true"><use href="#pin"/></svg></span><span><b>いまいる場所から さがす</b><small>近いお店の順に 出ます</small></span></div>
+          <div class="btn"><span class="ico"><svg aria-hidden="true"><use href="#shop"/></svg></span><span><b>市や町から さがす</b><small>酒田・遊佐・庄内・三川</small></span></div>
+          <div class="btn"><span class="ico"><svg aria-hidden="true"><use href="#basket"/></svg></span><span><b>お店の名前で さがす</b><small>ひらがなでも さがせます</small></span></div>
+          <div class="card">
+            <h3>（サンプル）〇〇スーパー</h3>
+            <p class="dist">ここから 約 1.2 km</p>
+            <div class="btn"><span class="ico"><svg aria-hidden="true"><use href="#pin"/></svg></span><b>行き方を調べる</b></div>
+          </div>
+          <p class="note">営業時間などは 変わることがあります。</p>
+        </div>
+      </div>
+      <p class="spec"><b>字体</b>：太めのゴシック。画面がすっきり見える<br><b>本文</b> 24px／見出し 31px／店名 31px<br><b>色</b>：紺×空色（白文字のコントラスト比 10：1）。3案で一番はっきり<br><b>絵</b>：地図のピン。「場所を探す」アプリだと、すぐ分かります</p>
+    </section>
+
+  </div>
+
+</body>
+</html>

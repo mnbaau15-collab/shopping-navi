@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>経路表示の検証（課題2）</title>
+  <style>
+    body { font-family: sans-serif; max-width: 40rem; margin: 0 auto; padding: 1rem; line-height: 1.6; }
+    label { display: block; margin-top: 1rem; font-weight: bold; }
+    input, select, button { width: 100%; font-size: 1rem; padding: 0.6rem; box-sizing: border-box; }
+    button { margin-top: 1.2rem; }
+    #message { margin-top: 1rem; color: #b00020; }
+    #map-area { margin-top: 1rem; }
+  </style>
+</head>
+<body>
+
+  <h1>経路表示の検証（課題2）</h1>
+  <p>出発地と目的地の住所、移動手段を入れると、Googleマップの経路が表示されます（Maps Embed API）。</p>
+
+  <form id="route-form">
+    <label for="origin">出発地の住所</label>
+    <input type="text" id="origin" value="山形県酒田市東大町3-36-3">
+
+    <label for="destination">目的地の住所</label>
+    <input type="text" id="destination" value="山形県酒田市泉町214">
+
+    <label for="mode">移動手段</label>
+    <select id="mode">
+      <option value="driving">車</option>
+      <option value="walking">徒歩</option>
+      <option value="bicycling">自転車</option>
+      <option value="transit">電車・バス</option>
+    </select>
+
+    <button type="submit">経路を見る</button>
+  </form>
+
+  <p id="message" role="status"></p>
+
+  <!-- 経路の地図は、ここに入ります -->
+  <div id="map-area"></div>
+
+  <!-- 先に config.js（キー）、次に route-check.js（処理）を読み込む -->
+  <script src="config.js"></script>
+  <script src="route-check.js"></script>
+
+</body>
+</html>

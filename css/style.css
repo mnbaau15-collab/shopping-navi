@@ -1,0 +1,433 @@
+/* ===========================================
+   色・文字の大きさ・余白をまとめて決める場所
+   ここを変えると、アプリ全体の見た目が変わります
+   （あたたかいオレンジのデザイン）
+   =========================================== */
+:root {
+  /* 色 */
+  --color-background: #fff6e8;   /* 画面の背景（あたたかいクリーム色） */
+  --color-text: #2b1a0e;         /* 文字（こげ茶に近い黒） */
+  --color-main: #9a3412;         /* 枠・見出し・距離などの色（濃いオレンジ茶） */
+  --color-accent: #c2410c;       /* 「かんたん」の文字などの色（オレンジ） */
+  --color-button-top: #c2410c;   /* ボタンの上のほうの色 */
+  --color-button-bottom: #9a3412;/* ボタンの下のほうの色 */
+  --color-main-pressed: #7c2d12; /* ボタンを押したときの色（濃い茶） */
+  --color-button-text: #ffffff;  /* ボタンの文字（白） */
+  --color-notice-bg: #ffe9b8;    /* 注意書きの背景（薄い黄色） */
+  --color-notice-border: #8a6d00;/* 注意書きの枠線 */
+  --color-focus: #0b4f9c;        /* キーボード操作時の枠線（青） */
+
+  /* 余白・角の丸さ */
+  --space-small: 0.5rem;
+  --space-medium: 1rem;
+  --space-large: 1.5rem;
+  --radius-button: 1.4rem;
+}
+
+/* 文字の基準の大きさを 22px にする（1rem = 22px） */
+html {
+  font-size: 137.5%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  /* 端末に入っている、読みやすい日本語の字体を使う（外部のフォントは使わない） */
+  font-family: "BIZ UDPGothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+  font-weight: 500;
+  line-height: 1.7;
+}
+
+/* hidden をつけた部品は、かならず隠す
+   （display: flex などの指定が、hidden に勝ってしまうのを防ぐため） */
+[hidden] {
+  display: none !important;
+}
+
+/* ===========================================
+   画面の上の部分（アプリの名前）
+   ふだんは小さく、表紙のときだけ大きく出す（body に is-top がつく）
+   =========================================== */
+.site-header {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(#fffaf0, #ffeccc);
+  color: var(--color-text);
+  text-align: center;
+  padding: 0.6rem var(--space-medium);
+  border-bottom: 3px solid #f2cf9a;
+}
+
+.app-title {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.app-title .title-sub {
+  color: var(--color-accent);
+}
+
+.app-title br,
+.app-lead {
+  display: none;
+}
+
+/* 表紙のときの、大きな名前 */
+body.is-top .site-header {
+  padding: 1.2rem var(--space-medium) 2.6rem;
+  border-bottom: 0;
+  border-radius: 0 0 50% 50% / 0 0 2.2rem 2.2rem;
+}
+
+body.is-top .app-title {
+  font-size: 2.3rem;
+  line-height: 1.25;
+}
+
+body.is-top .app-title br {
+  display: inline;
+}
+
+body.is-top .app-title .title-sub {
+  font-size: 2rem;
+}
+
+/* 「かんたん」の両わきの、きらきらの線 */
+body.is-top .app-title .title-sub::before {
+  content: "＼" / "";
+  margin-right: 0.3rem;
+}
+
+body.is-top .app-title .title-sub::after {
+  content: "／" / "";
+  margin-left: 0.3rem;
+}
+
+body.is-top .app-lead {
+  display: block;
+  margin: 0.4rem 0 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+/* 表紙の大きなイラスト（表紙のときだけ出す） */
+.hero {
+  display: none;
+}
+
+body.is-top .hero {
+  display: block;
+  position: relative;
+  z-index: 0;
+  max-width: 40rem;
+  margin: -2.2rem auto 0;
+}
+
+.hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ===========================================
+   真ん中の部分
+   =========================================== */
+.top-main {
+  max-width: 40rem;      /* 広い画面でも横に広がりすぎないようにする */
+  margin: 0 auto;
+  padding: var(--space-large) var(--space-medium);
+}
+
+/* 表紙のときは、イラストの下に重なる、丸い角の板にする */
+body.is-top .top-main {
+  position: relative;
+  z-index: 1;
+  margin-top: -1.6rem;
+  background-color: var(--color-background);
+  border-radius: 1.8rem 1.8rem 0 0;
+  box-shadow: 0 -4px 12px rgba(80, 40, 0, 0.12);
+}
+
+.section-title {
+  margin: 0 0 var(--space-medium);
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* 表紙の「できること」3つ */
+.feature-row {
+  display: flex;
+  gap: var(--space-small);
+  margin: 0 0 var(--space-large);
+  padding: 0 0 var(--space-medium);
+  list-style: none;
+  border-bottom: 2px dashed #e5c28f;
+}
+
+.feature-row li {
+  flex: 1;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 0.3rem;
+  background-color: #ffffff;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 6px rgba(80, 40, 0, 0.18);
+}
+
+.feature-icon svg {
+  width: 2.8rem;
+  height: 2.8rem;
+}
+
+/* ボタンを縦に並べる */
+.search-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-medium);  /* ボタンとボタンの間をあける */
+}
+
+/* 大きなボタン */
+.big-button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-medium);
+  width: 100%;
+  min-height: 4.5rem;
+  padding: var(--space-medium);
+  border: 3px solid var(--color-main-pressed);
+  border-radius: var(--radius-button);
+  background: linear-gradient(var(--color-button-top), var(--color-button-bottom));
+  color: var(--color-button-text);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 5px 0 var(--color-main-pressed);  /* 立体的に見せる影 */
+}
+
+/* 探し方のボタンの右はしに「›」を付ける */
+.search-buttons > .big-button::after {
+  content: "›" / "";
+  margin-left: auto;
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+/* ボタンを押したとき：色を濃くして、少し沈んだように見せる */
+.big-button:active {
+  background: var(--color-main-pressed);
+  box-shadow: none;
+  transform: translateY(5px);
+}
+
+/* キーボードで選んだとき：太い青の枠を出す */
+.big-button:focus-visible {
+  outline: 4px solid var(--color-focus);
+  outline-offset: 4px;
+}
+
+.button-icon {
+  flex: none;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+/* 表紙のボタンの、白いイラストのアイコン */
+.button-icon svg {
+  display: block;
+  width: 2.4rem;
+  height: 2.4rem;
+  fill: currentColor;
+}
+
+.button-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.button-label {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.button-note {
+  font-size: 1rem;
+}
+
+/* 注意書き */
+.notice {
+  margin: var(--space-large) 0 0;
+  padding: var(--space-medium);
+  background-color: var(--color-notice-bg);
+  border: 2px solid var(--color-notice-border);
+  border-radius: 0.8rem;
+  font-size: 1rem;
+}
+
+/* ===========================================
+   お店の一覧・店舗カード・もどるボタン
+   =========================================== */
+
+/* リンク（aタグ）をボタンとして使うときの設定 */
+a.big-button {
+  text-decoration: none;
+}
+
+/* 「もどる」などの控えめなボタン：白地に茶橙の枠と文字 */
+.sub-button {
+  background: #ffffff;
+  color: var(--color-main);
+  border-color: var(--color-main);
+  box-shadow: 0 4px 0 var(--color-main);
+}
+
+.sub-button:active {
+  background: #ffe9d6;
+  box-shadow: none;
+  transform: translateY(4px);
+}
+
+/* もどるボタンを並べる場所 */
+.nav-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-medium);
+  margin-top: var(--space-large);
+}
+
+/* 店舗カードを縦に並べる */
+.store-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-large);
+}
+
+/* 店舗カード1枚（太い枠線ではっきり区切る） */
+.store-card {
+  padding: var(--space-medium);
+  background-color: #ffffff;
+  border: 3px solid var(--color-text);
+  border-radius: 1.2rem;
+}
+
+.store-name {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.store-city {
+  margin: 0 0 var(--space-medium);
+  font-size: 1rem;
+}
+
+/* 店舗カードの中のボタン（行き方・お店のページ）を、間をあけて縦に並べる */
+.link-button-block + .link-button-block {
+  margin-top: var(--space-large);
+}
+
+.store-link-note {
+  margin: var(--space-small) 0 0;
+  font-size: 1rem;
+}
+
+/* 現在地を使う前の説明と、距離の注意書き */
+.location-explain {
+  margin: 0 0 var(--space-large);
+  font-size: 1rem;
+}
+
+.location-note {
+  margin: var(--space-large) 0 0;
+  font-size: 1rem;
+}
+
+.location-note:empty {
+  display: none;
+}
+
+/* 店舗カードの「ここから 約 1.2 km」 */
+.store-distance {
+  margin: 0.25rem 0 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-main);
+}
+
+/* お店の名前を入れる場所 */
+.search-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-medium);
+}
+
+.form-label {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.text-input {
+  width: 100%;
+  min-height: 4rem;
+  padding: var(--space-small) var(--space-medium);
+  border: 3px solid var(--color-text);
+  border-radius: 1rem;
+  background-color: #ffffff;
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 1.2rem;
+}
+
+.text-input:focus-visible {
+  outline: 4px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* 「見つかりました」などの知らせ */
+.search-message {
+  margin: var(--space-large) 0 var(--space-medium);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.search-message:empty {
+  margin: 0;
+}
+
+/* 見出しにカーソルが移ったときの枠線（太くはっきり） */
+.section-title:focus-visible {
+  outline: 4px solid var(--color-focus);
+  outline-offset: 4px;
+}
+
+/* ===========================================
+   画面の下の部分
+   =========================================== */
+.site-footer {
+  text-align: center;
+  padding: var(--space-medium);
+  font-size: 1rem;
+}
+
+.site-footer p {
+  margin: 0;
+}

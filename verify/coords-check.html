@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>お店の位置の確認ページ</title>
+  <style>
+    body { font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", sans-serif; max-width: 48rem; margin: 0 auto; padding: 1rem; line-height: 1.7; font-size: 18px; }
+    h1 { font-size: 1.5rem; }
+    .guide { background: #fff3cd; border: 2px solid #8a6d00; border-radius: 8px; padding: 0.8rem 1rem; }
+    .row { border: 3px solid #1a1a1a; border-radius: 10px; padding: 0.8rem 1rem; margin: 1rem 0; }
+    .row h2 { margin: 0; font-size: 1.2rem; }
+    .meta { margin: 0.2rem 0; }
+    .warn { color: #8a3b00; font-weight: bold; }
+    .links a { display: inline-block; margin: 0.4rem 0.6rem 0.4rem 0; padding: 0.6rem 1rem; background: #1b5e20; color: #fff; border-radius: 8px; text-decoration: none; font-weight: bold; }
+    .links a.second { background: #fff; color: #1b5e20; border: 2px solid #1b5e20; }
+    fieldset { border: 0; padding: 0; margin: 0.4rem 0; }
+    label.choice { margin-right: 1.2rem; white-space: nowrap; }
+    input[type="text"] { width: 100%; box-sizing: border-box; padding: 0.5rem; font-size: 1rem; }
+    button { font-size: 1.1rem; padding: 0.8rem 1.4rem; margin-top: 0.5rem; }
+    textarea { width: 100%; box-sizing: border-box; min-height: 14rem; font-size: 1rem; }
+  </style>
+</head>
+<body>
+
+  <h1>お店の位置の確認ページ（15軒）</h1>
+
+  <div class="guide">
+    <p><strong>使い方</strong></p>
+    <ol>
+      <li>「この位置を地図で見る」を押すと、調べた位置にピンが立ちます。</li>
+      <li>「お店の名前で地図を探す」も押して、<strong>2つのピンが同じ場所か</strong>を見てください。</li>
+      <li>お店の場所で合っていれば「OK」、ずれていれば「ずれている」を選びます。</li>
+      <li>ずれているときは、Googleマップで正しい位置を右クリックして出る数字（例：38.9, 139.8）を、下の欄に貼ってください。</li>
+      <li>最後に「結果をまとめる」を押して、出た文章を Claude に貼ってください。</li>
+    </ol>
+    <p>※ 位置は、公式ページの住所から国土地理院の住所検索で調べた<strong>候補</strong>です。<strong>△</strong>の印は、町名までしか合っておらず、数百m以上ずれている可能性があります。</p>
+  </div>
+
+  <div id="rows"></div>
+
+  <button type="button" id="make-result">結果をまとめる</button>
+  <textarea id="result" readonly placeholder="ここに結果が出ます。コピーして貼ってください。"></textarea>
+
+  <script>
+    // 確認する15軒の候補（住所は公式ページ、緯度・経度は国土地理院の住所検索）
+    // precision：◎=番地まで一致、○=丁目・街区まで一致、△=町名までしか一致していない
+    const candidates = [
+      { id: "sakata-007", name: "マックスバリュ平田店", address: "山形県酒田市砂越字粕町73-1", lat: 38.88942, lng: 139.90004, precision: "△", note: "「砂越」までしか一致していません" },
+      { id: "sakata-008", name: "マックスバリュ東泉店", address: "山形県酒田市東泉町4丁目1-15", lat: 38.930519, lng: 139.850723, precision: "○", note: "" },
+      { id: "sakata-009", name: "ザ・ビッグ酒田北店", address: "山形県酒田市泉町214", lat: 38.935413, lng: 139.847717, precision: "◎", note: "" },
+      { id: "sakata-011", name: "ヤマザワ東大町店", address: "山形県酒田市東大町3-36-3", lat: 38.905159, lng: 139.863205, precision: "○", note: "" },
+      { id: "sakata-012", name: "ヤマザワ山居店", address: "山形県酒田市山居町2-5-5", lat: 38.909119, lng: 139.835724, precision: "◎", note: "公式ページでの店名は「山居町店」" },
+      { id: "sakata-013", name: "ヤマザワ旭新町店", address: "山形県酒田市旭新町16-1", lat: 38.923031, lng: 139.851044, precision: "◎", note: "" },
+      { id: "sakata-014", name: "イオンタウン酒田", address: "山形県酒田市泉町198", lat: 38.931545, lng: 139.843628, precision: "△", note: "「泉町」までしか一致していません" },
+      { id: "yuza-001", name: "グリーンストア", address: "山形県飽海郡遊佐町遊佐字京田90-1", lat: 39.015877, lng: 139.909439, precision: "◎", note: "公式ページの地図リンクの数字ともほぼ一致" },
+      { id: "yuza-002", name: "マックスバリュゆざエルパ店", address: "山形県飽海郡遊佐町小原田字沼田12", lat: 39.009949, lng: 139.908142, precision: "◎", note: "公式ページでの店名は「遊佐エルパ店」" },
+      { id: "yuza-003", name: "Aコープ吹浦店", address: "山形県飽海郡遊佐町吹浦字苗代37", lat: 39.070995, lng: 139.879822, precision: "◎", note: "" },
+      { id: "yuza-004", name: "Aコープ遊佐店", address: "山形県飽海郡遊佐町遊佐字広表6-1", lat: 39.012802, lng: 139.906372, precision: "◎", note: "" },
+      { id: "shonai-002", name: "マックスバリュ余目店", address: "山形県東田川郡庄内町余目字滑石57-1", lat: 38.844627, lng: 139.897583, precision: "◎", note: "" },
+      { id: "shonai-003", name: "ヤマザワ余目店", address: "山形県東田川郡庄内町余目字滑石38-1", lat: 38.845764, lng: 139.897079, precision: "◎", note: "" },
+      { id: "mikawa-001", name: "イオン三川店", address: "山形県東田川郡三川町大字猪子字和田庫128-1", lat: 38.815754, lng: 139.835663, precision: "◎", note: "公式ページでの店名は「イオンモール三川」" },
+      { id: "mikawa-002", name: "スーパーのアオキ三川店", address: "山形県東田川郡三川町大字猪子字大堰端349-1", lat: 38.817928, lng: 139.83551, precision: "△", note: "「大堰端」までしか一致していません。公式ページでの店名は「スーパーのアオキ山形三川店」" }
+    ];
+
+    const rowsArea = document.getElementById("rows");
+
+    // 1軒分の確認カードを作る
+    function createRow(item) {
+      const row = document.createElement("section");
+      row.className = "row";
+
+      const title = document.createElement("h2");
+      title.textContent = item.id + "　" + item.name + "　［精度 " + item.precision + "］";
+      row.appendChild(title);
+
+      const address = document.createElement("p");
+      address.className = "meta";
+      address.textContent = "公式ページの住所：" + item.address;
+      row.appendChild(address);
+
+      const position = document.createElement("p");
+      position.className = "meta";
+      position.textContent = "調べた位置：" + item.lat + ", " + item.lng;
+      row.appendChild(position);
+
+      if (item.note !== "") {
+        const note = document.createElement("p");
+        note.className = "meta warn";
+        note.textContent = "メモ：" + item.note;
+        row.appendChild(note);
+      }
+
+      // 地図を開くリンク（Googleマップの検索URL。APIキーは使いません）
+      const links = document.createElement("div");
+      links.className = "links";
+      links.appendChild(createMapLink("この位置を地図で見る", item.lat + "," + item.lng, false));
+      links.appendChild(createMapLink("お店の名前で地図を探す", item.name + " " + item.address, true));
+      row.appendChild(links);
+
+      // OK / ずれている / 分からない
+      const choices = document.createElement("fieldset");
+      [["ok", "OK（合っている）"], ["ng", "ずれている"], ["unknown", "分からない"]].forEach(function (pair) {
+        const label = document.createElement("label");
+        label.className = "choice";
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = "check-" + item.id;
+        radio.value = pair[0];
+        label.appendChild(radio);
+        label.appendChild(document.createTextNode(" " + pair[1]));
+        choices.appendChild(label);
+      });
+      row.appendChild(choices);
+
+      // ずれているときの、正しい位置
+      const fix = document.createElement("input");
+      fix.type = "text";
+      fix.id = "fix-" + item.id;
+      fix.placeholder = "ずれているとき：正しい緯度, 経度 を貼る（例：38.9, 139.8）";
+      row.appendChild(fix);
+
+      return row;
+    }
+
+    // 地図を開くリンクを1つ作る
+    function createMapLink(text, query, isSecond) {
+      const link = document.createElement("a");
+      link.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query);
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = text;
+      if (isSecond) {
+        link.className = "second";
+      }
+      return link;
+    }
+
+    candidates.forEach(function (item) {
+      rowsArea.appendChild(createRow(item));
+    });
+
+    // 「結果をまとめる」を押したとき
+    document.getElementById("make-result").addEventListener("click", function () {
+      const labels = { ok: "OK", ng: "ずれている", unknown: "分からない" };
+      const lines = candidates.map(function (item) {
+        const checked = document.querySelector('input[name="check-' + item.id + '"]:checked');
+        const state = checked ? labels[checked.value] : "未確認";
+        const fix = document.getElementById("fix-" + item.id).value.trim();
+        return item.id + " " + item.name + "：" + state + (fix !== "" ? "　正しい位置：" + fix : "");
+      });
+      document.getElementById("result").value = lines.join("\n");
+    });
+  </script>
+
+</body>
+</html>

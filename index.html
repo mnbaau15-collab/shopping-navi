@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>かんたん お買い物ナビ</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="is-top">
+
+  <!-- ===== アイコン（自分で描いた図形。外部の画像は使いません） ===== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <!-- ボタンの中の、白いアイコン（色は文字の色に合わせて変わります） -->
+      <symbol id="glyph-pin" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9a2.2 2.2 0 1 1 0-4.4 2.2 2.2 0 0 1 0 4.4z"/></symbol>
+      <symbol id="glyph-shop" viewBox="0 0 24 24"><path d="M3 9l2-6h14l2 6z"/><path fill-rule="evenodd" d="M4 11h16v10H4zm6 4v6h4v-6z"/></symbol>
+      <symbol id="glyph-search" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M10 3a7 7 0 1 0 4.2 12.6l4.6 4.6 2-2-4.6-4.6A7 7 0 0 0 10 3zm0 3a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/></symbol>
+
+      <!-- 「できること」の、色つきのアイコン -->
+      <symbol id="ic-shop" viewBox="0 0 64 64">
+        <rect x="12" y="28" width="40" height="28" fill="#fff8ee" stroke="#9a3412" stroke-width="3"/>
+        <rect x="8" y="14" width="48" height="16" fill="#e8590c"/>
+        <rect x="16" y="14" width="8" height="16" fill="#fff8ee"/><rect x="32" y="14" width="8" height="16" fill="#fff8ee"/><rect x="48" y="14" width="8" height="16" fill="#fff8ee"/>
+        <rect x="26" y="38" width="12" height="18" fill="#e8590c"/>
+        <rect x="14" y="36" width="9" height="9" fill="#bfe3f5"/><rect x="41" y="36" width="9" height="9" fill="#bfe3f5"/>
+      </symbol>
+      <symbol id="ic-page" viewBox="0 0 64 64">
+        <rect x="10" y="8" width="44" height="48" rx="6" fill="#ffffff" stroke="#9a3412" stroke-width="3"/>
+        <path d="M10 14a6 6 0 0 1 6-6h32a6 6 0 0 1 6 6v6H10z" fill="#e8590c"/>
+        <rect x="18" y="28" width="28" height="4" rx="2" fill="#9a3412"/><rect x="18" y="38" width="28" height="4" rx="2" fill="#9a3412"/><rect x="18" y="48" width="18" height="4" rx="2" fill="#9a3412"/>
+      </symbol>
+      <symbol id="ic-map" viewBox="0 0 64 64">
+        <path d="M6 22l16-6 20 6 16-6v36l-16 6-20-6-16 6z" fill="#8fd19e" stroke="#2f7d46" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M22 16v36M42 22v36" stroke="#2f7d46" stroke-width="2.5"/>
+        <path d="M32 40c0 0-9-9-9-16a9 9 0 1 1 18 0c0 7-9 16-9 16z" fill="#e53935" stroke="#ffffff" stroke-width="2"/>
+        <circle cx="32" cy="24" r="3.5" fill="#ffffff"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- 画面の上の部分（アプリの名前） -->
+  <header class="site-header">
+    <h1 class="app-title"><span class="title-sub">かんたん</span><br>お買い物ナビ</h1>
+    <p class="app-lead">近くのお店を、かんたんに さがせます。</p>
+  </header>
+
+  <!-- 表紙の大きなイラスト（表紙のときだけ出ます） -->
+  <div class="hero">
+    <img src="images/hero-illustration.png" width="498" height="307"
+         alt="スマートフォンを見ながら、笑顔で話す ご夫婦のイラスト。うしろにスーパーが見えます">
+  </div>
+
+  <main class="top-main">
+
+    <!-- ========== 画面1：表紙（さがし方をえらぶ） ========== -->
+    <section id="screen-top">
+
+    <!-- このアプリでできること（かざり。ボタンではありません） -->
+    <ul class="feature-row">
+      <li><span class="feature-icon"><svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="#ic-shop"/></svg></span>お店を<br>さがせる</li>
+      <li><span class="feature-icon"><svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="#ic-page"/></svg></span>ページが<br>見られる</li>
+      <li><span class="feature-icon"><svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="#ic-map"/></svg></span>行き方が<br>わかる</li>
+    </ul>
+
+    <h2 class="section-title" id="top-title" tabindex="-1">どうやって さがしますか？</h2>
+
+    <!-- 3つの探し方のボタン -->
+    <div class="search-buttons">
+      <button type="button" class="big-button" id="button-location">
+        <span class="button-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#glyph-pin"/></svg></span>
+        <span class="button-text">
+          <span class="button-label">いまいる場所から さがす</span>
+          <span class="button-note">近いお店の順に 出ます</span>
+        </span>
+      </button>
+
+      <button type="button" class="big-button" id="button-city">
+        <span class="button-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#glyph-shop"/></svg></span>
+        <span class="button-text">
+          <span class="button-label">市や町から さがす</span>
+          <span class="button-note">酒田・遊佐・庄内・三川</span>
+        </span>
+      </button>
+
+      <button type="button" class="big-button" id="button-name">
+        <span class="button-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#glyph-search"/></svg></span>
+        <span class="button-text">
+          <span class="button-label">お店の名前で さがす</span>
+          <span class="button-note">ひらがなでも さがせます</span>
+        </span>
+      </button>
+    </div>
+
+    </section>
+
+    <!-- ========== 画面2：市や町をえらぶ ========== -->
+    <!-- hidden がついている間は、画面に出ません -->
+    <section id="screen-city" hidden>
+      <h2 class="section-title" id="city-title" tabindex="-1">どの市・町ですか？</h2>
+
+      <!-- 市や町のボタンは、app.js が店舗データから作ります -->
+      <div class="search-buttons" id="city-buttons"></div>
+
+      <div class="nav-buttons">
+        <button type="button" class="big-button sub-button" id="back-to-top-from-city">
+          <span class="button-icon" aria-hidden="true">⬅</span>
+          <span class="button-label">最初の画面に もどる</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========== 画面：いまいる場所からさがす ========== -->
+    <section id="screen-location" hidden>
+      <h2 class="section-title" id="location-title" tabindex="-1">いまいる場所から さがす</h2>
+
+      <!-- 現在地を使う前に、目的を説明する -->
+      <p class="location-explain">
+        近くのお店を さがすために、現在地を使います。<br>
+        現在地は、お店までの距離を はかるためだけに 使います。保存したり、ほかへ送ったりは しません。
+      </p>
+
+      <button type="button" class="big-button" id="button-use-location">
+        <span class="button-icon" aria-hidden="true">📍</span>
+        <span class="button-label">現在地を使って さがす</span>
+      </button>
+
+      <!-- 「しらべています…」「見つかりました」などの知らせ -->
+      <p id="location-message" class="search-message" role="status" aria-live="polite"></p>
+
+      <!-- うまくいかなかったときだけ出す、ほかのさがし方のボタン -->
+      <div class="nav-buttons" id="location-other-way" hidden>
+        <button type="button" class="big-button" id="location-to-city">
+          <span class="button-icon" aria-hidden="true">🏠</span>
+          <span class="button-label">市や町から さがす</span>
+        </button>
+        <button type="button" class="big-button" id="location-to-name">
+          <span class="button-icon" aria-hidden="true">🔍</span>
+          <span class="button-label">お店の名前で さがす</span>
+        </button>
+      </div>
+
+      <!-- お店のカードは、app.js が作ります -->
+      <div class="store-list" id="location-result-list"></div>
+
+      <!-- 距離についての注意書き -->
+      <p id="location-note" class="location-note"></p>
+
+      <div class="nav-buttons">
+        <button type="button" class="big-button sub-button" id="back-to-top-from-location">
+          <span class="button-icon" aria-hidden="true">⬅</span>
+          <span class="button-label">最初の画面に もどる</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========== 画面：お店の名前でさがす ========== -->
+    <section id="screen-name" hidden>
+      <h2 class="section-title" id="name-title" tabindex="-1">お店の名前で さがす</h2>
+
+      <!-- form で囲むと、キーボードの Enter でも「さがす」が動きます -->
+      <form id="name-form" class="search-form">
+        <label for="name-input" class="form-label">お店の名前（ひらがなでも さがせます）</label>
+        <input type="text" id="name-input" class="text-input" autocomplete="off" enterkeyhint="search">
+        <button type="submit" class="big-button">
+          <span class="button-icon" aria-hidden="true">🔍</span>
+          <span class="button-label">さがす</span>
+        </button>
+      </form>
+
+      <!-- 「見つかりました」「見つかりませんでした」などの知らせ -->
+      <p id="name-message" class="search-message" role="status" aria-live="polite"></p>
+
+      <!-- 見つからなかったときだけ出す、ほかのさがし方のボタン -->
+      <div class="nav-buttons" id="name-other-way" hidden>
+        <button type="button" class="big-button" id="name-to-city">
+          <span class="button-icon" aria-hidden="true">🏠</span>
+          <span class="button-label">市や町から さがす</span>
+        </button>
+      </div>
+
+      <!-- お店のカードは、app.js が作ります -->
+      <div class="store-list" id="name-result-list"></div>
+
+      <div class="nav-buttons">
+        <button type="button" class="big-button sub-button" id="back-to-top-from-name">
+          <span class="button-icon" aria-hidden="true">⬅</span>
+          <span class="button-label">最初の画面に もどる</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========== 画面3：お店の一覧 ========== -->
+    <section id="screen-list" hidden>
+      <h2 class="section-title" id="list-title" tabindex="-1"></h2>
+
+      <!-- お店のカードは、app.js が店舗データから作ります -->
+      <div class="store-list" id="store-list"></div>
+
+      <div class="nav-buttons">
+        <button type="button" class="big-button sub-button" id="back-to-city">
+          <span class="button-icon" aria-hidden="true">⬅</span>
+          <span class="button-label">市や町を えらびなおす</span>
+        </button>
+        <button type="button" class="big-button sub-button" id="back-to-top-from-list">
+          <span class="button-icon" aria-hidden="true">🏠</span>
+          <span class="button-label">最初の画面に もどる</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 注意書き（どの画面でも出します） -->
+    <p class="notice">
+      営業時間などは 変わることがあります。<br>
+      お出かけ前に お店に ご確認ください。
+    </p>
+
+  </main>
+
+  <!-- 画面の下の部分 -->
+  <footer class="site-footer">
+    <p>対象地域：酒田市・鶴岡市・三川町・庄内町・遊佐町</p>
+  </footer>
+
+  <!-- お店の名簿（先に読み込む） → 画面を動かすプログラム、の順番です -->
+  <script src="data/stores.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
