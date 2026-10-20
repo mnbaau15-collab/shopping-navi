@@ -1,0 +1,36 @@
+# 店舗データを、チェックする設定（いまは手動。schedule を有効にすると、毎週1回、自動で動く）
+# ・データの形と、各お店のURLが開けるかを調べる
+# ・問題があれば、GitHubの「Issues」（やることリスト）に、自動で書き込む
+# ・データの書き換えはしない。人が確認して、直す
+name: 店舗データのチェック
+
+on:
+  # ★ いまは「手動」だけで動きます。毎週の自動実行にしたいときは、下の schedule の3行の「#」を外してください
+  # schedule:
+  #   - cron: "0 0 * * 1"   # 毎週月曜 日本時間 9:00（GitHubの時間は世界標準時のため 0:00）
+  workflow_dispatch:       # 手動で動かせる（Actionsの画面の「Run workflow」ボタン）
+
+permissions:
+  contents: read
+  issues: write            # Issue を作るために必要
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: チェックを実行する
+        id: check
+        run: node tools/check-stores.js --links --report report.md
+        continue-on-error: true   # 問題があっても、次の手順（Issue作成）に進む
+
+      - name: 問題があれば Issue を作る
+        if: steps.check.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh issue create --title "店舗データの確認が必要です（$(date +%F)）" --body-file report.md

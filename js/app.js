@@ -8,6 +8,21 @@
 // （鶴岡市のお店を stores.js に足すと、自動でボタンが出ます）
 const CITY_ORDER = ["酒田市", "鶴岡市", "三川町", "庄内町", "遊佐町"];
 
+// 「チラシを さがす」ボタンで開くページ（トクバイの、庄内地方のチラシ一覧）
+// ※ リンクを開くだけ。このアプリから、トクバイへ自動でアクセスすることはしません
+const FLYER_AREA_URL = "https://tokubai.co.jp/prefectures/6/areas/96/leaflet";
+
+// ----- お店を「あいうえお順」に並べる（読みがなで比べる）-----
+// Intl.Collator("ja") は、日本語の辞書の順番（あ→い→う…、濁点は「か」のあとに「が」）で比べる道具
+const kanaCollator = new Intl.Collator("ja");
+
+function sortByKana(storeList) {
+  // もとのリストは変えずに、並べかえたコピーを返す（読みがながなければ店名で比べる）
+  return storeList.slice().sort(function (a, b) {
+    return kanaCollator.compare(a.kana || a.name, b.kana || b.name);
+  });
+}
+
 // ----- 画面（section）を名前で取り出しておく -----
 const screens = {
   top: document.getElementById("screen-top"),
@@ -103,9 +118,9 @@ function showStoreList(city) {
   document.getElementById("list-title").textContent = city + " の お店";
 
   // この市や町のお店だけを取り出す
-  const cityStores = stores.filter(function (store) {
+  const cityStores = sortByKana(stores.filter(function (store) {
     return store.city === city;
-  });
+  }));
 
   renderStoreCards(document.getElementById("store-list"), cityStores);
 
@@ -174,7 +189,7 @@ function handleNameSearch(event) {
     return;
   }
 
-  const found = findStoresByName(query);
+  const found = sortByKana(findStoresByName(query));
 
   if (found.length === 0) {
     message.textContent = "見つかりませんでした。ほかの言葉で さがすか、下のボタンから さがしてください。";
@@ -211,19 +226,75 @@ function createStoreCard(store, distanceKm) {
   city.textContent = store.city;
   card.appendChild(city);
 
-  // 「行き方を調べる」ボタン（場所のデータがあるお店だけ）
-  if (hasPosition(store)) {
-    card.appendChild(createLinkButton("🗺", "行き方を調べる", createRouteUrl(store),
-                                      "地図（Googleマップ）が 新しく ひらきます"));
+  // ボタンは、上から順に「チラシを さがす」「お店のページを見る」「行き方を調べる」
+
+  // 1番目：「チラシを さがす」ボタン
+  //   ・そのお店のトクバイのページがあれば、そこへ
+  //   ・トクバイに掲載がない（flyerUrl が null）お店は、ボタンの代わりに案内を出す
+  //   ・まだ調べていないお店は、庄内地方のページへ
+  if (store.flyerUrl === null) {
+    card.appendChild(createNoFlyerNotice());
+  } else {
+    const flyer = getFlyerLink(store);
+    card.appendChild(createLinkButton("📰", "チラシを さがす", flyer.url, flyer.note));
   }
 
-  // 「お店のページを見る」ボタン（URLが安全なときだけ出す）
+  // 2番目：「お店のページを見る」ボタン（URLが安全なときだけ出す）
   if (isSafeUrl(store.officialUrl)) {
     card.appendChild(createLinkButton("🌐", "お店のページを見る", store.officialUrl,
                                       "お店のページが 新しく ひらきます"));
   }
 
+  // 3番目：「行き方を調べる」ボタン（場所のデータがあるお店だけ）
+  if (hasPosition(store)) {
+    card.appendChild(createLinkButton("🗺", "行き方を調べる", createRouteUrl(store),
+                                      "地図（Googleマップ）が 新しく ひらきます"));
+  }
+
   return card;
+}
+
+// ----- トクバイにチラシがないお店の案内（ボタンではなく、文字だけ）-----
+function createNoFlyerNotice() {
+  const notice = document.createElement("p");
+  notice.className = "flyer-none";
+
+  const icon = document.createElement("span");
+  icon.className = "button-icon";
+  icon.setAttribute("aria-hidden", "true");
+  icon.textContent = "📰";
+
+  const text = document.createElement("span");
+  text.textContent = "トクバイに チラシが ありません";
+
+  notice.appendChild(icon);
+  notice.appendChild(text);
+  return notice;
+}
+
+// ----- 「チラシを さがす」の行き先を決める -----
+// store.flyerUrl は「そのお店のトクバイのページ」（https://tokubai.co.jp/チェーン名/店番号 の形）。
+// このページは、チラシが替わっても URL が変わらない。だから、チラシ1枚ごとのURL（/leaflets/番号）は、登録しない
+function getFlyerLink(store) {
+  if (isTokubaiStoreUrl(store.flyerUrl)) {
+    return { url: store.flyerUrl, note: "このお店の チラシの ページ（トクバイ）が 新しく ひらきます" };
+  }
+  return { url: FLYER_AREA_URL, note: "トクバイの 庄内地方の ページが 新しく ひらきます" };
+}
+
+// 「https://tokubai.co.jp/チェーン名/店番号」の形のURLだけを、OKにする（まちがったデータで、おかしなリンクを作らないため）
+function isTokubaiStoreUrl(url) {
+  if (typeof url !== "string") {
+    return false;
+  }
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "https:" &&
+           parsed.hostname === "tokubai.co.jp" &&
+           /^\/(?!prefectures|areas|leaflets|search)[^/]+\/\d+\/?$/.test(decodeURIComponent(parsed.pathname));
+  } catch (error) {
+    return false;
+  }
 }
 
 // 新しいタブで開くリンクを、大きなボタンの見た目で作る（ボタンの下に、説明の一文もつける）

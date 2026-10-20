@@ -13,8 +13,6 @@
   --color-button-bottom: #9a3412;/* ボタンの下のほうの色 */
   --color-main-pressed: #7c2d12; /* ボタンを押したときの色（濃い茶） */
   --color-button-text: #ffffff;  /* ボタンの文字（白） */
-  --color-notice-bg: #ffe9b8;    /* 注意書きの背景（薄い黄色） */
-  --color-notice-border: #8a6d00;/* 注意書きの枠線 */
   --color-focus: #0b4f9c;        /* キーボード操作時の枠線（青） */
 
   /* 余白・角の丸さ */
@@ -272,16 +270,6 @@ body.is-top .top-main {
   font-size: 1rem;
 }
 
-/* 注意書き */
-.notice {
-  margin: var(--space-large) 0 0;
-  padding: var(--space-medium);
-  background-color: var(--color-notice-bg);
-  border: 2px solid var(--color-notice-border);
-  border-radius: 0.8rem;
-  font-size: 1rem;
-}
-
 /* ===========================================
    お店の一覧・店舗カード・もどるボタン
    =========================================== */
@@ -338,6 +326,23 @@ a.big-button {
 .store-city {
   margin: 0 0 var(--space-medium);
   font-size: 1rem;
+}
+
+/* トクバイにチラシがないお店の案内（ボタンではないので、点線の枠にする） */
+.flyer-none {
+  display: flex;
+  align-items: center;
+  gap: var(--space-medium);
+  min-height: 4.5rem;
+  margin: 0 0 var(--space-large);
+  padding: var(--space-medium);
+  border: 3px dashed var(--color-main);
+  border-radius: var(--radius-button);
+  background-color: #ffffff;
+  color: var(--color-text);
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.4;
 }
 
 /* 店舗カードの中のボタン（行き方・お店のページ）を、間をあけて縦に並べる */

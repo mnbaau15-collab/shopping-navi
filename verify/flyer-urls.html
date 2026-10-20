@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>チラシ用URLの確認ページ</title>
+  <style>
+    body { font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", sans-serif; max-width: 48rem; margin: 0 auto; padding: 1rem; line-height: 1.7; font-size: 18px; }
+    h1 { font-size: 1.5rem; }
+    .guide { background: #fff3cd; border: 2px solid #8a6d00; border-radius: 8px; padding: 0.8rem 1rem; }
+    .row { border: 3px solid #2b1a0e; border-radius: 10px; padding: 0.7rem 1rem; margin: 1rem 0; }
+    .row h2 { margin: 0 0 0.3rem; font-size: 1.15rem; }
+    input[type="text"] { width: 100%; box-sizing: border-box; padding: 0.5rem; font-size: 1rem; }
+    input[type="text"]:disabled { background: #eee; }
+    label.none-check { display: block; margin: 0.4rem 0; }
+    .status { margin: 0.3rem 0; font-weight: bold; }
+    .ok { color: #1b5e20; } .ng { color: #b00020; } .none { color: #555; }
+    button, a.open { font-size: 1.05rem; padding: 0.6rem 1.1rem; margin: 0.3rem 0.5rem 0.3rem 0; display: inline-block; }
+    a.open { background: #9a3412; color: #fff; border-radius: 6px; text-decoration: none; font-weight: bold; }
+    a.open[aria-disabled="true"] { background: #bbb; pointer-events: none; }
+    textarea { width: 100%; box-sizing: border-box; min-height: 14rem; font-size: 1rem; }
+  </style>
+</head>
+<body>
+
+  <h1>チラシ用URLの確認ページ（22軒）</h1>
+
+  <div class="guide">
+    <p><strong>使い方</strong></p>
+    <ol>
+      <li>各お店の欄に、<strong>トクバイのお店のページ</strong>のURLが入っています（検索で見つけた<strong>候補</strong>です）。</li>
+      <li>「<strong>開いて確認</strong>」を押して、<strong>そのお店のチラシのページか</strong>、自分の目で確かめます（店名・住所が合っているか）。</li>
+      <li>違っていたら、トクバイでお店を検索して、正しいお店のページのURLを貼り直します。</li>
+      <li>トクバイに<strong>掲載がない</strong>お店は、「トクバイに掲載がない」に、チェックを入れます（アプリには「トクバイに チラシが ありません」と出ます）。</li>
+      <li>最後に「結果をまとめる」を押して、出た文章を Claude に貼ってください。</li>
+    </ol>
+    <p>URLの形は、<strong>https://tokubai.co.jp/チェーン名/店番号</strong>（例：https://tokubai.co.jp/イオン/12598）です。<strong>チラシ1枚ごとのURL（…/leaflets/数字）は、使わないでください。</strong>（チラシが替わると、すぐ古くなるためです。）</p>
+    <p>※ このページは、<strong>トクバイに自動でアクセスしません。</strong>「開いて確認」を押したときだけ、あなたのブラウザで開きます。</p>
+  </div>
+
+  <div id="rows"></div>
+
+  <button type="button" id="make-result">結果をまとめる</button>
+  <textarea id="result" readonly placeholder="ここに結果が出ます。コピーして貼ってください。"></textarea>
+
+  <!-- お店のデータを読み込む（アプリと同じファイル） -->
+  <script src="../data/stores.js"></script>
+  <script>
+    // 「https://tokubai.co.jp/チェーン名/店番号」の形かを調べる。戻り値：{ ok: true/false/null, text: 説明 }
+    function checkFlyerUrl(value) {
+      const url = value.trim();
+      if (url === "") {
+        return { ok: null, text: "未入力（庄内地方のページが開きます）" };
+      }
+      let parsed;
+      try {
+        parsed = new URL(url);
+      } catch (error) {
+        return { ok: false, text: "✕ URLの形が正しくありません" };
+      }
+      let path = "";
+      try { path = decodeURIComponent(parsed.pathname); } catch (error) { path = parsed.pathname; }
+
+      if (parsed.protocol !== "https:" || parsed.hostname !== "tokubai.co.jp") {
+        return { ok: false, text: "✕ https://tokubai.co.jp/ から始まるURLにしてください" };
+      }
+      if (path.includes("/leaflets/")) {
+        return { ok: false, text: "✕ チラシ1枚ごとのURLです。お店のページ（…/チェーン名/店番号）にしてください" };
+      }
+      if (!/^\/(?!prefectures|areas|leaflets|search)[^/]+\/\d+\/?$/.test(path)) {
+        return { ok: false, text: "✕ お店のページの形（/チェーン名/店番号）ではありません" };
+      }
+      return { ok: true, text: "○ お店のページの形です" };
+    }
+
+    const rowsArea = document.getElementById("rows");
+    const controls = {}; // お店の id ごとに、入力欄とチェックを覚えておく
+
+    // 1軒分の確認欄を作る
+    function createRow(store) {
+      const row = document.createElement("section");
+      row.className = "row";
+
+      const title = document.createElement("h2");
+      title.textContent = store.id + "　" + store.name;
+      row.appendChild(title);
+
+      const input = document.createElement("input");
+      input.type = "text";
+      input.value = typeof store.flyerUrl === "string" ? store.flyerUrl : "";
+      input.placeholder = "https://tokubai.co.jp/チェーン名/店番号";
+      row.appendChild(input);
+
+      const noneLabel = document.createElement("label");
+      noneLabel.className = "none-check";
+      const noneBox = document.createElement("input");
+      noneBox.type = "checkbox";
+      noneBox.checked = store.flyerUrl === null;
+      noneLabel.appendChild(noneBox);
+      noneLabel.appendChild(document.createTextNode(" トクバイに掲載がない"));
+      row.appendChild(noneLabel);
+
+      const status = document.createElement("p");
+      status.className = "status";
+      row.appendChild(status);
+
+      const open = document.createElement("a");
+      open.className = "open";
+      open.textContent = "開いて確認";
+      open.target = "_blank";
+      open.rel = "noopener noreferrer";
+      row.appendChild(open);
+
+      // 入力やチェックのたびに、形を調べて、「開いて確認」の行き先を直す
+      function refresh() {
+        input.disabled = noneBox.checked;
+        if (noneBox.checked) {
+          status.textContent = "掲載なし（アプリには「トクバイに チラシが ありません」と出ます）";
+          status.className = "status none";
+          open.removeAttribute("href");
+          open.setAttribute("aria-disabled", "true");
+          return;
+        }
+        const result = checkFlyerUrl(input.value);
+        status.textContent = result.text;
+        status.className = "status " + (result.ok === true ? "ok" : result.ok === false ? "ng" : "none");
+        if (result.ok === true) {
+          open.href = input.value.trim();
+          open.removeAttribute("aria-disabled");
+        } else {
+          open.removeAttribute("href");
+          open.setAttribute("aria-disabled", "true");
+        }
+      }
+      input.addEventListener("input", refresh);
+      noneBox.addEventListener("change", refresh);
+      refresh();
+
+      controls[store.id] = { input: input, box: noneBox };
+      return row;
+    }
+
+    stores.forEach(function (store) {
+      rowsArea.appendChild(createRow(store));
+    });
+
+    // 「結果をまとめる」：登録するもの・掲載なし・直してほしいもの・未入力 に分けて、一覧にする
+    document.getElementById("make-result").addEventListener("click", function () {
+      const good = [], none = [], bad = [], empty = [];
+      stores.forEach(function (store) {
+        const label = store.id + " " + store.name;
+        const control = controls[store.id];
+        if (control.box.checked) {
+          none.push(label);
+          return;
+        }
+        const value = control.input.value.trim();
+        const result = checkFlyerUrl(value);
+        if (result.ok === true) good.push(label + "：" + value);
+        else if (result.ok === false) bad.push(label + "：" + result.text);
+        else empty.push(label);
+      });
+      const lines = ["【トクバイのお店のページ】（" + good.length + " 軒）"].concat(good);
+      lines.push("", "【トクバイに掲載なし】（" + none.length + " 軒）");
+      none.forEach(function (line) { lines.push(line); });
+      if (bad.length > 0) {
+        lines.push("", "【直してほしいもの】（" + bad.length + " 軒）");
+        bad.forEach(function (line) { lines.push(line); });
+      }
+      if (empty.length > 0) {
+        lines.push("", "【未入力】（" + empty.length + " 軒。庄内地方のページが開きます）");
+        empty.forEach(function (line) { lines.push(line); });
+      }
+      document.getElementById("result").value = lines.join("\n");
+    });
+  </script>
+
+</body>
+</html>
