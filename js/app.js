@@ -320,7 +320,7 @@ function handleNameSearch(event) {
   const found = sortByKana(findStoresByName(query));
 
   if (found.length === 0) {
-    message.textContent = "見つかりませんでした。 お店の名前の 最初の 文字や、 名前の中の ことばの 最初の 文字を 入れて さがすか、 下の ボタンから さがしてください。";
+    message.textContent = "見つかりませんでした。\nお店の名前の 最初の 文字や、 名前の中の ことばの 最初の 文字を 入れて さがすか、 下の ボタンから さがしてください。";
     otherWay.hidden = false;
   } else {
     fillCountMessage(message, ["お店が ", found.length, " 軒 見つかりました。"]);
@@ -577,7 +577,7 @@ function handleUseLocation() {
 
   // 使えない端末のとき
   if (!navigator.geolocation) {
-    setLocationMessage("この 機械では 現在地を つかえません。 下の ボタンから さがしてください。", true);
+    setLocationMessage("この 機械では 現在地を つかえません。\n下の ボタンから さがしてください。", true);
     return;
   }
 
@@ -596,12 +596,12 @@ function handleUseLocation() {
       console.error("位置情報を取得できませんでした:", error); // くわしいことは console にだけ出す
       if (error.code === 1) {
         // 1 = 許可されなかった
-        setLocationMessage("現在地を つかうことが ゆるされませんでした。 スマホの 設定で、 この ページの 位置情報を 「許可」に すると つかえます。 または、 下の ボタンから さがしてください。", true);
+        setLocationMessage("現在地を つかうことが\nゆるされませんでした。\nスマホの 設定で、\nこの ページの 位置情報を\n「許可」に すると\nつかえます。\nまたは、\n下の ボタンから\nさがしてください。", true);
       } else if (error.code === 3) {
         // 3 = 時間切れ
-        setLocationMessage("現在地を しらべるのに 時間が かかっています。 もう一度 ボタンを おすか、 下の ボタンから さがしてください。", true);
+        setLocationMessage("現在地を しらべるのに\n時間が かかっています。\nもう一度 ボタンを おすか、\n下の ボタンから\nさがしてください。", true);
       } else {
-        setLocationMessage("現在地が わかりませんでした。 下の ボタンから さがしてください。", true);
+        setLocationMessage("現在地が わかりませんでした。\n下の ボタンから さがしてください。", true);
       }
     },
     { timeout: 20000, maximumAge: 60000 } // 20秒たっても分からなければ、あきらめる。1分以内に調べた場所は、そのまま使う
@@ -616,7 +616,7 @@ function showNearbyStores(lat, lng) {
   const note = document.getElementById("location-note");
 
   if (result.sorted.length === 0) {
-    setLocationMessage("場所の データが あるお店が まだ ありません。 下の ボタンから さがしてください。", true);
+    setLocationMessage("場所の データが あるお店が まだ ありません。\n下の ボタンから さがしてください。", true);
     return;
   }
 
@@ -628,13 +628,13 @@ function showNearbyStores(lat, lng) {
 
   const missingCount = stores.length - result.sorted.length;
   if (missingCount > 0) {
-    noteText += " 場所の データが まだない お店（" + missingCount + " 軒）は、 ここには 出ません。" +
-                " 「市や町から」 「お店の名前から」では、 すべての お店を さがせます。";
+    noteText += "場所の データが まだない お店（" + missingCount + " 軒）は、 ここには 出ません。\n" +
+                "「市や町から」 「お店の名前から」では、 すべての お店を さがせます。";
   }
 
   const nearestKm = result.distances[result.sorted[0].id];
   if (nearestKm > 30) {
-    noteText += " いちばん 近い お店でも 30 km より 遠いので、 庄内地域から はなれているようです。";
+    noteText += (noteText ? "\n" : "") + "いちばん 近い お店でも 30 km より 遠いので、 庄内地域から はなれているようです。";
   }
 
   note.textContent = noteText.trim();
