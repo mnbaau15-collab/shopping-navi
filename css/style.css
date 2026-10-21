@@ -1,30 +1,37 @@
 /* ===========================================
    色・文字の大きさ・余白をまとめて決める場所
    ここを変えると、アプリ全体の見た目が変わります
-   （あたたかいオレンジのデザイン）
+   （あたたかいオレンジのデザイン：表紙のイラストの色に合わせる）
    =========================================== */
 :root {
   /* 色 */
-  --color-background: #fff6e8;   /* 画面の背景（あたたかいクリーム色） */
-  --color-text: #2b1a0e;         /* 文字（こげ茶に近い黒） */
+  /* 表紙のイラストの色に合わせた、あたたかいオレンジ */
+  --color-background: #fef8ee;   /* 画面の背景（表紙の上の、あたたかいクリーム色） */
+  --color-text: #3a2216;         /* 文字（表紙の「お買い物ナビ」と同じ、こげ茶） */
   --color-main: #9a3412;         /* 枠・見出し・距離などの色（濃いオレンジ茶） */
-  --color-accent: #c2410c;       /* 「かんたん」の文字などの色（オレンジ） */
-  --color-button-top: #c2410c;   /* ボタンの上のほうの色 */
-  --color-button-bottom: #9a3412;/* ボタンの下のほうの色 */
+  --color-accent: #c2410c;       /* 「かんたん」の文字などの色（表紙の「かんたん」のオレンジ） */
+  --color-orange: #f08519;       /* かざりに使うオレンジ。文字の色には使わない */
+  --color-button-top: #c2410c;   /* ボタンの上のほうの色（オレンジ） */
+  --color-button-bottom: #9a3412;/* ボタンの下のほうの色（濃いオレンジ茶） */
   --color-main-pressed: #7c2d12; /* ボタンを押したときの色（濃い茶） */
   --color-button-text: #ffffff;  /* ボタンの文字（白） */
   --color-focus: #0b4f9c;        /* キーボード操作時の枠線（青） */
 
+  /* 字体（端末に入っているものだけを使う。外部のフォントは使わない）
+     すべて丸ゴシック（やさしい印象）。Windows では、UDゴシック（BIZ UDPゴシック）になる */
+  --font-title: "Hiragino Maru Gothic ProN", "BIZ UDPGothic", "Yu Gothic", "Meiryo", sans-serif;
+  --font-body: "Hiragino Maru Gothic ProN", "BIZ UDPGothic", "Yu Gothic", "Meiryo", sans-serif;
+
   /* 余白・角の丸さ */
-  --space-small: 0.5rem;
-  --space-medium: 1rem;
-  --space-large: 1.5rem;
-  --radius-button: 1.4rem;
+  --space-small: 0.4rem;
+  --space-medium: 0.8rem;
+  --space-large: 1.2rem;
+  --radius-button: 1.1rem;
 }
 
-/* 文字の基準の大きさを 22px にする（1rem = 22px） */
+/* 文字の基準の大きさを 28px にする（1rem = 28px）。高齢の方が、読みやすい大きさ */
 html {
-  font-size: 137.5%;
+  font-size: 175%;
 }
 
 * {
@@ -35,10 +42,12 @@ body {
   margin: 0;
   background-color: var(--color-background);
   color: var(--color-text);
-  /* 端末に入っている、読みやすい日本語の字体を使う（外部のフォントは使わない） */
-  font-family: "BIZ UDPGothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+  font-family: var(--font-body);
   font-weight: 500;
   line-height: 1.7;
+  /* 日本語の文章の区切り（スペース）でだけ折り返す。入りきらないときだけ、文字の途中で折り返す */
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 
 /* hidden をつけた部品は、かならず隠す
@@ -50,6 +59,7 @@ body {
 /* ===========================================
    画面の上の部分（アプリの名前）
    ふだんは小さく、表紙のときだけ大きく出す（body に is-top がつく）
+   表紙の構図：上に文字（かんたん お買い物ナビ）、その下に大きなイラスト
    =========================================== */
 .site-header {
   position: relative;
@@ -58,80 +68,94 @@ body {
   color: var(--color-text);
   text-align: center;
   padding: 0.6rem var(--space-medium);
-  border-bottom: 3px solid #f2cf9a;
+  border-bottom: 3px solid #f4c27f;
+}
+
+.header-inner {
+  max-width: 40rem;
+  margin: 0 auto;
 }
 
 .app-title {
+  font-family: var(--font-title);
   margin: 0;
-  font-size: 1.3rem;
+  font-size: 0.95rem;
   font-weight: 800;
   line-height: 1.3;
 }
 
 .app-title .title-sub {
   color: var(--color-accent);
+  margin-right: 0.3em;
 }
 
+/* ふだんの画面では、説明文と改行は出さない */
 .app-title br,
 .app-lead {
   display: none;
 }
 
-/* 表紙のときの、大きな名前 */
+/* ----- 表紙のとき：Canvaで作った表紙の画像を、画面の幅いっぱいに出す ----- */
+/* 画像の中に、タイトル・説明文・使い方の3つが入っているので、頭の部分の文字は、見えなくする
+   （見えないだけで、画面の読み上げには、そのまま読まれる） */
 body.is-top .site-header {
-  padding: 1.2rem var(--space-medium) 2.6rem;
-  border-bottom: 0;
-  border-radius: 0 0 50% 50% / 0 0 2.2rem 2.2rem;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
 }
 
-body.is-top .app-title {
-  font-size: 2.3rem;
-  line-height: 1.25;
-}
-
-body.is-top .app-title br {
-  display: inline;
-}
-
-body.is-top .app-title .title-sub {
-  font-size: 2rem;
-}
-
-/* 「かんたん」の両わきの、きらきらの線 */
-body.is-top .app-title .title-sub::before {
-  content: "＼" / "";
-  margin-right: 0.3rem;
-}
-
-body.is-top .app-title .title-sub::after {
-  content: "／" / "";
-  margin-left: 0.3rem;
-}
-
-body.is-top .app-lead {
-  display: block;
-  margin: 0.4rem 0 0;
-  font-size: 1rem;
-  font-weight: 700;
-}
-
-/* 表紙の大きなイラスト（表紙のときだけ出す） */
 .hero {
   display: none;
 }
 
+/* 見た目には出さないが、画面の読み上げには読まれる文字 */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
 body.is-top .hero {
-  display: block;
   position: relative;
-  z-index: 0;
+  display: block;
   max-width: 40rem;
-  margin: -2.2rem auto 0;
+  margin: 0 auto;
+  background-color: #fef8ee;   /* 画像の上のふちの色（クリーム色）と、同じにする */
+}
+
+/* さらに、あたたかいクリーム色を、うすくかぶせて、やわらかい印象にする */
+.hero::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(254, 248, 238, 0.22);
+  pointer-events: none;
 }
 
 .hero img {
   display: block;
   width: 100%;
   height: auto;
+  /* トーンを下げる：色のあざやかさを少しおさえ、コントラストをやわらげる（数字を変えると、強さを調整できる） */
+  filter: saturate(0.7) contrast(0.92) brightness(1.02);
+  /* 下のふちを、少しぼかして、背景のクリーム色になじませる */
+  -webkit-mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
 }
 
 /* ===========================================
@@ -147,52 +171,126 @@ body.is-top .hero {
 body.is-top .top-main {
   position: relative;
   z-index: 1;
-  margin-top: -1.6rem;
-  background-color: var(--color-background);
-  border-radius: 1.8rem 1.8rem 0 0;
-  box-shadow: 0 -4px 12px rgba(80, 40, 0, 0.12);
+  margin-top: 0;
+  background-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .section-title {
+  font-family: var(--font-title);
+  text-wrap: balance;   /* 行の長さをそろえて、1文字だけ次の行に落ちるのを防ぐ */
   margin: 0 0 var(--space-medium);
-  font-size: 1.3rem;
+  font-size: 1.45rem;
   font-weight: 700;
   text-align: center;
 }
 
-/* 表紙の「できること」3つ */
-.feature-row {
+/* ===========================================
+   表紙の「探し方」のカード（表紙の絵の、カードの形）
+   緑：いまいる場所／オレンジ：市や町／青：お店の名前
+   =========================================== */
+.search-cards {
   display: flex;
-  gap: var(--space-small);
-  margin: 0 0 var(--space-large);
-  padding: 0 0 var(--space-medium);
-  list-style: none;
-  border-bottom: 2px dashed #e5c28f;
+  flex-direction: column;
+  gap: var(--space-medium);
 }
 
-.feature-row li {
-  flex: 1;
-  text-align: center;
-  font-size: 1rem;
+.search-card {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  min-height: 5rem;
+  padding: 0.5rem 0.6rem;
+  border: 3px solid var(--card-border);
+  border-radius: 1.2rem;
+  background-color: var(--card-bg);
+  color: var(--color-text);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(90, 70, 20, 0.14);
+}
+
+.search-card:active {
+  transform: translateY(2px);
+  box-shadow: none;
+  filter: brightness(0.95);
+}
+
+.search-card:focus-visible {
+  outline: 4px solid var(--color-focus);
+  outline-offset: 4px;
+}
+
+.search-card-icon {
+  flex: none;
+  width: 2.4rem;
+  height: 2.4rem;
+}
+
+.search-card-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.search-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.search-card-title {
+  font-family: var(--font-title);
+  font-size: 0.95rem;
   font-weight: 700;
+  line-height: 1.3;
+  color: var(--card-title);
+}
+
+.search-card-note {
+  font-size: 0.75rem;
   line-height: 1.4;
 }
 
-.feature-icon {
+.search-card-arrow {
+  flex: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 4rem;
-  height: 4rem;
-  margin: 0 auto 0.3rem;
-  background-color: #ffffff;
-  border-radius: 1.2rem;
-  box-shadow: 0 2px 6px rgba(80, 40, 0, 0.18);
+  width: 1.7rem;
+  height: 1.7rem;
+  margin-left: auto;
+  border-radius: 50%;
+  background-color: var(--card-arrow);
+  color: #ffffff;
+  font-size: 1.2rem;
+  line-height: 1;
 }
 
-.feature-icon svg {
-  width: 2.8rem;
-  height: 2.8rem;
+/* 色ちがい（文字の色は、背景の上で、4.5:1 以上になる濃さ） */
+.search-card-green {
+  --card-border: #7bc043;
+  --card-bg: #f4fbec;
+  --card-title: #1b6e2a;
+  --card-arrow: #2e8b3a;
+}
+
+.search-card-orange {
+  --card-border: #f6a458;
+  --card-bg: #fff5e8;
+  --card-title: #b83a08;
+  --card-arrow: #d4480a;
+}
+
+.search-card-blue {
+  --card-border: #8fcdf0;
+  --card-bg: #eef7fe;
+  --card-title: #1d4ed8;
+  --card-arrow: #2f6fd0;
 }
 
 /* ボタンを縦に並べる */
@@ -206,10 +304,10 @@ body.is-top .top-main {
 .big-button {
   display: flex;
   align-items: center;
-  gap: var(--space-medium);
+  gap: 0.55rem;
   width: 100%;
-  min-height: 4.5rem;
-  padding: var(--space-medium);
+  min-height: 4rem;
+  padding: 0.7rem;
   border: 3px solid var(--color-main-pressed);
   border-radius: var(--radius-button);
   background: linear-gradient(var(--color-button-top), var(--color-button-bottom));
@@ -224,7 +322,7 @@ body.is-top .top-main {
 .search-buttons > .big-button::after {
   content: "›" / "";
   margin-left: auto;
-  font-size: 2.4rem;
+  font-size: 1.6rem;
   line-height: 1;
 }
 
@@ -243,15 +341,15 @@ body.is-top .top-main {
 
 .button-icon {
   flex: none;
-  font-size: 2rem;
+  font-size: 1.6rem;
   line-height: 1;
 }
 
 /* 表紙のボタンの、白いイラストのアイコン */
 .button-icon svg {
   display: block;
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 1.6rem;
+  height: 1.6rem;
   fill: currentColor;
 }
 
@@ -261,13 +359,19 @@ body.is-top .top-main {
 }
 
 .button-label {
-  font-size: 1.2rem;
+  font-family: var(--font-title);
+  /* スペース（文の区切り）でだけ折り返す。長くて入りきらないときだけ、文字の途中で折り返す */
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  font-size: 1.05rem;
   font-weight: 700;
   line-height: 1.4;
 }
 
 .button-note {
-  font-size: 1rem;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  font-size: 0.85rem;
 }
 
 /* ===========================================
@@ -310,37 +414,49 @@ a.big-button {
 
 /* 店舗カード1枚（太い枠線ではっきり区切る） */
 .store-card {
-  padding: var(--space-medium);
+  padding: 0.6rem;
   background-color: #ffffff;
   border: 3px solid var(--color-text);
   border-radius: 1.2rem;
 }
 
+/* 店舗カードの中は、はばがせまいので、余白とアイコンを少しだけ小さくして、ボタンの文字を入れる */
+.store-card .big-button {
+  padding: 0.6rem;
+  gap: 0.45rem;
+}
+
+.store-card .button-icon {
+  font-size: 1.35rem;
+}
+
 .store-name {
+  font-family: var(--font-title);
   margin: 0;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: 700;
   line-height: 1.4;
 }
 
 .store-city {
   margin: 0 0 var(--space-medium);
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 /* トクバイにチラシがないお店の案内（ボタンではないので、点線の枠にする） */
 .flyer-none {
   display: flex;
-  align-items: center;
+  flex-direction: column;   /* 文が長いので、絵の下に文を出して、幅を広く使う */
+  align-items: flex-start;
   gap: var(--space-medium);
-  min-height: 4.5rem;
+  min-height: 4rem;
   margin: 0 0 var(--space-large);
   padding: var(--space-medium);
   border: 3px dashed var(--color-main);
   border-radius: var(--radius-button);
   background-color: #ffffff;
   color: var(--color-text);
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   font-weight: 700;
   line-height: 1.4;
 }
@@ -352,18 +468,18 @@ a.big-button {
 
 .store-link-note {
   margin: var(--space-small) 0 0;
-  font-size: 1rem;
+  font-size: 0.85rem;
 }
 
 /* 現在地を使う前の説明と、距離の注意書き */
 .location-explain {
   margin: 0 0 var(--space-large);
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 .location-note {
   margin: var(--space-large) 0 0;
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 .location-note:empty {
@@ -373,7 +489,7 @@ a.big-button {
 /* 店舗カードの「ここから 約 1.2 km」 */
 .store-distance {
   margin: 0.25rem 0 0;
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--color-main);
 }
@@ -386,20 +502,20 @@ a.big-button {
 }
 
 .form-label {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 700;
 }
 
 .text-input {
   width: 100%;
-  min-height: 4rem;
+  min-height: 3.2rem;
   padding: var(--space-small) var(--space-medium);
   border: 3px solid var(--color-text);
   border-radius: 1rem;
   background-color: #ffffff;
   color: var(--color-text);
   font-family: inherit;
-  font-size: 1.2rem;
+  font-size: 1.05rem;
 }
 
 .text-input:focus-visible {
@@ -410,7 +526,7 @@ a.big-button {
 /* 「見つかりました」などの知らせ */
 .search-message {
   margin: var(--space-large) 0 var(--space-medium);
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 700;
 }
 
@@ -419,6 +535,14 @@ a.big-button {
 }
 
 /* 見出しにカーソルが移ったときの枠線（太くはっきり） */
+/* 見出し：表紙の「お買い物」のように、緑の太い文字に、白いふち取りと、オレンジのやさしい影 */
+.section-title {
+  color: var(--color-main);
+  -webkit-text-stroke: 0.14em #ffffff;
+  paint-order: stroke fill;
+  text-shadow: 0 0.07em 0 #ffd9a0, 0 0.1em 0.16em rgba(154, 52, 18, 0.28);
+}
+
 .section-title:focus-visible {
   outline: 4px solid var(--color-focus);
   outline-offset: 4px;
@@ -430,9 +554,47 @@ a.big-button {
 .site-footer {
   text-align: center;
   padding: var(--space-medium);
-  font-size: 1rem;
+  font-size: 0.8rem;
 }
 
 .site-footer p {
   margin: 0;
+}
+
+/* ===========================================
+   探し方ごとの色（表紙のカードと同じ）
+   緑：いまいる場所／オレンジ：市や町（もとの色）／青：お店の名前
+   =========================================== */
+body[data-theme="location"] {
+  --color-background: #f4fbec;
+  --color-main: #1b6e2a;
+  --color-accent: #1b6e2a;
+  --color-button-top: #2e8b3a;
+  --color-button-bottom: #1b6e2a;
+  --color-main-pressed: #14531e;
+}
+
+body[data-theme="name"] {
+  --color-background: #eef7fe;
+  --color-main: #1d4ed8;
+  --color-accent: #1d4ed8;
+  --color-button-top: #2f6fd0;
+  --color-button-bottom: #1d4ed8;
+  --color-main-pressed: #1e3a8a;
+}
+
+body[data-theme="location"] .section-title { text-shadow: 0 0.07em 0 #c9e8a8, 0 0.1em 0.16em rgba(27, 110, 42, 0.28); }
+body[data-theme="name"] .section-title { text-shadow: 0 0.07em 0 #bfe0f7, 0 0.1em 0.16em rgba(29, 78, 216, 0.28); }
+
+/* ボタンの中の、表紙と同じ色つきの絵：白い丸いふだの上に置いて、どの色のボタンでも見えるようにする */
+.button-icon.icon-badge {
+  display: flex;
+  padding: 0.2rem;
+  border-radius: 0.5rem;
+  background: #ffffff;
+}
+
+.button-icon.icon-badge svg {
+  width: 2.2rem;
+  height: 2.2rem;
 }

@@ -7,7 +7,18 @@ verify/config.js
 # 個人の設定・変更前の控え・参考画像
 .claude/
 backup-before-redesign/
+backup-before-28px/
+backup-before-green/
+backup-before-search/
+backup-before-cover/
+backup-before-newcover/
 41bf0929-8993-4442-9bf8-62452e20b19c.png
+ペースト済み*.png
+Canva AI*.jpg
 
 # VS Codeの拡張機能が作る、CLAUDE.md の書き出し
 CLAUDE.html
+
+# Canvaに渡すための素材（GitHubには上げない）
+canva-assets/
+/hero.jpg

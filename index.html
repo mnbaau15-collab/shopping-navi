@@ -11,43 +11,71 @@
   <!-- ===== アイコン（自分で描いた図形。外部の画像は使いません） ===== -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <defs>
-      <!-- ボタンの中の、白いアイコン（色は文字の色に合わせて変わります） -->
-      <symbol id="glyph-pin" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9a2.2 2.2 0 1 1 0-4.4 2.2 2.2 0 0 1 0 4.4z"/></symbol>
-      <symbol id="glyph-shop" viewBox="0 0 24 24"><path d="M3 9l2-6h14l2 6z"/><path fill-rule="evenodd" d="M4 11h16v10H4zm6 4v6h4v-6z"/></symbol>
-      <symbol id="glyph-search" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M10 3a7 7 0 1 0 4.2 12.6l4.6 4.6 2-2-4.6-4.6A7 7 0 0 0 10 3zm0 3a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/></symbol>
-
-      <!-- 「できること」の、色つきのアイコン -->
-      <symbol id="ic-shop" viewBox="0 0 64 64">
-        <rect x="12" y="28" width="40" height="28" fill="#fff8ee" stroke="#9a3412" stroke-width="3"/>
-        <rect x="8" y="14" width="48" height="16" fill="#e8590c"/>
-        <rect x="16" y="14" width="8" height="16" fill="#fff8ee"/><rect x="32" y="14" width="8" height="16" fill="#fff8ee"/><rect x="48" y="14" width="8" height="16" fill="#fff8ee"/>
-        <rect x="26" y="38" width="12" height="18" fill="#e8590c"/>
-        <rect x="14" y="36" width="9" height="9" fill="#bfe3f5"/><rect x="41" y="36" width="9" height="9" fill="#bfe3f5"/>
+      <!-- 探し方のカードの、色つきのアイコン（自分で描いた図形） -->
+      <symbol id="ic-here" viewBox="0 0 64 64">
+        <path d="M4 22l16-6 20 6 20-6v36l-20 6-20-6-16 6z" fill="#8fd19e" stroke="#2f7d46" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M20 16v36M40 22v36" stroke="#2f7d46" stroke-width="2.5"/>
+        <path d="M32 44c0 0-11-11-11-20a11 11 0 1 1 22 0c0 9-11 20-11 20z" fill="#e53935" stroke="#ffffff" stroke-width="2.5"/>
+        <circle cx="32" cy="24" r="4.5" fill="#ffffff"/>
       </symbol>
-      <symbol id="ic-page" viewBox="0 0 64 64">
-        <rect x="10" y="8" width="44" height="48" rx="6" fill="#ffffff" stroke="#9a3412" stroke-width="3"/>
-        <path d="M10 14a6 6 0 0 1 6-6h32a6 6 0 0 1 6 6v6H10z" fill="#e8590c"/>
-        <rect x="18" y="28" width="28" height="4" rx="2" fill="#9a3412"/><rect x="18" y="38" width="28" height="4" rx="2" fill="#9a3412"/><rect x="18" y="48" width="18" height="4" rx="2" fill="#9a3412"/>
+      <symbol id="ic-town" viewBox="0 0 64 64">
+        <rect x="6" y="30" width="22" height="26" fill="#fff3d6" stroke="#9a3412" stroke-width="3"/>
+        <path d="M3 32L17 16l14 16z" fill="#e8590c" stroke="#9a3412" stroke-width="3" stroke-linejoin="round"/>
+        <rect x="14" y="40" width="7" height="16" fill="#e8590c"/>
+        <rect x="34" y="20" width="24" height="36" fill="#ffe2b0" stroke="#9a3412" stroke-width="3"/>
+        <rect x="39" y="26" width="6" height="6" fill="#bfe3f5"/><rect x="49" y="26" width="6" height="6" fill="#bfe3f5"/>
+        <rect x="39" y="37" width="6" height="6" fill="#bfe3f5"/><rect x="49" y="37" width="6" height="6" fill="#bfe3f5"/>
+        <rect x="43" y="47" width="8" height="9" fill="#e8590c"/>
+        <circle cx="56" cy="12" r="6" fill="#6cbf5c"/>
       </symbol>
-      <symbol id="ic-map" viewBox="0 0 64 64">
-        <path d="M6 22l16-6 20 6 16-6v36l-16 6-20-6-16 6z" fill="#8fd19e" stroke="#2f7d46" stroke-width="3" stroke-linejoin="round"/>
-        <path d="M22 16v36M42 22v36" stroke="#2f7d46" stroke-width="2.5"/>
-        <path d="M32 40c0 0-9-9-9-16a9 9 0 1 1 18 0c0 7-9 16-9 16z" fill="#e53935" stroke="#ffffff" stroke-width="2"/>
-        <circle cx="32" cy="24" r="3.5" fill="#ffffff"/>
+      <symbol id="ic-name" viewBox="0 0 64 64">
+        <rect x="8" y="26" width="34" height="28" fill="#fff8ee" stroke="#1d4ed8" stroke-width="3"/>
+        <rect x="5" y="14" width="40" height="14" fill="#e8590c"/>
+        <rect x="11" y="14" width="7" height="14" fill="#fff8ee"/><rect x="25" y="14" width="7" height="14" fill="#fff8ee"/><rect x="39" y="14" width="6" height="14" fill="#fff8ee"/>
+        <rect x="20" y="36" width="10" height="18" fill="#bfe3f5" stroke="#1d4ed8" stroke-width="2"/>
+        <circle cx="44" cy="40" r="12" fill="#ffffff" fill-opacity="0.7" stroke="#1d4ed8" stroke-width="5"/>
+        <line x1="53" y1="49" x2="61" y2="58" stroke="#1d4ed8" stroke-width="6" stroke-linecap="round"/>
+      </symbol>
+      <!-- 店のカードのボタンの、色つきのアイコン -->
+      <symbol id="ic-flyer" viewBox="0 0 64 64">
+        <rect x="8" y="6" width="42" height="52" rx="3" fill="#ffffff" stroke="#9a3412" stroke-width="3"/>
+        <rect x="8" y="6" width="42" height="14" fill="#e53935"/>
+        <rect x="14" y="26" width="30" height="4" fill="#e0c9a6"/>
+        <circle cx="22" cy="43" r="8" fill="#6cbf5c" stroke="#2f7d46" stroke-width="2.5"/>
+        <circle cx="39" cy="44" r="7" fill="#f6a021" stroke="#b45309" stroke-width="2.5"/>
+        <path d="M44 20l14 6-4 32H44z" fill="#ffe2b0" stroke="#9a3412" stroke-width="3" stroke-linejoin="round"/>
+      </symbol>
+      <symbol id="ic-shop-page" viewBox="0 0 64 64">
+        <rect x="5" y="9" width="54" height="44" rx="5" fill="#ffffff" stroke="#1d4ed8" stroke-width="3"/>
+        <rect x="5" y="9" width="54" height="11" fill="#bfe3f5" stroke="#1d4ed8" stroke-width="3"/>
+        <rect x="12" y="28" width="22" height="6" fill="#e8590c"/>
+        <rect x="12" y="38" width="22" height="9" fill="#ffe2b0" stroke="#9a3412" stroke-width="2"/>
+        <circle cx="46" cy="40" r="9" fill="#e8f6ff" stroke="#1d4ed8" stroke-width="2.5"/>
+        <path d="M37 40h18M46 31c-5 5-5 13 0 18M46 31c5 5 5 13 0 18" fill="none" stroke="#1d4ed8" stroke-width="2"/>
+      </symbol>
+      <symbol id="ic-route" viewBox="0 0 64 64">
+        <path d="M4 18l16-6 20 6 20-6v34l-20 6-20-6-16 6z" fill="#d9efd0" stroke="#2f7d46" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M10 44c10-2 8-14 18-14s8 8 16 4" fill="none" stroke="#1d4ed8" stroke-width="3.5" stroke-dasharray="5 5" stroke-linecap="round"/>
+        <path d="M48 28c0 0-8-8-8-14a8 8 0 1 1 16 0c0 6-8 14-8 14z" fill="#e53935" stroke="#ffffff" stroke-width="2"/>
+        <circle cx="48" cy="14" r="3" fill="#ffffff"/>
+        <rect x="10" y="44" width="22" height="9" rx="4" fill="#2f6fd0" stroke="#ffffff" stroke-width="2"/>
+        <circle cx="16" cy="54" r="3.5" fill="#333"/><circle cx="27" cy="54" r="3.5" fill="#333"/>
       </symbol>
     </defs>
   </svg>
 
-  <!-- 画面の上の部分（アプリの名前） -->
+  <!-- 画面の上の部分（アプリの名前）。表紙のときは、画像の中に同じ文字があるので、見えなくする（読み上げ用には残す） -->
   <header class="site-header">
-    <h1 class="app-title"><span class="title-sub">かんたん</span><br>お買い物ナビ</h1>
-    <p class="app-lead">近くのお店を、かんたんに さがせます。</p>
+    <div class="header-inner">
+      <h1 class="app-title"><span class="title-sub">かんたん</span><br>お買い物<br>ナビ</h1>
+      <p class="app-lead">近くのお店を、<br>かんたんに さがせます。</p>
+    </div>
   </header>
 
-  <!-- 表紙の大きなイラスト（表紙のときだけ出ます） -->
+  <!-- 表紙の画像（表紙のときだけ出ます）。Canva で作った表紙で、タイトルと説明文が、画像の中に入っています -->
   <div class="hero">
-    <img src="images/hero-illustration.png" width="498" height="307"
-         alt="スマートフォンを見ながら、笑顔で話す ご夫婦のイラスト。うしろにスーパーが見えます">
+    <img src="images/cover.jpg" width="1024" height="796"
+         alt="かんたん お買い物ナビ。近くのスーパーや、チラシを、かんたんに探せます。スーパーの前で、笑顔の家族が、買い物に来ています。">
   </div>
 
   <main class="top-main">
@@ -55,39 +83,35 @@
     <!-- ========== 画面1：表紙（さがし方をえらぶ） ========== -->
     <section id="screen-top">
 
-    <!-- このアプリでできること（かざり。ボタンではありません） -->
-    <ul class="feature-row">
-      <li><span class="feature-icon"><svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="#ic-shop"/></svg></span>お店を<br>さがせる</li>
-      <li><span class="feature-icon"><svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="#ic-page"/></svg></span>ページが<br>見られる</li>
-      <li><span class="feature-icon"><svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="#ic-map"/></svg></span>行き方が<br>わかる</li>
-    </ul>
+    <h2 class="visually-hidden" id="top-title" tabindex="-1">どうやって さがしますか？</h2>
 
-    <h2 class="section-title" id="top-title" tabindex="-1">どうやって さがしますか？</h2>
-
-    <!-- 3つの探し方のボタン -->
-    <div class="search-buttons">
-      <button type="button" class="big-button" id="button-location">
-        <span class="button-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#glyph-pin"/></svg></span>
-        <span class="button-text">
-          <span class="button-label">いまいる場所から さがす</span>
-          <span class="button-note">近いお店の順に 出ます</span>
+    <!-- 3つの探し方のボタン（表紙の絵の、カードの形） -->
+    <div class="search-cards">
+      <button type="button" class="search-card search-card-green" id="button-location">
+        <span class="search-card-icon" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><use href="#ic-here"/></svg></span>
+        <span class="search-card-text">
+          <span class="search-card-title">いまいる 場所から さがす</span>
+          <span class="search-card-note">近いお店の順に 出ます</span>
         </span>
+        <span class="search-card-arrow" aria-hidden="true">›</span>
       </button>
 
-      <button type="button" class="big-button" id="button-city">
-        <span class="button-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#glyph-shop"/></svg></span>
-        <span class="button-text">
-          <span class="button-label">市や町から さがす</span>
-          <span class="button-note">酒田・遊佐・庄内・三川</span>
+      <button type="button" class="search-card search-card-orange" id="button-city">
+        <span class="search-card-icon" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><use href="#ic-town"/></svg></span>
+        <span class="search-card-text">
+          <span class="search-card-title">市や町から さがす</span>
+          <span class="search-card-note">酒田・遊佐・<wbr>庄内・三川</span>
         </span>
+        <span class="search-card-arrow" aria-hidden="true">›</span>
       </button>
 
-      <button type="button" class="big-button" id="button-name">
-        <span class="button-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#glyph-search"/></svg></span>
-        <span class="button-text">
-          <span class="button-label">お店の名前で さがす</span>
-          <span class="button-note">ひらがなでも さがせます</span>
+      <button type="button" class="search-card search-card-blue" id="button-name">
+        <span class="search-card-icon" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><use href="#ic-name"/></svg></span>
+        <span class="search-card-text">
+          <span class="search-card-title">お店の 名前で さがす</span>
+          <span class="search-card-note">ひらがなでも さがせます</span>
         </span>
+        <span class="search-card-arrow" aria-hidden="true">›</span>
       </button>
     </div>
 
@@ -104,24 +128,24 @@
       <div class="nav-buttons">
         <button type="button" class="big-button sub-button" id="back-to-top-from-city">
           <span class="button-icon" aria-hidden="true">⬅</span>
-          <span class="button-label">最初の画面に もどる</span>
+          <span class="button-label">最初の 画面に もどる</span>
         </button>
       </div>
     </section>
 
     <!-- ========== 画面：いまいる場所からさがす ========== -->
     <section id="screen-location" hidden>
-      <h2 class="section-title" id="location-title" tabindex="-1">いまいる場所から さがす</h2>
+      <h2 class="section-title" id="location-title" tabindex="-1">いまいる 場所から さがす</h2>
 
       <!-- 現在地を使う前に、目的を説明する -->
       <p class="location-explain">
-        近くのお店を さがすために、現在地を使います。<br>
-        現在地は、お店までの距離を はかるためだけに 使います。保存したり、ほかへ送ったりは しません。
+        近くのお店を さがすために、 現在地を 使います。<br>
+        現在地は、 お店までの 距離を はかるためだけに 使います。 保存したり、 ほかへ 送ったりは しません。
       </p>
 
       <button type="button" class="big-button" id="button-use-location">
-        <span class="button-icon" aria-hidden="true">📍</span>
-        <span class="button-label">現在地を使って さがす</span>
+        <span class="button-icon icon-badge" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><use href="#ic-here"/></svg></span>
+        <span class="button-label">現在地から さがす</span>
       </button>
 
       <!-- 「しらべています…」「見つかりました」などの知らせ -->
@@ -130,11 +154,11 @@
       <!-- うまくいかなかったときだけ出す、ほかのさがし方のボタン -->
       <div class="nav-buttons" id="location-other-way" hidden>
         <button type="button" class="big-button" id="location-to-city">
-          <span class="button-icon" aria-hidden="true">🏠</span>
+          <span class="button-icon icon-badge" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><use href="#ic-town"/></svg></span>
           <span class="button-label">市や町から さがす</span>
         </button>
         <button type="button" class="big-button" id="location-to-name">
-          <span class="button-icon" aria-hidden="true">🔍</span>
+          <span class="button-icon icon-badge" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><use href="#ic-name"/></svg></span>
           <span class="button-label">お店の名前で さがす</span>
         </button>
       </div>
@@ -148,7 +172,7 @@
       <div class="nav-buttons">
         <button type="button" class="big-button sub-button" id="back-to-top-from-location">
           <span class="button-icon" aria-hidden="true">⬅</span>
-          <span class="button-label">最初の画面に もどる</span>
+          <span class="button-label">最初の 画面に もどる</span>
         </button>
       </div>
     </section>
@@ -159,10 +183,10 @@
 
       <!-- form で囲むと、キーボードの Enter でも「さがす」が動きます -->
       <form id="name-form" class="search-form">
-        <label for="name-input" class="form-label">お店の名前（ひらがなでも さがせます）</label>
+        <label for="name-input" class="form-label">お店の名前の 最初の 文字を 入れてください<wbr>（ひらがなでも カタカナでも さがせます）</label>
         <input type="text" id="name-input" class="text-input" autocomplete="off" enterkeyhint="search">
         <button type="submit" class="big-button">
-          <span class="button-icon" aria-hidden="true">🔍</span>
+          <span class="button-icon icon-badge" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><use href="#ic-name"/></svg></span>
           <span class="button-label">さがす</span>
         </button>
       </form>
@@ -173,7 +197,7 @@
       <!-- 見つからなかったときだけ出す、ほかのさがし方のボタン -->
       <div class="nav-buttons" id="name-other-way" hidden>
         <button type="button" class="big-button" id="name-to-city">
-          <span class="button-icon" aria-hidden="true">🏠</span>
+          <span class="button-icon icon-badge" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><use href="#ic-town"/></svg></span>
           <span class="button-label">市や町から さがす</span>
         </button>
       </div>
@@ -184,7 +208,7 @@
       <div class="nav-buttons">
         <button type="button" class="big-button sub-button" id="back-to-top-from-name">
           <span class="button-icon" aria-hidden="true">⬅</span>
-          <span class="button-label">最初の画面に もどる</span>
+          <span class="button-label">最初の 画面に もどる</span>
         </button>
       </div>
     </section>
@@ -202,8 +226,8 @@
           <span class="button-label">市や町を えらびなおす</span>
         </button>
         <button type="button" class="big-button sub-button" id="back-to-top-from-list">
-          <span class="button-icon" aria-hidden="true">🏠</span>
-          <span class="button-label">最初の画面に もどる</span>
+          <span class="button-icon icon-badge" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><use href="#ic-town"/></svg></span>
+          <span class="button-label">最初の 画面に もどる</span>
         </button>
       </div>
     </section>
@@ -212,7 +236,7 @@
 
   <!-- 画面の下の部分 -->
   <footer class="site-footer">
-    <p>対象地域：酒田市・鶴岡市・三川町・庄内町・遊佐町</p>
+    <p>対象地域：<wbr>酒田市・三川町・<wbr>庄内町・遊佐町</p>
   </footer>
 
   <!-- お店の名簿（先に読み込む） → 画面を動かすプログラム、の順番です -->

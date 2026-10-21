@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>字体と「できること」の見本（2回目）</title>
+  <style>
+    :root { --base: 24px; }  /* 文字の基準の大きさ。上のボタンで切りかえられる */
+    body { margin: 0; padding: 1rem; background: #e7e2d8; font-family: "Hiragino Sans", sans-serif; color: #222; line-height: 1.6; }
+    .intro { max-width: 70rem; margin: 0 auto 1rem; font-size: 16px; }
+    .intro h1 { font-size: 22px; margin: 0 0 6px; }
+    .size-bar { margin: 8px 0 0; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .size-bar button { font-size: 16px; padding: 6px 14px; border: 2px solid #9a3412; background: #fff; color: #9a3412; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    .size-bar button[aria-pressed="true"] { background: #9a3412; color: #fff; }
+    h2.section { max-width: 70rem; margin: 1.6rem auto 0.4rem; font-size: 20px; }
+    .grid { max-width: 80rem; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; align-items: flex-start; }
+    .cell { width: 360px; }
+    .label { margin: 0 0 6px; font-size: 16px; font-weight: bold; }
+    .spec { margin: 8px 0 0; font-size: 14px; background: #fff; border-radius: 8px; padding: 8px 12px; }
+
+    /* ===== スマホ1画面ぶん（幅360px）===== */
+    .phone { width: 360px; box-sizing: border-box; background: #fff6e8; border: 2px solid #999; border-radius: 16px; overflow: hidden;
+             font-size: var(--base); line-height: 1.6; color: #2b1a0e; }
+    .phone .top { background: #fff4e1; text-align: center; padding: 0.8em 0.6em 0.6em; }
+    .phone .top h1 { margin: 0; font-size: 1.9em; line-height: 1.2; }
+    .phone .top h1 span { color: #c2410c; }
+    .phone .top p { margin: 0.3em 0 0; font-weight: 700; font-size: 0.9em; }
+    .phone .body { padding: 0.7em 0.7em 0.9em; }
+    .phone h2 { margin: 0 0 0.5em; text-align: center; font-size: 1.15em; }
+    .btn { display: flex; align-items: center; gap: 0.5em; background: linear-gradient(#c2410c, #9a3412); color: #fff; border-radius: 1.1em; padding: 0.6em 0.7em; box-shadow: 0 4px 0 #7c2d12; margin-bottom: 0.7em; }
+    .btn b { display: block; font-size: 1.1em; line-height: 1.35; }
+    .btn small { font-size: 0.85em; }
+    .btn .pin { flex: none; width: 1.6em; height: 1.6em; fill: #fff; }
+    .card { background: #fff; border: 3px solid #2b1a0e; border-radius: 0.9em; padding: 0.6em 0.7em; }
+    .card h3 { margin: 0; font-size: 1.15em; line-height: 1.35; }
+    .card p { margin: 0.1em 0 0.4em; font-size: 0.9em; }
+    .card .dist { font-weight: 700; color: #9a3412; }
+    .kana { margin: 0.5em 0 0; font-size: 0.85em; }
+
+    /* ===== 字体 ===== */
+    .f-now   { font-family: "Hiragino Maru Gothic ProN", "BIZ UDPGothic", "Yu Gothic", sans-serif; }
+    .f-kaku  { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "BIZ UDPGothic", "Yu Gothic", sans-serif; font-weight: 700; }
+    .f-yu    { font-family: "Yu Gothic", "YuGothic", "游ゴシック体", "Yu Gothic UI", "Meiryo", sans-serif; font-weight: 700; }
+    .f-klee  { font-family: "Klee", "Klee One", "UD Digi Kyokasho NK-R", "UD デジタル 教科書体 NK-R", "Hiragino Maru Gothic ProN", sans-serif; font-weight: 600; }
+    .f-kaku h1, .f-kaku h2, .f-kaku h3, .f-kaku b { font-weight: 800; }
+    .f-yu h1, .f-yu h2, .f-yu h3, .f-yu b { font-weight: 700; }
+
+    /* ===== 「できること」5パターン ===== */
+    .feat-area { padding: 0.8em 0.7em; background: #fff6e8; }
+    .ico { background: #fff; border-radius: 0.9em; box-shadow: 0 2px 6px rgba(80,40,0,.18); display: flex; align-items: center; justify-content: center; }
+    .ico svg { width: 70%; height: 70%; }
+
+    /* P1：3つ横並び（いま） */
+    .p1 { display: flex; gap: 0.4em; list-style: none; margin: 0; padding: 0; }
+    .p1 li { flex: 1; text-align: center; font-weight: 700; font-size: 0.85em; line-height: 1.35; }
+    .p1 .ico { width: 3.4em; height: 3.4em; margin: 0 auto 0.3em; }
+
+    /* P2：たて3行のカード（大きなアイコン＋文＋ひとこと） */
+    .p2 { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5em; }
+    .p2 li { display: flex; align-items: center; gap: 0.6em; background: #fff; border-radius: 0.9em; padding: 0.5em 0.6em; box-shadow: 0 2px 6px rgba(80,40,0,.14); }
+    .p2 .ico { flex: none; width: 2.8em; height: 2.8em; background: #fff1e0; box-shadow: none; }
+    .p2 b { display: block; font-size: 1em; line-height: 1.3; }
+    .p2 small { font-size: 0.78em; }
+
+    /* P3：番号つきの流れ（1→2→3） */
+    .p3 { list-style: none; margin: 0; padding: 0; display: flex; align-items: flex-start; justify-content: space-between; }
+    .p3 li { flex: 1; text-align: center; font-weight: 700; font-size: 0.85em; line-height: 1.35; position: relative; }
+    .p3 .num { display: inline-flex; width: 1.7em; height: 1.7em; border-radius: 50%; background: #c2410c; color: #fff; align-items: center; justify-content: center; font-size: 1em; margin-bottom: 0.2em; }
+    .p3 .ico { width: 3em; height: 3em; margin: 0 auto 0.3em; }
+    .p3 li + li::before { content: "▶"; position: absolute; left: -0.55em; top: 2.6em; color: #c2410c; font-size: 0.9em; }
+
+    /* P4：絵の上の、吹き出し */
+    .p4 { position: relative; overflow: hidden; border-radius: 0.9em; }
+    .p4 img { display: block; width: 130%; max-width: none; margin-left: -22%; }
+    .p4 .bubble { position: absolute; background: #fff; border: 2px solid #c2410c; border-radius: 1em; padding: 0.25em 0.6em; font-weight: 700; font-size: 0.8em; line-height: 1.3; box-shadow: 0 2px 6px rgba(0,0,0,.2); display: flex; align-items: center; gap: 0.4em; }
+    .p4 .bubble svg { width: 1.5em; height: 1.5em; }
+    .p4 .b1 { left: 4%; top: 6%; }
+    .p4 .b2 { right: 4%; top: 18%; }
+    .p4 .b3 { left: 6%; bottom: 8%; }
+
+    /* P5：1枚のカードの中の、チェックリスト */
+    .p5 { background: #fff; border: 3px solid #c2410c; border-radius: 1em; padding: 0.6em 0.8em; list-style: none; margin: 0; }
+    .p5 li { display: flex; align-items: center; gap: 0.5em; padding: 0.3em 0; font-weight: 700; font-size: 1em; border-bottom: 2px dotted #e5c28f; }
+    .p5 li:last-child { border-bottom: 0; }
+    .p5 .check { flex: none; width: 1.5em; height: 1.5em; border-radius: 50%; background: #2f7d46; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+
+  <!-- アイコン（自分で描いた図形） -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="ic-shop" viewBox="0 0 64 64">
+        <rect x="12" y="28" width="40" height="28" fill="#fff8ee" stroke="#9a3412" stroke-width="3"/>
+        <rect x="8" y="14" width="48" height="16" fill="#e8590c"/>
+        <rect x="16" y="14" width="8" height="16" fill="#fff8ee"/><rect x="32" y="14" width="8" height="16" fill="#fff8ee"/><rect x="48" y="14" width="8" height="16" fill="#fff8ee"/>
+        <rect x="26" y="38" width="12" height="18" fill="#e8590c"/>
+        <rect x="14" y="36" width="9" height="9" fill="#bfe3f5"/><rect x="41" y="36" width="9" height="9" fill="#bfe3f5"/>
+      </symbol>
+      <symbol id="ic-page" viewBox="0 0 64 64">
+        <rect x="10" y="8" width="44" height="48" rx="6" fill="#ffffff" stroke="#9a3412" stroke-width="3"/>
+        <path d="M10 14a6 6 0 0 1 6-6h32a6 6 0 0 1 6 6v6H10z" fill="#e8590c"/>
+        <rect x="18" y="28" width="28" height="4" rx="2" fill="#9a3412"/><rect x="18" y="38" width="28" height="4" rx="2" fill="#9a3412"/><rect x="18" y="48" width="18" height="4" rx="2" fill="#9a3412"/>
+      </symbol>
+      <symbol id="ic-map" viewBox="0 0 64 64">
+        <path d="M6 22l16-6 20 6 16-6v36l-16 6-20-6-16 6z" fill="#8fd19e" stroke="#2f7d46" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M22 16v36M42 22v36" stroke="#2f7d46" stroke-width="2.5"/>
+        <path d="M32 40c0 0-9-9-9-16a9 9 0 1 1 18 0c0 7-9 16-9 16z" fill="#e53935" stroke="#ffffff" stroke-width="2"/>
+        <circle cx="32" cy="24" r="3.5" fill="#ffffff"/>
+      </symbol>
+      <symbol id="glyph-pin" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9a2.2 2.2 0 1 1 0-4.4 2.2 2.2 0 0 1 0 4.4z"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="intro">
+    <h1>字体と「できること」の見本（2回目）</h1>
+    <p style="margin:0">アプリ本体は変えていません。文字は、いまより<strong>大きく</strong>（基準 24px）してあります。上のボタンで、大きさを切りかえて見比べられます。字体は、お使いのMacに入っているものが使われます（Windowsでは、近い字体に置きかわります）。</p>
+    <div class="size-bar" id="size-bar">
+      <span style="font-weight:bold">文字の基準の大きさ：</span>
+      <button type="button" data-size="22px" aria-pressed="false">22px（いま）</button>
+      <button type="button" data-size="24px" aria-pressed="true">24px</button>
+      <button type="button" data-size="26px" aria-pressed="false">26px</button>
+      <button type="button" data-size="28px" aria-pressed="false">28px</button>
+    </div>
+  </div>
+
+  <!-- =============== 字体の比較 =============== -->
+  <h2 class="section">① 字体の比較（同じ内容を、4つの字体で）</h2>
+  <div class="grid" id="fonts"></div>
+
+  <!-- =============== できること 5パターン =============== -->
+  <h2 class="section">② 「お店をさがせる／ページが見られる／行き方がわかる」の見せ方（5パターン）</h2>
+  <div class="grid">
+
+    <div class="cell">
+      <p class="label">パターン1　3つ横並び（いま）</p>
+      <div class="phone f-now"><div class="feat-area">
+        <ul class="p1">
+          <li><div class="ico"><svg><use href="#ic-shop"/></svg></div>お店を<br>さがせる</li>
+          <li><div class="ico"><svg><use href="#ic-page"/></svg></div>ページが<br>見られる</li>
+          <li><div class="ico"><svg><use href="#ic-map"/></svg></div>行き方が<br>わかる</li>
+        </ul>
+      </div></div>
+      <p class="spec">場所を取らず、ひと目で3つが分かる。文字は小さめになりがち。</p>
+    </div>
+
+    <div class="cell">
+      <p class="label">パターン2　たて3行のカード</p>
+      <div class="phone f-now"><div class="feat-area">
+        <ul class="p2">
+          <li><div class="ico"><svg><use href="#ic-shop"/></svg></div><div><b>お店を さがせる</b><small>近くや、名前で さがせます</small></div></li>
+          <li><div class="ico"><svg><use href="#ic-page"/></svg></div><div><b>ページが 見られる</b><small>お店の ページへ すぐ行けます</small></div></li>
+          <li><div class="ico"><svg><use href="#ic-map"/></svg></div><div><b>行き方が わかる</b><small>地図で 道順が 出ます</small></div></li>
+        </ul>
+      </div></div>
+      <p class="spec">文字を大きくできる。ひとこと説明つきで、意味が分かりやすい。縦に長くなる。</p>
+    </div>
+
+    <div class="cell">
+      <p class="label">パターン3　番号つきの流れ（1→2→3）</p>
+      <div class="phone f-now"><div class="feat-area">
+        <ul class="p3">
+          <li><span class="num">1</span><div class="ico"><svg><use href="#ic-shop"/></svg></div>お店を<br>さがす</li>
+          <li><span class="num">2</span><div class="ico"><svg><use href="#ic-page"/></svg></div>ページを<br>見る</li>
+          <li><span class="num">3</span><div class="ico"><svg><use href="#ic-map"/></svg></div>行き方を<br>知る</li>
+        </ul>
+      </div></div>
+      <p class="spec">「使う順番」が伝わる。初めての人にも、迷いにくい。</p>
+    </div>
+
+    <div class="cell">
+      <p class="label">パターン4　絵の上の吹き出し</p>
+      <div class="phone f-now"><div class="feat-area">
+        <div class="p4">
+          <img src="../images/hero.jpg" alt="">
+          <div class="bubble b1"><svg><use href="#ic-shop"/></svg>お店を さがせる</div>
+          <div class="bubble b2"><svg><use href="#ic-page"/></svg>ページが 見られる</div>
+          <div class="bubble b3"><svg><use href="#ic-map"/></svg>行き方が わかる</div>
+        </div>
+      </div></div>
+      <p class="spec">絵と一体になって、やわらかい印象。絵の上に重ねるので、文字を大きくしすぎると、絵が隠れる。</p>
+    </div>
+
+    <div class="cell">
+      <p class="label">パターン5　チェックリスト（1枚のカード）</p>
+      <div class="phone f-now"><div class="feat-area">
+        <ul class="p5">
+          <li><span class="check">✓</span>お店を さがせる</li>
+          <li><span class="check">✓</span>ページが 見られる</li>
+          <li><span class="check">✓</span>行き方が わかる</li>
+        </ul>
+      </div></div>
+      <p class="spec">いちばんシンプルで、文字を大きくしやすい。アイコンがないので、少し地味。</p>
+    </div>
+
+  </div>
+
+  <script>
+    // ----- ① 字体の比較の画面を作る -----
+    const fontPlans = [
+      { cls: "f-now",  name: "いま：丸ゴシック", note: "ヒラギノ丸ゴ（Windows：BIZ UDPゴシック）。やわらかい。" },
+      { cls: "f-kaku", name: "案1：角ゴシック（太め）", note: "ヒラギノ角ゴ W7〜W8（Windows：BIZ UDPゴシック）。はっきり、力強い。" },
+      { cls: "f-yu",   name: "案2：游ゴシック", note: "游ゴシック Bold（Windows：游ゴシック／メイリオ）。すっきり、上品。" },
+      { cls: "f-klee", name: "案3：教科書体（クレー）", note: "クレー（Windows：UDデジタル教科書体）。手書きの教科書の形で、やさしい。" }
+    ];
+
+    const fontsArea = document.getElementById("fonts");
+    fontPlans.forEach(function (plan) {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+
+      const label = document.createElement("p");
+      label.className = "label";
+      label.textContent = plan.name;
+      cell.appendChild(label);
+
+      const phone = document.createElement("div");
+      phone.className = "phone " + plan.cls;
+      phone.innerHTML =
+        "<div class=\"top\"><h1><span>かんたん</span><br>お買い物ナビ</h1><p>近くのお店を、<br>かんたんに さがせます。</p></div>" +
+        "<div class=\"body\"><h2>どうやって<br>さがしますか？</h2>" +
+        "<div class=\"btn\"><svg class=\"pin\"><use href=\"#glyph-pin\"/></svg><div><b>いまいる 場所から さがす</b><small>近いお店の順に 出ます</small></div></div>" +
+        "<div class=\"card\"><h3>マックスバリュ 東泉店</h3><p class=\"dist\">ここから 約 1.2 km</p><p>酒田市</p></div>" +
+        "<p class=\"kana\">ひらがな：あいうえお　カタカナ：ヤマザワ<br>数字：0123456789　1.2 km</p></div>";
+      cell.appendChild(phone);
+
+      const spec = document.createElement("p");
+      spec.className = "spec";
+      spec.textContent = plan.note;
+      cell.appendChild(spec);
+      fontsArea.appendChild(cell);
+    });
+
+    // ----- 文字の大きさを切りかえる -----
+    document.querySelectorAll("#size-bar button").forEach(function (button) {
+      button.addEventListener("click", function () {
+        document.documentElement.style.setProperty("--base", button.dataset.size);
+        document.querySelectorAll("#size-bar button").forEach(function (b) {
+          b.setAttribute("aria-pressed", b === button ? "true" : "false");
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

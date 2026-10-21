@@ -40,12 +40,13 @@ Object.keys(elements).forEach(function (id) {
 
 const bodyClasses = new Set(["is-top"]);
 const fakeDocument = {
-  body: { classList: { toggle: function (name, on) { on ? bodyClasses.add(name) : bodyClasses.delete(name); } } },
+  body: { themes: [], setAttribute: function (k, v) { this.theme = v; }, removeAttribute: function () { this.theme = null; }, classList: { toggle: function (name, on) { on ? bodyClasses.add(name) : bodyClasses.delete(name); } } },
   getElementById: function (id) {
     if (!elements[id]) throw new Error("index.html に id がありません: " + id);
     return elements[id];
   },
-  createElement: createElement
+  createElement: createElement,
+  createElementNS: function (ns, tag) { return createElement(tag); }
 };
 
 // stores.js と app.js を読み込んで動かす
@@ -67,10 +68,10 @@ const api = run({ getCurrentPosition: function (success) { success({ coords: { l
 
 // ---- 市や町 ----
 elements["button-city"].listeners.click();
-check("市町ボタン4つ（鶴岡なし）", elements["city-buttons"].children.length === 4);
+check("市町ボタン4つ（酒田・三川・庄内・遊佐。鶴岡は対象外）", elements["city-buttons"].children.length === 4);
 elements["city-buttons"].children[0].listeners.click();
 check("酒田市13枚", elements["store-list"].children.length === 13);
-const namesOf = function (list) { return list.children.map(function (card) { return card.children[0]._text; }); };
+const namesOf = function (list) { return list.children.map(function (card) { return card.children[0]._text.replace(/\u200b/g, ""); }); };   // 表示用の見えない区切りは、とって比べる
 const kanaOrder = new Intl.Collator("ja");
 const sakataNames = namesOf(elements["store-list"]);
 check("酒田市の一覧は あいうえお順（先頭：イオン酒田南店、最後：ヤマザワ東大町店）", sakataNames[0] === "イオン酒田南店" && sakataNames[12] === "ヤマザワ東大町店");
@@ -89,6 +90,18 @@ function search(query) {
 search("まっくすばりゅ");
 check("まっくすばりゅ→4件", elements["name-result-list"].children.length === 4 && elements["name-other-way"].hidden === true);
 check("店名検索の結果も 読みがなの あいうえお順（あまるめ → ひがしいずみ → ひらた → ゆざ）", namesOf(elements["name-result-list"]).join("|") === "マックスバリュ余目店|マックスバリュ東泉店|マックスバリュ平田店|マックスバリュゆざエルパ店");
+const hitCount = function (q) { search(q); return elements["name-result-list"].children.length; };
+const hitNames = function (q) { search(q); return elements["name-result-list"].children.map(function (c) { return c.children[0]._text.replace(/\u200b/g, ""); }); };
+check("店名の頭：「ばりゅ」（「マックスバリュ」の途中）は見つからない", hitCount("ばりゅ") === 0 && elements["name-message"]._text.includes("見つかりませんでした"));
+check("頭の文字：「やまざわ」→4件、「ヤマ」→4件、「ﾔﾏ」（半角）→4件", hitCount("やまざわ") === 4 && hitCount("ヤマ") === 4 && hitCount("ﾔﾏ") === 4);
+check("頭の文字：「いおん」→2件、「すーぱー」→2件、「えーこーぷ」→3件", hitCount("いおん") === 2 && hitCount("すーぱー") === 2 && hitCount("えーこーぷ") === 3);
+check("単語の頭：「ビッグ」「びっぐ」→ザ・ビッグ酒田北店", hitNames("ビッグ").join() === "ザ・ビッグ酒田北店" && hitNames("びっぐ").join() === "ザ・ビッグ酒田北店");
+check("単語の頭：「アオキ」「あおき」→スーパーアオキ・スーパーのアオキ三川店", hitCount("アオキ") === 2 && hitCount("あおき") === 2);
+check("単語の頭：「酒田」→3件（イオン酒田南・ザ・ビッグ酒田北・こぴあコープ酒田）", hitCount("酒田") === 3);
+check("単語の頭：「余目」「あまるめ」→3件", hitCount("余目") === 3 && hitCount("あまるめ") === 3);
+check("単語の頭：「ゆざ」→2件（ゆざエルパ店・Aコープ遊佐店）、「エルパ」→1件、「コープ」→4件", hitCount("ゆざ") === 2 && hitCount("エルパ") === 1 && hitCount("コープ") === 4);
+check("単語の途中の文字は見つからない：「ッグ」「るぱ」「ざわ」", hitCount("ッグ") === 0 && hitCount("るぱ") === 0 && hitCount("ざわ") === 0);
+search("まっくすばりゅ");
 search("ほげ");
 check("ほげ→0件・別の探し方ボタン表示", elements["name-result-list"].children.length === 0 && elements["name-other-way"].hidden === false);
 search("   ");
@@ -122,7 +135,7 @@ const noPosition = api.createStoreCard({ id: "x", name: "テスト", city: "庄�
 check("位置なしのお店は 行き方ボタン無し（チラシとお店のページは出る）", linkBlocks(noPosition).length === 2);
 const labelOf = function (block) { return block.children[0].children[1]._text; };
 const order = linkBlocks(api.createStoreCard({ id: "o", name: "順番", city: "酒田市", officialUrl: "https://example.com/", lat: 38.9, lng: 139.8 })).map(labelOf);
-check("ボタンの順番：チラシ → お店のページ → 行き方", order.join("|") === "チラシを さがす|お店のページを見る|行き方を調べる");
+check("ボタンの順番：チラシ → お店のページ → 行き方", order.join("|") === "チラシを さがす|お店の ページを 見る|行き方を 調べる");
 
 // ---- チラシボタン・お店のページボタン ----
 const sample = api.createStoreCard({ id: "y", name: "テスト", city: "酒田市", officialUrl: "https://example.com/", lat: 38.9, lng: 139.8 });
@@ -144,7 +157,7 @@ check("エリアのページのURL（/prefectures/6）は、お店のページ�
 check("変な文字のURLでも、止まらずに庄内地方のページへ", flyerOf(Object.assign({}, base, { flyerUrl: "%%%" })) === FLYER_AREA);
 const none = api.createStoreCard(Object.assign({}, base, { flyerUrl: null }));
 const noneNotice = none.children.find(function (c) { return c.className === "flyer-none"; });
-check("flyerUrl が null のお店は、チラシボタンの代わりに「トクバイに チラシが ありません」", !!noneNotice && noneNotice.children[1]._text === "トクバイに チラシが ありません" && linkBlocks(none).length === 2);
+check("flyerUrl が null のお店は、チラシボタンの代わりに「こちらでは チラシが 検索されませんでした…」", !!noneNotice && noneNotice.children[1]._text === "こちらでは チラシが 検索されませんでした。 お店の ページを ご確認ください" && linkBlocks(none).length === 2);
 check("案内は、1番目（市や町の次）の位置に出る", none.children.findIndex(function (c) { return c.className === "flyer-none"; }) < none.children.findIndex(function (c) { return c.className === "link-button-block"; }));
 
 // ---- 本物のデータ ----

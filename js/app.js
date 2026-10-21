@@ -5,8 +5,7 @@
 // ===========================================
 
 // 市や町を並べる順番。お店が1軒もない市や町は、ボタンを出しません
-// （鶴岡市のお店を stores.js に足すと、自動でボタンが出ます）
-const CITY_ORDER = ["酒田市", "鶴岡市", "三川町", "庄内町", "遊佐町"];
+const CITY_ORDER = ["酒田市", "三川町", "庄内町", "遊佐町"];
 
 // 「チラシを さがす」ボタンで開くページ（トクバイの、庄内地方のチラシ一覧）
 // ※ リンクを開くだけ。このアプリから、トクバイへ自動でアクセスすることはしません
@@ -19,7 +18,7 @@ const kanaCollator = new Intl.Collator("ja");
 function sortByKana(storeList) {
   // もとのリストは変えずに、並べかえたコピーを返す（読みがながなければ店名で比べる）
   return storeList.slice().sort(function (a, b) {
-    return kanaCollator.compare(a.kana || a.name, b.kana || b.name);
+    return kanaCollator.compare((a.kana || a.name).replace(/\s/g, ""), (b.kana || b.name).replace(/\s/g, ""));
   });
 }
 
@@ -38,6 +37,13 @@ function showScreen(name) {
   Object.keys(screens).forEach(function (key) {
     screens[key].hidden = (key !== name);
   });
+
+  // 探し方ごとの色（緑・オレンジ・青）。お店の一覧は、直前の探し方の色のまま
+  if (name === "top") {
+    document.body.removeAttribute("data-theme");
+  } else if (name !== "list") {
+    document.body.setAttribute("data-theme", name);
+  }
 
   // 表紙のときだけ、大きな名前とイラストを出す（CSS が body の is-top を見て切りかえる）
   document.body.classList.toggle("is-top", name === "top");
@@ -85,9 +91,16 @@ function createCityButton(city, count) {
   button.className = "big-button";
 
   const icon = document.createElement("span");
-  icon.className = "button-icon";
+  icon.className = "button-icon icon-badge";
   icon.setAttribute("aria-hidden", "true");
-  icon.textContent = "📍";
+  // 表紙の「市や町から さがす」と同じ、家の絵
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("viewBox", "0 0 64 64");
+  svg.setAttribute("focusable", "false");
+  const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+  use.setAttribute("href", "#ic-town");
+  svg.appendChild(use);
+  icon.appendChild(svg);
 
   const text = document.createElement("span");
   text.className = "button-text";
@@ -151,15 +164,67 @@ function normalizeText(text) {
     .replace(/[\s・]/g, "");           // 空白と「・」を取りのぞく
 }
 
-// 入力した文字に合うお店を探す（店名か読みがなの、一部が合えばOK）
+// ----- 店名を「単語」に分ける -----
+// 文字の種類（カタカナ・ひらがな・漢字・英字）が変わるところで区切る。「・」や空白でも区切る。
+// 例：「ザ・ビッグ酒田北店」→「ザ」「ビッグ」「酒田北店」／「スーパーのアオキ三川店」→「スーパー」「アオキ」「三川店」
+// 1文字だけの単語（「の」「店」など）は、検索に使わない
+function charKind(ch) {
+  if (/[ァ-ヶｦ-ﾟ]/.test(ch)) return "katakana";
+  if (/[ぁ-ん]/.test(ch)) return "hiragana";
+  if (/[一-龥々]/.test(ch)) return "kanji";
+  if (/[A-Za-zＡ-Ｚａ-ｚ0-9０-９]/.test(ch)) return "latin";
+  return "other";
+}
+
+function splitNameWords(name) {
+  const words = [];
+  let current = "";
+  let currentKind = "";
+  Array.from(name).forEach(function (ch) {
+    const kind = charKind(ch);
+    // 「ー」（のばす棒）は、前の文字の仲間として、つなげる
+    const isLongMark = (ch === "ー" || ch === "ｰ");
+    if (kind === "other" && !isLongMark) {
+      if (current !== "") words.push(current);
+      current = "";
+      currentKind = "";
+      return;
+    }
+    if (!isLongMark && currentKind !== "" && kind !== currentKind) {
+      words.push(current);
+      current = "";
+    }
+    current += ch;
+    if (!isLongMark) currentKind = kind;
+  });
+  if (current !== "") words.push(current);
+  return words.filter(function (w) { return w.length >= 2; });
+}
+
+// 読みがなは、単語の区切りが「スペース」で書いてある（data/stores.js）
+function splitKanaWords(kana) {
+  return (kana || "").split(/\s+/).filter(function (w) { return w.length >= 2; });
+}
+
+// 入力した文字に合うお店を探す
+// 店名か読みがなの「頭の文字」、または、店名の中の「単語の頭の文字」が合うものを出す
+//   例：「ビッグ」→「ザ・ビッグ酒田北店」（単語「ビッグ」の頭）／「ばりゅ」→ 見つからない（「マックスバリュ」の途中）
+// ひらがな・カタカナ・全角・半角は、normalizeText でそろえてから比べる
+function matchesStore(store, word) {
+  const starts = function (text) { return normalizeText(text).startsWith(word); };
+  return starts(store.name) ||
+         starts(store.kana || "") ||
+         splitNameWords(store.name).some(starts) ||
+         splitKanaWords(store.kana).some(starts);
+}
+
 function findStoresByName(query) {
   const word = normalizeText(query);
   if (word === "") {
     return [];
   }
   return stores.filter(function (store) {
-    return normalizeText(store.name).includes(word) ||
-           normalizeText(store.kana || "").includes(word);
+    return matchesStore(store, word);
   });
 }
 
@@ -192,13 +257,29 @@ function handleNameSearch(event) {
   const found = sortByKana(findStoresByName(query));
 
   if (found.length === 0) {
-    message.textContent = "見つかりませんでした。ほかの言葉で さがすか、下のボタンから さがしてください。";
+    message.textContent = "見つかりませんでした。 お店の名前の 最初の 文字や、 名前の中の ことばの 最初の 文字を 入れて さがすか、 下の ボタンから さがしてください。";
     otherWay.hidden = false;
   } else {
     message.textContent = "お店が " + found.length + " 件 見つかりました。";
     otherWay.hidden = true;
   }
   renderStoreCards(resultList, found);
+}
+
+// ----- お店の名前を、自然な場所で折り返せるようにする -----
+// 「マックスバリュ」「ヤマザワ」のような、チェーンの名前のあとに、見えない区切り（ゼロ幅スペース U+200B）を入れる。
+// 画面にはなにも見えず、はばが足りないときだけ、そこで折り返す。検索には使わない（表示のためだけ）
+const NAME_BREAK_PREFIXES = ["マックスバリュ", "ヤマザワ", "ザ・ビッグ", "スーパーの", "スーパー", "こぴあコープ", "Aコープ", "イオン", "ト一屋"];
+const NAME_BREAK_OVERRIDES = { "といちやいろは蔵パーク店": "といちや\u200bいろは蔵\u200bパーク店" };
+
+function breakableName(name) {
+  if (NAME_BREAK_OVERRIDES[name]) {
+    return NAME_BREAK_OVERRIDES[name];
+  }
+  const prefix = NAME_BREAK_PREFIXES.find(function (p) {
+    return name.startsWith(p) && name.length > p.length;
+  });
+  return prefix ? prefix + "\u200b" + name.slice(prefix.length) : name;
 }
 
 // お店のカード1枚分を作る
@@ -209,7 +290,7 @@ function createStoreCard(store, distanceKm) {
   // 店名（一番大きく）
   const name = document.createElement("h3");
   name.className = "store-name";
-  name.textContent = store.name;
+  name.textContent = breakableName(store.name);
   card.appendChild(name);
 
   // 現在地からの距離（現在地検索のときだけ）
@@ -236,22 +317,37 @@ function createStoreCard(store, distanceKm) {
     card.appendChild(createNoFlyerNotice());
   } else {
     const flyer = getFlyerLink(store);
-    card.appendChild(createLinkButton("📰", "チラシを さがす", flyer.url, flyer.note));
+    card.appendChild(createLinkButton("ic-flyer", "チラシを さがす", flyer.url, flyer.note));
   }
 
   // 2番目：「お店のページを見る」ボタン（URLが安全なときだけ出す）
   if (isSafeUrl(store.officialUrl)) {
-    card.appendChild(createLinkButton("🌐", "お店のページを見る", store.officialUrl,
-                                      "お店のページが 新しく ひらきます"));
+    card.appendChild(createLinkButton("ic-shop-page", "お店の ページを 見る", store.officialUrl,
+                                      "お店の ページが 新しく ひらきます"));
   }
 
   // 3番目：「行き方を調べる」ボタン（場所のデータがあるお店だけ）
   if (hasPosition(store)) {
-    card.appendChild(createLinkButton("🗺", "行き方を調べる", createRouteUrl(store),
-                                      "地図（Googleマップ）が 新しく ひらきます"));
+    card.appendChild(createLinkButton("ic-route", "行き方を 調べる", createRouteUrl(store),
+                                      "Googleマップが 新しく ひらきます"));
   }
 
   return card;
+}
+
+// ----- 色つきの絵（index.html の symbol）を、白いふだに入れて作る -----
+function createIconBadge(symbolId) {
+  const icon = document.createElement("span");
+  icon.className = "button-icon icon-badge";
+  icon.setAttribute("aria-hidden", "true");
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("viewBox", "0 0 64 64");
+  svg.setAttribute("focusable", "false");
+  const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+  use.setAttribute("href", "#" + symbolId);
+  svg.appendChild(use);
+  icon.appendChild(svg);
+  return icon;
 }
 
 // ----- トクバイにチラシがないお店の案内（ボタンではなく、文字だけ）-----
@@ -259,13 +355,10 @@ function createNoFlyerNotice() {
   const notice = document.createElement("p");
   notice.className = "flyer-none";
 
-  const icon = document.createElement("span");
-  icon.className = "button-icon";
-  icon.setAttribute("aria-hidden", "true");
-  icon.textContent = "📰";
+  const icon = createIconBadge("ic-flyer");
 
   const text = document.createElement("span");
-  text.textContent = "トクバイに チラシが ありません";
+  text.textContent = "こちらでは チラシが 検索されませんでした。 お店の ページを ご確認ください";
 
   notice.appendChild(icon);
   notice.appendChild(text);
@@ -277,7 +370,7 @@ function createNoFlyerNotice() {
 // このページは、チラシが替わっても URL が変わらない。だから、チラシ1枚ごとのURL（/leaflets/番号）は、登録しない
 function getFlyerLink(store) {
   if (isTokubaiStoreUrl(store.flyerUrl)) {
-    return { url: store.flyerUrl, note: "このお店の チラシの ページ（トクバイ）が 新しく ひらきます" };
+    return { url: store.flyerUrl, note: "トクバイの お店の ページが 新しく ひらきます" };
   }
   return { url: FLYER_AREA_URL, note: "トクバイの 庄内地方の ページが 新しく ひらきます" };
 }
@@ -298,7 +391,7 @@ function isTokubaiStoreUrl(url) {
 }
 
 // 新しいタブで開くリンクを、大きなボタンの見た目で作る（ボタンの下に、説明の一文もつける）
-function createLinkButton(iconText, labelText, url, noteText) {
+function createLinkButton(symbolId, labelText, url, noteText) {
   const wrapper = document.createElement("div");
   wrapper.className = "link-button-block";
 
@@ -308,10 +401,7 @@ function createLinkButton(iconText, labelText, url, noteText) {
   link.target = "_blank";                // 新しいタブで開く
   link.rel = "noopener noreferrer";      // 安全のためのおまじない
 
-  const icon = document.createElement("span");
-  icon.className = "button-icon";
-  icon.setAttribute("aria-hidden", "true");
-  icon.textContent = iconText;
+  const icon = createIconBadge(symbolId);
 
   const label = document.createElement("span");
   label.className = "button-label";
@@ -419,7 +509,7 @@ function handleUseLocation() {
 
   // 使えない端末のとき
   if (!navigator.geolocation) {
-    setLocationMessage("この機械では 現在地を つかえません。下のボタンから さがしてください。", true);
+    setLocationMessage("この 機械では 現在地を つかえません。 下の ボタンから さがしてください。", true);
     return;
   }
 
@@ -438,9 +528,9 @@ function handleUseLocation() {
       console.error("位置情報を取得できませんでした:", error); // くわしいことは console にだけ出す
       if (error.code === 1) {
         // 1 = 許可されなかった
-        setLocationMessage("現在地を つかうことが ゆるされませんでした。下のボタンから さがしてください。", true);
+        setLocationMessage("現在地を つかうことが ゆるされませんでした。 下の ボタンから さがしてください。", true);
       } else {
-        setLocationMessage("現在地が わかりませんでした。下のボタンから さがしてください。", true);
+        setLocationMessage("現在地が わかりませんでした。 下の ボタンから さがしてください。", true);
       }
     },
     { timeout: 15000 } // 15秒たっても分からなければ、あきらめる
@@ -455,28 +545,28 @@ function showNearbyStores(lat, lng) {
   const note = document.getElementById("location-note");
 
   if (result.sorted.length === 0) {
-    setLocationMessage("場所の データが あるお店が まだ ありません。下のボタンから さがしてください。", true);
+    setLocationMessage("場所の データが あるお店が まだ ありません。 下の ボタンから さがしてください。", true);
     return;
   }
 
-  setLocationMessage("近い順に、お店が " + result.sorted.length + " 件 見つかりました。", false);
+  setLocationMessage("近い順に、 お店が " + result.sorted.length + " 件 見つかりました。", false);
   renderStoreCards(resultList, result.sorted, result.distances);
 
   // 注意書きをつくる
-  let noteText = "距離は、地図の上の まっすぐな長さです。道のりとは ちがいます。";
+  let noteText = "";
 
   const missingCount = stores.length - result.sorted.length;
   if (missingCount > 0) {
-    noteText += " 場所の データが まだない お店（" + missingCount + " 件）は、ここには 出ません。" +
-                "「市や町から」「お店の名前から」では、すべてのお店を さがせます。";
+    noteText += " 場所の データが まだない お店（" + missingCount + " 件）は、 ここには 出ません。" +
+                " 「市や町から」 「お店の名前から」では、 すべての お店を さがせます。";
   }
 
   const nearestKm = result.distances[result.sorted[0].id];
   if (nearestKm > 30) {
-    noteText += " いちばん近いお店でも 30 km より 遠いので、庄内地域から はなれているようです。";
+    noteText += " いちばん 近い お店でも 30 km より 遠いので、 庄内地域から はなれているようです。";
   }
 
-  note.textContent = noteText;
+  note.textContent = noteText.trim();
 }
 
 // ----- ボタンを押したときの動きを登録する -----

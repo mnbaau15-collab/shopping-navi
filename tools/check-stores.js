@@ -29,7 +29,7 @@ const dataFile = valueOf("--file") || path.join(__dirname, "..", "data", "stores
 const reportFile = valueOf("--report");
 
 // ---- 決まりごと ----
-const CITIES = ["酒田市", "鶴岡市", "三川町", "庄内町", "遊佐町"];
+const CITIES = ["酒田市", "三川町", "庄内町", "遊佐町"];
 const AREA = { latMin: 38.5, latMax: 39.2, lngMin: 139.5, lngMax: 140.1 }; // 庄内地域のだいたいの範囲
 const OLD_DAYS = 180;          // 確認日がこれより古いデータは「再確認」をすすめる
 const LINK_TIMEOUT_MS = 10000; // 1軒あたりの待ち時間
@@ -66,8 +66,8 @@ function checkData(stores) {
     if (store.city && !CITIES.includes(store.city)) {
       errors.push(label + "：市や町の名前が正しくありません（" + store.city + "）");
     }
-    if (store.kana && !/^[ぁ-んー]+$/.test(store.kana)) {
-      errors.push(label + "：読みがなは、ひらがなだけで書いてください（" + store.kana + "）");
+    if (store.kana && !/^[ぁ-んー]+( [ぁ-んー]+)*$/.test(store.kana)) {
+      errors.push(label + "：読みがなは、ひらがなだけで書き、単語の区切りは、スペース1つにしてください（" + store.kana + "）");
     }
     if (store.officialUrl && !/^https?:\/\//.test(store.officialUrl)) {
       errors.push(label + "：URLが http:// か https:// で始まっていません");

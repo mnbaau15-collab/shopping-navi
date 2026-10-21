@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>文字の飾りの見本（3パターン）</title>
+  <style>
+    :root { --base: 28px; }   /* 文字の基準の大きさ。上のボタンで切りかえる */
+    body { margin: 0; padding: 1rem; background: #e7e2d8; font-family: "Hiragino Sans", sans-serif; color: #222; line-height: 1.6; }
+    .intro { max-width: 70rem; margin: 0 auto 1rem; font-size: 16px; }
+    .intro h1 { font-size: 22px; margin: 0 0 6px; }
+    .size-bar { margin: 8px 0 0; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .size-bar button { font-size: 16px; padding: 6px 14px; border: 2px solid #9a3412; background: #fff; color: #9a3412; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    .size-bar button[aria-pressed="true"] { background: #9a3412; color: #fff; }
+    .grid { max-width: 80rem; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; align-items: flex-start; }
+    .cell { width: 360px; }
+    .label { margin: 0 0 6px; font-size: 16px; font-weight: bold; }
+    .spec { margin: 8px 0 0; font-size: 14px; background: #fff; border-radius: 8px; padding: 8px 12px; }
+
+    /* ===== スマホ1画面ぶん（幅360px）。アプリの表紙と同じ重ね方 ===== */
+    .phone { width: 360px; box-sizing: border-box; background: #fff6e8; border: 2px solid #999; border-radius: 16px; overflow: hidden;
+             font-family: "Hiragino Maru Gothic ProN", "BIZ UDPGothic", "Yu Gothic", sans-serif; font-size: var(--base); line-height: 1.5; color: #2b1a0e; }
+    .phone .head { position: relative; z-index: 2; background: #fff4e1; text-align: center; padding: 0.5em 0.4em 0.3em; overflow-wrap: anywhere; }
+    .phone .t1 { margin: 0; font-size: 1.45em; font-weight: 800; line-height: 1.2; }
+    .phone .t1 .sub { display: block; font-size: 0.9em; color: #c2410c; }
+    .phone .lead { margin: 0.3em 0 0; font-size: 0.8em; font-weight: 700; }
+    .phone .hero { position: relative; z-index: 1; margin-top: -94px; overflow: hidden; background: #fff4e1; }
+    .phone .hero img { display: block; width: 120%; max-width: none; margin-left: -17%; }
+    .phone .panel { position: relative; z-index: 3; margin-top: -0.8em; background: #fff6e8; border-radius: 1.2em 1.2em 0 0; padding: 0.5em 0.5em 0.8em; overflow-wrap: anywhere; }
+    .phone .h2 { margin: 0.2em 0 0.4em; text-align: center; font-size: 1.1em; font-weight: 700; line-height: 1.35; }
+    .phone .btn { display: flex; align-items: center; gap: 0.4em; background: linear-gradient(#c2410c, #9a3412); color: #fff; border-radius: 0.9em; padding: 0.5em 0.6em; box-shadow: 0 4px 0 #7c2d12; margin-bottom: 0.5em; }
+    .phone .btn svg { flex: none; width: 1.2em; height: 1.2em; fill: #fff; }
+    .phone .btn b { font-size: 1em; line-height: 1.3; }
+    .phone .card { background: #fff; border: 3px solid #2b1a0e; border-radius: 0.8em; padding: 0.4em 0.6em; }
+    .phone .card h3 { margin: 0; font-size: 1.1em; line-height: 1.3; font-weight: 700; }
+    .phone .card p { margin: 0.1em 0 0; font-size: 0.8em; font-weight: 700; color: #9a3412; }
+
+    /* ===== パターンA：白いふち取り ＋ やわらかい影 ===== */
+    .A .t1, .A .t1 .sub, .A .h2, .A .lead {
+      -webkit-text-stroke: 0.16em #ffffff;
+      paint-order: stroke fill;
+      text-shadow: 0 0.07em 0 #f3b27a, 0 0.1em 0.16em rgba(154, 52, 18, 0.35);   /* シールのように、ふくらんで見える */
+    }
+    .A .lead { -webkit-text-stroke-width: 0.2em; }
+    .A .btn b { text-shadow: 0 0.06em 0 rgba(0, 0, 0, 0.35); letter-spacing: 0.02em; }
+    .A .card h3 { -webkit-text-stroke: 0.12em #fff1e0; paint-order: stroke fill; }
+
+    /* ===== パターンB：リボン（ラベル）と、筆のなみ線 ===== */
+    .B .t1 .sub { display: inline-block; background: linear-gradient(#e8590c, #c2410c); color: #fff; padding: 0 0.55em 0.04em; border-radius: 999px; font-size: 0.6em; box-shadow: 0 0.1em 0 #9a3412; margin-bottom: 0.2em; }
+    .B .t1 .main, .B .h2 .main {
+      display: inline-block; padding-bottom: 0.16em;
+      background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 12' preserveAspectRatio='none'><path d='M0 7 Q8 1 16 7 T32 7 T48 7 T64 7 T80 7 T100 7' fill='none' stroke='%23e8590c' stroke-width='3.6' stroke-linecap='round'/></svg>") left bottom / 100% 0.26em no-repeat;
+    }
+    .B .lead { display: inline-block; background: rgba(255, 255, 255, 0.75); padding: 0.05em 0.6em; border-radius: 999px; }
+    .B .card h3 { border-left: 0.3em solid #e8590c; padding-left: 0.4em; }
+    .B .btn { border: 0.08em solid #fff3d6; }
+
+    /* ===== パターンC：水彩のマーカー ＋ 秋の葉っぱ ===== */
+    .C .t1 .main, .C .h2 .main {
+      display: inline-block; padding: 0 0.15em; border-radius: 0.15em; transform: rotate(-1.2deg);
+      background: linear-gradient(transparent 50%, rgba(255, 190, 80, 0.8) 50%, rgba(255, 190, 80, 0.8) 94%, transparent 94%);
+    }
+    .C .h2 .main { background: linear-gradient(transparent 55%, rgba(255, 205, 120, 0.75) 55%, rgba(255, 205, 120, 0.75) 94%, transparent 94%); }
+    .C .t1 .sub::before, .C .t1 .sub::after, .C .card h3::before {
+      content: ""; display: inline-block; width: 0.75em; height: 0.75em; margin: 0 0.15em; vertical-align: -0.05em;
+      background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M4 28C4 14 14 4 28 4c0 14-10 24-24 24z' fill='%23f0a030'/><path d='M4 28L20 12' stroke='%23b45309' stroke-width='2' fill='none'/></svg>") center / contain no-repeat;
+    }
+    .C .t1 .sub::after { transform: scaleX(-1); }
+    .C .btn { background: linear-gradient(#c2410c, #9a3412); }
+    .C .btn b::before { content: ""; display: inline-block; width: 0.7em; height: 0.7em; margin-right: 0.25em; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M4 28C4 14 14 4 28 4c0 14-10 24-24 24z' fill='%23ffd27a'/></svg>") center / contain no-repeat; }
+  </style>
+</head>
+<body>
+
+  <div class="intro">
+    <h1>文字の飾りの見本（3パターン）</h1>
+    <p style="margin:0">アプリ本体は変えていません。上のボタンで、文字の大きさを<strong>標準（28px）／1.5倍／2倍</strong>に切りかえて、見比べられます。2倍では、せまい画面で、文字が2〜3行に折り返します。</p>
+    <div class="size-bar" id="size-bar">
+      <span style="font-weight:bold">文字の基準の大きさ：</span>
+      <button type="button" data-size="28px" aria-pressed="true">標準 28px</button>
+      <button type="button" data-size="42px" aria-pressed="false">1.5倍 42px</button>
+      <button type="button" data-size="56px" aria-pressed="false">2倍 56px</button>
+    </div>
+  </div>
+
+  <div class="grid" id="plans"></div>
+
+  <script>
+    const pinPath = "M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9a2.2 2.2 0 1 1 0-4.4 2.2 2.2 0 0 1 0 4.4z";
+
+    const plans = [
+      { cls: "A", name: "パターンA　白いふち取り ＋ シールのような影",
+        note: "文字のまわりを白でふち取り、オレンジの影をつけて、シールのように浮き出させる。絵の上でも、文字がくっきり読める。飾りが少なく、いちばん読みやすい。" },
+      { cls: "B", name: "パターンB　リボン（ラベル）と、筆のなみ線",
+        note: "「かんたん」をオレンジのリボンにし、タイトルと見出しの下に、筆で引いたようななみ線。商店街の看板のような、親しみやすい印象。" },
+      { cls: "C", name: "パターンC　水彩のマーカー ＋ 秋の葉っぱ",
+        note: "文字の下に、水彩のマーカーをななめに引き、イラストの秋の葉に合わせた、葉っぱの飾りをつける。いちばん絵になじむが、飾りは多め。" }
+    ];
+
+    const area = document.getElementById("plans");
+    plans.forEach(function (plan) {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+
+      const label = document.createElement("p");
+      label.className = "label";
+      label.textContent = plan.name;
+      cell.appendChild(label);
+
+      const phone = document.createElement("div");
+      phone.className = "phone " + plan.cls;
+      // 見本ページだけで使う、固定の文章（外から来たデータは入れない）
+      phone.innerHTML =
+        '<div class="head"><h1 class="t1"><span class="sub">かんたん</span><span class="main">お買い物ナビ</span></h1>' +
+        '<p class="lead">近くのお店を、<br>かんたんに さがせます。</p></div>' +
+        '<div class="hero"><img src="../images/hero.jpg" alt=""></div>' +
+        '<div class="panel"><p class="h2"><span class="main">どうやって さがしますか？</span></p>' +
+        '<div class="btn"><svg viewBox="0 0 24 24"><path d="' + pinPath + '"/></svg><b>いまいる 場所から さがす</b></div>' +
+        '<div class="card"><h3>マックスバリュ 東泉店</h3><p>ここから 約 1.2 km</p></div></div>';
+      cell.appendChild(phone);
+
+      const spec = document.createElement("p");
+      spec.className = "spec";
+      spec.textContent = plan.note;
+      cell.appendChild(spec);
+      area.appendChild(cell);
+    });
+
+    // 文字の大きさを切りかえる（?size=56 のように、アドレスで指定もできる）
+    function setSize(size) {
+      document.documentElement.style.setProperty("--base", size);
+      document.querySelectorAll("#size-bar button").forEach(function (b) {
+        b.setAttribute("aria-pressed", b.dataset.size === size ? "true" : "false");
+      });
+    }
+    document.querySelectorAll("#size-bar button").forEach(function (button) {
+      button.addEventListener("click", function () { setSize(button.dataset.size); });
+    });
+    const fromUrl = new URLSearchParams(location.search).get("size");
+    if (fromUrl) { setSize(fromUrl + "px"); }
+  </script>
+
+</body>
+</html>
