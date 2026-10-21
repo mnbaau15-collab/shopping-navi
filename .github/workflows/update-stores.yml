@@ -1,0 +1,50 @@
+# 店舗データ（住所・電話番号・営業時間）を、月に1回、お店の公式ページから読み取って、更新案を作る設定
+# ・読み取りは、Claude（Anthropic API）が行う。キーは GitHub の Secrets「ANTHROPIC_API_KEY」に入れておく
+# ・stores.js を直接は書き換えない。変わった分を「プルリクエスト」にして、人が公式ページと見比べてから取り込む
+# ・プルリクエストを作ると、持ち主（このリポジトリのアカウント）を「担当者」にする。GitHubが、登録してあるメールアドレスへ知らせのメールを送る
+# ・読むのは、各お店の公式ページだけ（1軒1回）。トクバイなどには、アクセスしない
+name: 店舗データの月1回の更新案づくり
+
+on:
+  schedule:
+    - cron: "0 0 1 * *"   # 毎月1日 日本時間 9:00（GitHubの時間は世界標準時のため 0:00）
+  workflow_dispatch:       # 手動でも動かせる（Actionsの画面の「Run workflow」ボタン）
+
+permissions:
+  contents: write          # 更新案のブランチを作るために必要
+  pull-requests: write     # プルリクエストを作るために必要
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: お店のページを読んで、更新案を作る
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node tools/update-stores.js --report report.md
+
+      - name: 変わった分があれば、プルリクエストにする
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          if git diff --quiet data/stores.js; then
+            echo "変更はありませんでした。"
+            exit 0
+          fi
+          node tools/check-stores.js   # データの形が壊れていないかを検査（壊れていたら、ここで止まる）
+          BRANCH="update-stores-$(date +%F)-${GITHUB_RUN_ID}"
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add data/stores.js
+          git commit -m "店舗データの更新案（$(date +%F)）"
+          git push origin "$BRANCH"
+          # --assignee：持ち主を担当者にする → GitHubから、持ち主のメールへ知らせが届く
+          gh pr create --title "店舗データの更新案（$(date +%F)）" --body-file report.md --base main --head "$BRANCH" --assignee "$OWNER"

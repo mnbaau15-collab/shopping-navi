@@ -46,6 +46,8 @@ shopping-navi/
 
 店舗データの自動チェック（`tools/check-stores.js`、`.github/workflows/check-stores.yml`）は、「確認が必要なところを見つけて知らせる」までを自動にし、**データの書き換えは必ず人が確認してから行う**（お店のページを読み取って自動で書き換えることはしない）。詳しくは `docs/auto-update-feasibility.md`。
 
+**月1回の更新案づくり**（`tools/update-stores.js`、`.github/workflows/update-stores.yml`）：毎月1日に、GitHub Actions が各お店の**公式ページだけ**（1軒1回、3秒おき。トクバイのサイトには、プログラムで拒否していて、アクセスしない）を読む。Claude（Anthropic API、キーは GitHub の Secrets「ANTHROPIC_API_KEY」）で住所・電話番号・営業時間を取り出し、さらに、公式ページに書かれている**トクバイのお店のページへのリンク**（`https://tokubai.co.jp/チェーン名/店番号` の形で、1つだけのとき）を `flyerUrl` の候補にする。チラシの内容（品名・値段・画像）は、取得しない。変わっていた分は、**`stores.js` に直接は反映せず、プルリクエストにして**、持ち主を担当者にする（GitHubから、登録のメールへ知らせが届く）。**人が公式ページと見比べて「Merge」を押したときだけ、反映される**（「書き換えは人が確認してから」の方針は、この形で守る）。書き換えるのは address / tel / hours / flyerUrl / updatedAt だけで、ページに書かれていない項目は、空にせず、レポートに「要確認」と書く。
+
 このほかに、アプリ本体と独立した宿題用の検証フォルダ `verify/`（`fetch-leaflets.js`・`route-check.html`・`coords-check.html` など）と、説明メモ `docs/explanation.md` がある。`verify/` はアプリに組み込まない。`verify/config.js` はAPIキーを貼る場所なので、キーを貼ったら他人に見せない・公開しない。
 
 ※ 実装開始時に必要に応じて調整してよいが、変更した場合はこの節も更新すること。
