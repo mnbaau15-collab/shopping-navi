@@ -320,7 +320,7 @@ function handleNameSearch(event) {
   const found = sortByKana(findStoresByName(query));
 
   if (found.length === 0) {
-    message.textContent = "見つかりませんでした。\nお店の名前の 最初の 文字や、 名前の中の ことばの 最初の 文字を 入れて さがすか、 下の ボタンから さがしてください。";
+    message.textContent = "見つかりませんでした。\n文字を かえて もう一度 どうぞ。";
     otherWay.hidden = false;
   } else {
     fillCountMessage(message, ["お店が ", found.length, " 軒 見つかりました。"]);

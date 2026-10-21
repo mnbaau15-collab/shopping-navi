@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>かんたん お買い物ナビ</title>
-  <link rel="stylesheet" href="css/style.css?v=20261021g">
+  <link rel="stylesheet" href="css/style.css?v=20261021h">
 </head>
 <body class="is-top">
 
@@ -74,7 +74,7 @@
 
   <!-- 表紙の画像（表紙のときだけ出ます）。Canva で作った表紙で、タイトルと説明文が、画像の中に入っています -->
   <div class="hero">
-    <img src="images/cover.jpg?v=20261021g" width="1024" height="796"
+    <img src="images/cover.jpg?v=20261021h" width="1024" height="796"
          alt="かんたん お買い物ナビ。近くのスーパーや、チラシを、かんたんに探せます。スーパーの前で、笑顔の家族が、買い物に来ています。">
   </div>
 
@@ -139,8 +139,8 @@
 
       <!-- 現在地を使う前に、目的を説明する -->
       <p class="location-explain">
-        近くのお店を さがすために、 現在地を 使います。<br>
-        現在地は、 お店までの 距離を はかるためだけに 使います。 保存したり、 ほかへ 送ったりは しません。
+        現在地を 使って 近いお店を さがします。<br>
+        現在地は 保存も 送信も しません。
       </p>
 
       <button type="button" class="big-button" id="button-use-location">
@@ -183,7 +183,7 @@
 
       <!-- form で囲むと、キーボードの Enter でも「さがす」が動きます -->
       <form id="name-form" class="search-form">
-        <label for="name-input" class="form-label">お店の名前の 最初の 文字を 入れてください。<br>ひらがなでも カタカナでも さがせます。</label>
+        <label for="name-input" class="form-label">名前の 最初の 文字を 入れてください。<br>ひらがな・カタカナで さがせます。</label>
         <input type="text" id="name-input" class="text-input" autocomplete="off" enterkeyhint="search" autofocus>
         <!-- 入力した文字に合うお店の名前が、ここに出ます（app.js が作ります） -->
         <div id="name-suggestions" class="suggestions" hidden></div>
@@ -242,8 +242,8 @@
   </footer>
 
   <!-- お店の名簿（先に読み込む） → 画面を動かすプログラム、の順番です -->
-  <script src="data/stores.js?v=20261021g"></script>
-  <script src="js/app.js?v=20261021g"></script>
+  <script src="data/stores.js?v=20261021h"></script>
+  <script src="js/app.js?v=20261021h"></script>
 
 </body>
 </html>

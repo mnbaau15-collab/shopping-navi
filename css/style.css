@@ -475,7 +475,8 @@ a.big-button {
 /* 現在地を使う前の説明と、距離の注意書き */
 .location-explain {
   margin: 0 0 var(--space-large);
-  font-size: 0.9rem;
+  font-size: min(0.9rem, 4.6vw);   /* 2行が、スマホの横幅いっぱいに入る大きさ */
+  white-space: nowrap;
 }
 
 .location-note {
@@ -503,7 +504,8 @@ a.big-button {
 }
 
 .form-label {
-  font-size: 0.9rem;
+  font-size: min(0.9rem, 4.6vw);   /* 2行が、スマホの横幅いっぱいに入る大きさ */
+  white-space: nowrap;
   font-weight: 700;
 }
 
@@ -674,3 +676,6 @@ body[data-theme="name"] .section-title { text-shadow: 0 0.07em 0 #bfe0f7, 0 0.1e
 
 /* 現在地の案内：「他の 方法で さがして 下さい。」が1行に入る大きさにする */
 #location-message { font-size: min(0.95rem, 5vw); }
+
+/* 名前をさがした結果の知らせも、スマホの幅に合わせる */
+#name-message { font-size: min(0.95rem, 5vw); }
