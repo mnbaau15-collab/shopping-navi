@@ -596,7 +596,7 @@ function handleUseLocation() {
       console.error("位置情報を取得できませんでした:", error); // くわしいことは console にだけ出す
       if (error.code === 1) {
         // 1 = 許可されなかった
-        setLocationMessage("現在地を つかうことが\nゆるされませんでした。\nスマホの 設定で、\nこの ページの 位置情報を\n「許可」に すると\nつかえます。\nまたは、\n下の ボタンから\nさがしてください。", true);
+        setLocationMessage("現在地を つかうことが\nゆるされませんでした。\nスマホの 設定で、\n位置情報を 「許可」にして 下さい。\nまたは、\n下の ボタンから\nさがしてください。", true);
       } else if (error.code === 3) {
         // 3 = 時間切れ
         setLocationMessage("現在地を しらべるのに\n時間が かかっています。\nもう一度 ボタンを おすか、\n下の ボタンから\nさがしてください。", true);
