@@ -671,3 +671,6 @@ body[data-theme="name"] .section-title { text-shadow: 0 0.07em 0 #bfe0f7, 0 0.1e
 }
 
 .location-note { white-space: pre-line; }
+
+/* 現在地の案内：「他の 方法で さがして 下さい。」が1行に入る大きさにする */
+#location-message { font-size: min(0.95rem, 5vw); }

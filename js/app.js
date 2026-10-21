@@ -577,7 +577,7 @@ function handleUseLocation() {
 
   // 使えない端末のとき
   if (!navigator.geolocation) {
-    setLocationMessage("この 機械では 現在地を つかえません。\n他の 方法で\nさがして 下さい。", true);
+    setLocationMessage("この 機械では 現在地を つかえません。\n他の 方法で さがして 下さい。", true);
     return;
   }
 
@@ -596,12 +596,12 @@ function handleUseLocation() {
       console.error("位置情報を取得できませんでした:", error); // くわしいことは console にだけ出す
       if (error.code === 1) {
         // 1 = 許可されなかった
-        setLocationMessage("現在地を つかうことが\nゆるされませんでした。\nスマホの 設定で、\n位置情報を 「許可」にして 下さい。\nまたは、\n他の 方法で\nさがして 下さい。", true);
+        setLocationMessage("現在地を つかうことが\nゆるされませんでした。\nスマホの 設定で、\n位置情報を 「許可」にして 下さい。\nまたは 他の 方法で さがして 下さい。", true);
       } else if (error.code === 3) {
         // 3 = 時間切れ
-        setLocationMessage("現在地を しらべるのに\n時間が かかっています。\nもう一度 ボタンを おすか、\n他の 方法で\nさがして 下さい。", true);
+        setLocationMessage("現在地を しらべるのに\n時間が かかっています。\nもう一度 ボタンを おすか、\n他の 方法で さがして 下さい。", true);
       } else {
-        setLocationMessage("現在地が わかりませんでした。\n他の 方法で\nさがして 下さい。", true);
+        setLocationMessage("現在地が わかりませんでした。\n他の 方法で さがして 下さい。", true);
       }
     },
     { timeout: 20000, maximumAge: 60000 } // 20秒たっても分からなければ、あきらめる。1分以内に調べた場所は、そのまま使う
