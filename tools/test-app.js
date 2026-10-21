@@ -134,7 +134,9 @@ check("「くわしく見る」は出さない", elements["store-list"].children
 // ---- 位置のないお店（データを足したときの備え）----
 const noPosition = api.createStoreCard({ id: "x", name: "テスト", city: "庄内町", officialUrl: "https://example.com/" });
 check("位置なしのお店は 行き方ボタン無し（チラシとお店のページは出る）", linkBlocks(noPosition).length === 2);
-const labelOf = function (block) { return block.children[0].children[1]._text; };
+const labelOf = function (block) {
+  return block.children[0].children[1].children.map(function (c) { return c._text !== undefined ? c._text : c.text; }).join("");
+};
 const order = linkBlocks(api.createStoreCard({ id: "o", name: "順番", city: "酒田市", officialUrl: "https://example.com/", lat: 38.9, lng: 139.8 })).map(labelOf);
 check("ボタンの順番：チラシ → お店のページ → 行き方", order.join("|") === "チラシを さがす|お店の ページを 見る|行き方を 調べる");
 

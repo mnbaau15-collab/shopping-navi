@@ -701,3 +701,14 @@ body[data-theme="name"] .section-title { text-shadow: 0 0.07em 0 #bfe0f7, 0 0.1e
 .search-card-icon { width: 1.8rem; height: 1.8rem; }
 .search-card-arrow { width: 1.2rem; height: 1.2rem; font-size: 1rem; }
 .search-card-title { font-size: min(0.95rem, 4.4vw); }
+
+/* ボタンの中の「チラシ」「お店」「行き方」：2倍の大きさの太字（1行におさまるよう、まわりの文字は小さめ） */
+.key-word {
+  font-size: 2em;
+  font-weight: 800;
+  line-height: 1;
+}
+.store-card .button-label { font-size: min(0.75rem, 3.9vw); }
+.store-card .big-button { gap: 0.3rem; padding-left: 0.5rem; padding-right: 0.4rem; }
+.store-card .button-icon.icon-badge svg { width: 1.9rem; height: 1.9rem; }
+.store-card .button-label { font-size: min(0.75rem, 4.3vw); }

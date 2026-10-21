@@ -468,7 +468,18 @@ function createLinkButton(symbolId, labelText, url, noteText) {
 
   const label = document.createElement("span");
   label.className = "button-label";
-  label.textContent = labelText;
+  // 「チラシ」「お店」「行き方」だけ、大きな太い文字にする
+  labelText.split(/(チラシ|お店|行き方)/).forEach(function (part) {
+    if (part === "") return;
+    if (part === "チラシ" || part === "お店" || part === "行き方") {
+      const key = document.createElement("span");
+      key.className = "key-word";
+      key.textContent = part;
+      label.appendChild(key);
+    } else {
+      label.appendChild(document.createTextNode(part));
+    }
+  });
 
   link.appendChild(icon);
   link.appendChild(label);
