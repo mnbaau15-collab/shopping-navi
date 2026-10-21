@@ -158,7 +158,7 @@ check("エリアのページのURL（/prefectures/6）は、お店のページ�
 check("変な文字のURLでも、止まらずに庄内地方のページへ", flyerOf(Object.assign({}, base, { flyerUrl: "%%%" })) === FLYER_AREA);
 const none = api.createStoreCard(Object.assign({}, base, { flyerUrl: null }));
 const noneNotice = none.children.find(function (c) { return c.className === "flyer-none"; });
-check("flyerUrl が null のお店は、チラシボタンの代わりに「こちらでは チラシが 検索されませんでした…」", !!noneNotice && noneNotice.children[1]._text === "こちらでは チラシが 検索されませんでした。 お店の ページを ご確認ください" && linkBlocks(none).length === 2);
+check("flyerUrl が null のお店は、チラシボタンの代わりに「こちらでは チラシが 検索されませんでした…」", !!noneNotice && noneNotice.children[1]._text === "こちらでは チラシが 検索\nできませんでした。\nページを ご確認ください。" && linkBlocks(none).length === 2);
 check("案内は、1番目（市や町の次）の位置に出る", none.children.findIndex(function (c) { return c.className === "flyer-none"; }) < none.children.findIndex(function (c) { return c.className === "link-button-block"; }));
 
 // ---- 本物のデータ ----

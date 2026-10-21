@@ -679,3 +679,25 @@ body[data-theme="name"] .section-title { text-shadow: 0 0.07em 0 #bfe0f7, 0 0.1e
 
 /* 名前をさがした結果の知らせも、スマホの幅に合わせる */
 #name-message { font-size: min(0.95rem, 5vw); }
+
+/* お店のカードの3つのボタンの文字：1行で出す（スマホの幅に合わせて小さくする） */
+.store-card .button-label {
+  white-space: nowrap;
+  font-size: min(0.75rem, 4.9vw);
+}
+
+/* トクバイにチラシがないときの文：3行で出す */
+.flyer-none span:last-child {
+  white-space: pre-line;
+  font-size: min(0.95rem, 5vw);
+}
+
+/* 説明文をなくしたので、表紙のカードは低くして、矢印は真ん中にもどす */
+.search-card { min-height: 4rem; }
+.search-card-arrow { align-self: center; margin-bottom: 0; }
+.search-card-title { font-size: min(0.95rem, 4.5vw); }
+.store-card .button-label { font-size: min(0.75rem, 4.4vw); }
+.search-card { padding: 0.5rem 0.45rem; gap: 0.3rem; }
+.search-card-icon { width: 1.8rem; height: 1.8rem; }
+.search-card-arrow { width: 1.2rem; height: 1.2rem; font-size: 1rem; }
+.search-card-title { font-size: min(0.95rem, 4.4vw); }

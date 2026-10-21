@@ -421,7 +421,7 @@ function createNoFlyerNotice() {
   const icon = createIconBadge("ic-flyer");
 
   const text = document.createElement("span");
-  text.textContent = "こちらでは チラシが 検索されませんでした。 お店の ページを ご確認ください";
+  text.textContent = "こちらでは チラシが 検索\nできませんでした。\nページを ご確認ください。";
 
   notice.appendChild(icon);
   notice.appendChild(text);
@@ -474,11 +474,7 @@ function createLinkButton(symbolId, labelText, url, noteText) {
   link.appendChild(label);
   wrapper.appendChild(link);
 
-  const note = document.createElement("p");
-  note.className = "store-link-note";
-  note.textContent = noteText;
-  wrapper.appendChild(note);
-
+  // ボタンの下の説明文は、出さない（noteText は使わない）
   return wrapper;
 }
 
