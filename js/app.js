@@ -58,6 +58,22 @@ function showScreen(name) {
   }
 }
 
+// ----- 「お店が 13 軒 あります」のように、数字だけを大きくして出す -----
+// parts：文字（そのまま）と数字（大きくする）を、順にならべたもの
+function fillCountMessage(element, parts) {
+  element.textContent = "";
+  parts.forEach(function (part) {
+    if (typeof part === "number") {
+      const number = document.createElement("span");
+      number.className = "count-number";
+      number.textContent = String(part);
+      element.appendChild(number);
+    } else {
+      element.appendChild(document.createTextNode(part));
+    }
+  });
+}
+
 // ----- 市や町ごとのお店の数を数える -----
 function countStoresByCity() {
   const counts = {};
@@ -111,7 +127,7 @@ function createCityButton(city, count) {
 
   const note = document.createElement("span");
   note.className = "button-note";
-  note.textContent = "お店が " + count + " 件 あります";
+  fillCountMessage(note, ["お店が ", count, " 軒"]);
 
   text.appendChild(label);
   text.appendChild(note);
@@ -234,12 +250,59 @@ function showNameScreen() {
   document.getElementById("name-message").textContent = "";
   document.getElementById("name-other-way").hidden = true;
   document.getElementById("name-result-list").textContent = "";
+  hideNameSuggestions();
   showScreen("name");
+  // 開いたらすぐ入力できるように、入力欄にカーソルを置く
+  document.getElementById("name-input").focus();
+}
+
+// ----- 入力中の予測表示（1文字入れると、合うお店の名前が下に出る）-----
+const MAX_SUGGESTIONS = 8;
+
+function hideNameSuggestions() {
+  const box = document.getElementById("name-suggestions");
+  box.textContent = "";
+  box.hidden = true;
+}
+
+function showNameSuggestions() {
+  const query = document.getElementById("name-input").value;
+  const box = document.getElementById("name-suggestions");
+  box.textContent = "";
+
+  if (normalizeText(query) === "") {
+    box.hidden = true;
+    return;
+  }
+
+  const found = sortByKana(findStoresByName(query)).slice(0, MAX_SUGGESTIONS);
+  box.hidden = (found.length === 0);
+
+  found.forEach(function (store) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "suggestion-button";
+    button.textContent = breakableName(store.name);
+    // 選ぶと、そのお店のカードだけを出す
+    button.addEventListener("click", function () {
+      chooseSuggestedStore(store);
+    });
+    box.appendChild(button);
+  });
+}
+
+function chooseSuggestedStore(store) {
+  document.getElementById("name-input").value = store.name;
+  hideNameSuggestions();
+  document.getElementById("name-other-way").hidden = true;
+  fillCountMessage(document.getElementById("name-message"), ["お店が ", 1, " 軒 見つかりました。"]);
+  renderStoreCards(document.getElementById("name-result-list"), [store]);
 }
 
 // 「さがす」ボタンを押したときの動き
 function handleNameSearch(event) {
   event.preventDefault(); // 画面が読み込み直されないようにする
+  hideNameSuggestions();
 
   const query = document.getElementById("name-input").value;
   const message = document.getElementById("name-message");
@@ -260,7 +323,7 @@ function handleNameSearch(event) {
     message.textContent = "見つかりませんでした。 お店の名前の 最初の 文字や、 名前の中の ことばの 最初の 文字を 入れて さがすか、 下の ボタンから さがしてください。";
     otherWay.hidden = false;
   } else {
-    message.textContent = "お店が " + found.length + " 件 見つかりました。";
+    fillCountMessage(message, ["お店が ", found.length, " 軒 見つかりました。"]);
     otherWay.hidden = true;
   }
   renderStoreCards(resultList, found);
@@ -499,7 +562,12 @@ function showLocationScreen() {
 
 // 画面に出すお知らせを書きかえる
 function setLocationMessage(text, showOtherWay) {
-  document.getElementById("location-message").textContent = text;
+  const message = document.getElementById("location-message");
+  if (typeof text === "string") {
+    message.textContent = text;
+  } else {
+    fillCountMessage(message, text);   // 数字を含む文
+  }
   document.getElementById("location-other-way").hidden = !showOtherWay;
 }
 
@@ -549,7 +617,7 @@ function showNearbyStores(lat, lng) {
     return;
   }
 
-  setLocationMessage("近い順に、 お店が " + result.sorted.length + " 件 見つかりました。", false);
+  setLocationMessage(["近い順に、 お店が ", result.sorted.length, " 軒 見つかりました。"], false);
   renderStoreCards(resultList, result.sorted, result.distances);
 
   // 注意書きをつくる
@@ -557,7 +625,7 @@ function showNearbyStores(lat, lng) {
 
   const missingCount = stores.length - result.sorted.length;
   if (missingCount > 0) {
-    noteText += " 場所の データが まだない お店（" + missingCount + " 件）は、 ここには 出ません。" +
+    noteText += " 場所の データが まだない お店（" + missingCount + " 軒）は、 ここには 出ません。" +
                 " 「市や町から」 「お店の名前から」では、 すべての お店を さがせます。";
   }
 
@@ -580,6 +648,7 @@ document.getElementById("back-to-top-from-location").addEventListener("click", f
   showScreen("top");
 });
 document.getElementById("name-form").addEventListener("submit", handleNameSearch);
+document.getElementById("name-input").addEventListener("input", showNameSuggestions);
 document.getElementById("name-to-city").addEventListener("click", showCityScreen);
 document.getElementById("back-to-top-from-name").addEventListener("click", function () {
   showScreen("top");

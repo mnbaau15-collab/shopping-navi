@@ -46,6 +46,7 @@ const fakeDocument = {
     return elements[id];
   },
   createElement: createElement,
+  createTextNode: function (t) { return { text: t }; },
   createElementNS: function (ns, tag) { return createElement(tag); }
 };
 

@@ -183,8 +183,10 @@
 
       <!-- form で囲むと、キーボードの Enter でも「さがす」が動きます -->
       <form id="name-form" class="search-form">
-        <label for="name-input" class="form-label">お店の名前の 最初の 文字を 入れてください<wbr>（ひらがなでも カタカナでも さがせます）</label>
-        <input type="text" id="name-input" class="text-input" autocomplete="off" enterkeyhint="search">
+        <label for="name-input" class="form-label">お店の名前の 最初の 文字を 入れてください。<br>ひらがなでも カタカナでも さがせます。</label>
+        <input type="text" id="name-input" class="text-input" autocomplete="off" enterkeyhint="search" autofocus>
+        <!-- 入力した文字に合うお店の名前が、ここに出ます（app.js が作ります） -->
+        <div id="name-suggestions" class="suggestions" hidden></div>
         <button type="submit" class="big-button">
           <span class="button-icon icon-badge" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><use href="#ic-name"/></svg></span>
           <span class="button-label">さがす</span>
@@ -236,7 +238,7 @@
 
   <!-- 画面の下の部分 -->
   <footer class="site-footer">
-    <p>対象地域：<wbr>酒田市・三川町・<wbr>庄内町・遊佐町</p>
+    <p>対象地域：酒田市・三川町・庄内町・遊佐町</p>
   </footer>
 
   <!-- お店の名簿（先に読み込む） → 画面を動かすプログラム、の順番です -->
