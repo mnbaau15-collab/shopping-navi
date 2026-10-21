@@ -747,3 +747,10 @@ body[data-theme="name"] .section-title { text-shadow: 0 0.07em 0 #bfe0f7, 0 0.1e
 .flyer-none span:last-child { white-space: pre; font-size: min(0.95rem, 3.8vw); }
 .header-home-button { font-size: min(0.9rem, 5.2vw); }
 .flyer-none span:last-child { font-size: min(0.95rem, 3.4vw); }
+
+/* ページの下の「最初の 画面に もどる」：1行で出す */
+.sub-button .button-label {
+  white-space: nowrap;
+  font-size: min(0.9rem, 5vw);
+}
+#button-use-location .button-label { white-space: nowrap; font-size: min(0.95rem, 5.4vw); }
