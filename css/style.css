@@ -611,7 +611,12 @@ body[data-theme="name"] .section-title { text-shadow: 0 0.07em 0 #bfe0f7, 0 0.1e
 }
 
 .search-card-icon { width: 2rem; height: 2rem; }
-.search-card-arrow { width: 1.4rem; height: 1.4rem; }
+.search-card-arrow {
+  width: 1.4rem;
+  height: 1.4rem;
+  align-self: flex-end;   /* 矢印を下げて、題名の文字にかぶらないようにする */
+  margin-bottom: 0.1rem;
+}
 .search-card { gap: 0.35rem; }
 
 /* 「お店が 13 軒」の数字だけ、2倍の大きさにする */

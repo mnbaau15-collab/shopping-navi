@@ -596,12 +596,15 @@ function handleUseLocation() {
       console.error("位置情報を取得できませんでした:", error); // くわしいことは console にだけ出す
       if (error.code === 1) {
         // 1 = 許可されなかった
-        setLocationMessage("現在地を つかうことが ゆるされませんでした。 下の ボタンから さがしてください。", true);
+        setLocationMessage("現在地を つかうことが ゆるされませんでした。 スマホの 設定で、 この ページの 位置情報を 「許可」に すると つかえます。 または、 下の ボタンから さがしてください。", true);
+      } else if (error.code === 3) {
+        // 3 = 時間切れ
+        setLocationMessage("現在地を しらべるのに 時間が かかっています。 もう一度 ボタンを おすか、 下の ボタンから さがしてください。", true);
       } else {
         setLocationMessage("現在地が わかりませんでした。 下の ボタンから さがしてください。", true);
       }
     },
-    { timeout: 15000 } // 15秒たっても分からなければ、あきらめる
+    { timeout: 20000, maximumAge: 60000 } // 20秒たっても分からなければ、あきらめる。1分以内に調べた場所は、そのまま使う
   );
 }
 
