@@ -712,3 +712,38 @@ body[data-theme="name"] .section-title { text-shadow: 0 0.07em 0 #bfe0f7, 0 0.1e
 .store-card .big-button { gap: 0.3rem; padding-left: 0.5rem; padding-right: 0.4rem; }
 .store-card .button-icon.icon-badge svg { width: 1.9rem; height: 1.9rem; }
 .store-card .button-label { font-size: min(0.75rem, 4.3vw); }
+
+/* 画面の上の部分の「最初の 画面に もどる」ボタン */
+.header-home-button {
+  display: block;
+  width: 100%;
+  min-height: 3rem;
+  margin: 0.4rem 0 0;
+  padding: 0.3rem 0.5rem;
+  border: 3px solid var(--color-main);
+  border-radius: var(--radius-button);
+  background: #ffffff;
+  color: var(--color-main);
+  font-family: inherit;
+  font-size: min(0.8rem, 4.6vw);
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.header-home-button:active {
+  background: var(--color-background);
+  transform: translateY(2px);
+}
+
+.header-home-button:focus-visible {
+  outline: 4px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+/* チラシがないときの2行の文：1行に入る大きさにする */
+.flyer-none span:last-child { font-size: min(0.95rem, 3.9vw); }
+.flyer-none { padding: 0.5rem 0.4rem; }
+.flyer-none span:last-child { white-space: pre; font-size: min(0.95rem, 3.8vw); }
+.header-home-button { font-size: min(0.9rem, 5.2vw); }
+.flyer-none span:last-child { font-size: min(0.95rem, 3.4vw); }

@@ -421,7 +421,7 @@ function createNoFlyerNotice() {
   const icon = createIconBadge("ic-flyer");
 
   const text = document.createElement("span");
-  text.textContent = "こちらでは チラシが 検索\nできませんでした。\nページを ご確認ください。";
+  text.textContent = "こちらでは チラシが 検索できませんでした。\nお店の ページを ご確認ください。";
 
   notice.appendChild(icon);
   notice.appendChild(text);
@@ -664,6 +664,9 @@ document.getElementById("back-to-top-from-name").addEventListener("click", funct
   showScreen("top");
 });
 document.getElementById("back-to-top-from-city").addEventListener("click", function () {
+  showScreen("top");
+});
+document.getElementById("back-to-top-from-header").addEventListener("click", function () {
   showScreen("top");
 });
 document.getElementById("back-to-city").addEventListener("click", showCityScreen);
