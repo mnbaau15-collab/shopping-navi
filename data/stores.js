@@ -65,6 +65,10 @@ const stores = [
     city: "酒田市",
     lat: 38.91764149914794,
     lng: 139.85885822209008,
+    address: "山形県酒田市日の出町一丁目1番地の8",
+    tel: "0234-43-0103",
+    hours: "9:00-22:00",
+    updatedAt: "2026-10-25",
     flyerUrl: null,
     officialUrl: "https://kusuri-aoki-shop-info.com/result?searchword=&page=1&size=15&cityId=27&districtId=322&closeTime=0&openTime=0&listTags="
   },
@@ -75,6 +79,9 @@ const stores = [
     city: "酒田市",
     lat: 38.88922746190737,
     lng: 139.85278933743416,
+    address: "山形県天童市万代1番2号",
+    tel: "023-654-1245",
+    updatedAt: "2026-10-25",
     flyerUrl: null,
     officialUrl: "https://nogawa-bikkuriichi.com/shop/94"
   },
@@ -139,8 +146,8 @@ const stores = [
     lng: 139.86300587650882,
     address: "山形県酒田市東大町3-36-3",
     tel: "0234-24-7001",
-    hours: "9:30〜21:00（日曜日は9:00開店）",
-    updatedAt: "2026-10-20",
+    hours: "9:30～21:00（日曜日は9:00開店）",
+    updatedAt: "2026-10-25",
     flyerUrl: "https://tokubai.co.jp/ヤマザワ/875",
     officialUrl: "https://yamazawa.co.jp/shop/084.html"
   },
@@ -153,8 +160,8 @@ const stores = [
     lng: 139.83513234234286,
     address: "山形県酒田市山居町2-5-5",
     tel: "0234-21-2211",
-    hours: "9:30〜21:00（日曜日は9:00開店）",
-    updatedAt: "2026-10-20",
+    hours: "9:30～21:00（日曜日は9:00開店）",
+    updatedAt: "2026-10-25",
     flyerUrl: "https://tokubai.co.jp/ヤマザワ/896",
     officialUrl: "https://yamazawa.co.jp/shop/042.html"
   },
@@ -167,8 +174,8 @@ const stores = [
     lng: 139.85195244434757,
     address: "山形県酒田市旭新町16-1",
     tel: "0234-23-2288",
-    hours: "9:30〜21:00（日曜日は9:00開店）",
-    updatedAt: "2026-10-20",
+    hours: "9:30～21:00（日曜日は9:00開店）",
+    updatedAt: "2026-10-25",
     flyerUrl: "https://tokubai.co.jp/ヤマザワ/903",
     officialUrl: "https://yamazawa.co.jp/shop/068.html"
   },
@@ -207,8 +214,8 @@ const stores = [
     lng: 139.8796535744857,
     address: "山形県飽海郡遊佐町吹浦字苗代37",
     tel: "0234-77-2438",
-    hours: "10:00〜18:30",
-    updatedAt: "2026-10-20",
+    hours: "10:00～18:30",
+    updatedAt: "2026-10-25",
     flyerUrl: "https://tokubai.co.jp/Aコープ/22778",
     officialUrl: "https://www.acoop-east-t.jp/store/list/store_64.html"
   },
@@ -221,8 +228,8 @@ const stores = [
     lng: 139.9071073797518,
     address: "山形県飽海郡遊佐町遊佐字広表6-1",
     tel: "0234-72-3001",
-    hours: "9:30〜20:00（11月〜3月は 9:30〜19:00）",
-    updatedAt: "2026-10-20",
+    hours: "9:30～20:00 (冬季11～3月は19:00閉店)",
+    updatedAt: "2026-10-25",
     flyerUrl: null,
     officialUrl: "https://www.acoop-east-t.jp/store/list/store_63.html"
   },
@@ -235,6 +242,9 @@ const stores = [
     city: "庄内町",
     lat: 38.84789046909989,
     lng: 139.9060530556504,
+    tel: "0234-45-1508",
+    hours: "【月〜水・金〜土】9:30〜19:00 【日】9:00〜19:00 【毎週木曜日定休日】",
+    updatedAt: "2026-10-25",
     flyerUrl: null,
     officialUrl: "https://www.ja-amarume.or.jp/03_01.html"
   },
@@ -261,8 +271,8 @@ const stores = [
     lng: 139.8976583571397,
     address: "山形県東田川郡庄内町余目字滑石38-1",
     tel: "0234-42-2211",
-    hours: "9:30〜21:00（日曜日は9:00開店）",
-    updatedAt: "2026-10-20",
+    hours: "9:30～21:00（日曜日は9:00開店）",
+    updatedAt: "2026-10-25",
     flyerUrl: "https://tokubai.co.jp/ヤマザワ/867",
     officialUrl: "https://yamazawa.co.jp/shop/067.html"
   },
@@ -287,8 +297,8 @@ const stores = [
     lng: 139.83625813319517,
     address: "山形県東田川郡三川町大字猪子字大堰端349番地1",
     tel: "0235-26-0581",
-    hours: "9:00〜22:00",
-    updatedAt: "2026-10-20",
+    hours: "9:00-22:00",
+    updatedAt: "2026-10-25",
     flyerUrl: "https://tokubai.co.jp/スーパーのアオキ/306152",
     officialUrl: "https://kusuri-aoki-shop-info.com/result?storeCode=1227"
   }
