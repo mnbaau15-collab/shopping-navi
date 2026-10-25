@@ -22,3 +22,5 @@ CLAUDE.html
 # Canvaに渡すための素材（GitHubには上げない）
 canva-assets/
 /hero.jpg
+backup-before-tabfix/
+backup-before-checkfix/

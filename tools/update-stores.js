@@ -71,6 +71,14 @@ function cleanValue(field, value) {
   return null;
 }
 
+// ----- 見た目だけの違い（〜 ～ - の書き方、空白）を、同じものとして比べる -----
+function sameText(a, b) {
+  const simplify = function (text) {
+    return String(text).normalize("NFKC").replace(/[〜~\-－−–—]/g, "-").replace(/\s+/g, "");
+  };
+  return simplify(a) === simplify(b);
+}
+
 // ----- Claude に、ページの文章から項目を取り出してもらう -----
 async function askClaude(storeName, pageText) {
   const response = await fetch("https://api.anthropic.com/v1/messages", {
@@ -106,15 +114,25 @@ async function askClaude(storeName, pageText) {
 function compareStore(store, found) {
   const changes = {};   // 書き換える項目
   const missing = [];   // ページに書かれていないが、今は値がある項目（人が確認する）
+  const warnings = [];  // 人が確認すること（別のお店の情報かもしれないとき）
+
+  // 取り出した住所に、店の市町（酒田市・遊佐町など）が入っていなければ、別のお店の情報かもしれない。
+  // そのときは、住所・電話番号・営業時間のすべてを、取り入れない
+  const foundAddress = cleanValue("address", found.address);
+  if (foundAddress !== null && !foundAddress.includes(store.city)) {
+    warnings.push("住所の市町が、登録（" + store.city + "）と違います（" + foundAddress + "）。別のお店の情報かもしれないので、更新案にしませんでした");
+    return { changes: changes, missing: missing, warnings: warnings };
+  }
+
   FIELDS.forEach(function (field) {
     const next = cleanValue(field, found[field]);
     if (next === null) {
       if (store[field]) missing.push(field);
-    } else if (next !== store[field]) {
+    } else if (!store[field] || !sameText(next, store[field])) {
       changes[field] = next;
     }
   });
-  return { changes: changes, missing: missing };
+  return { changes: changes, missing: missing, warnings: warnings };
 }
 
 // ----- stores.js の文字を、その店の分だけ書き換える（コメントや並びは、そのまま残す） -----
@@ -205,6 +223,7 @@ async function main() {
       } else {
         unchanged.push(store.name);
       }
+      result.warnings.forEach(function (text) { needCheck.push(store.name + "：" + text); });
       if (result.missing.length > 0) {
         needCheck.push(store.name + "：ページに書かれていない項目があります（" + result.missing.join("・") + "）。今の値は、そのまま残しています");
       }
@@ -250,4 +269,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { loadStores, cleanValue, compareStore, applyChanges, htmlToText, findTokubaiLinks };
+module.exports = { loadStores, cleanValue, sameText, compareStore, applyChanges, htmlToText, findTokubaiLinks };
