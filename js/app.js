@@ -385,8 +385,9 @@ function createStoreCard(store, distanceKm) {
 
   // 2番目：「お店のページを見る」ボタン（URLが安全なときだけ出す）
   if (isSafeUrl(store.officialUrl)) {
+    // officialNote を書いたお店（本社のページへ行くお店など）だけ、ボタンの下に説明を出す
     card.appendChild(createLinkButton("ic-shop-page", "お店の ページを 見る", store.officialUrl,
-                                      "お店の ページが 新しく ひらきます"));
+                                      "お店の ページが 新しく ひらきます", store.officialNote));
   }
 
   // 3番目：「行き方を調べる」ボタン（場所のデータがあるお店だけ）
@@ -454,7 +455,7 @@ function isTokubaiStoreUrl(url) {
 }
 
 // 新しいタブで開くリンクを、大きなボタンの見た目で作る（ボタンの下に、説明の一文もつける）
-function createLinkButton(symbolId, labelText, url, noteText) {
+function createLinkButton(symbolId, labelText, url, noteText, extraNote) {
   const wrapper = document.createElement("div");
   wrapper.className = "link-button-block";
 
@@ -485,7 +486,14 @@ function createLinkButton(symbolId, labelText, url, noteText) {
   link.appendChild(label);
   wrapper.appendChild(link);
 
-  // ボタンの下の説明文は、出さない（noteText は使わない）
+  // ボタンの下の説明文は、ふつうは出さない（noteText は使わない）
+  // extraNote（店ごとの特別な説明）があるときだけ出す
+  if (typeof extraNote === "string" && extraNote !== "") {
+    const extra = document.createElement("p");
+    extra.className = "store-link-note";
+    extra.textContent = extraNote;
+    wrapper.appendChild(extra);
+  }
   return wrapper;
 }
 

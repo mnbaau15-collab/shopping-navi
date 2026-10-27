@@ -23,8 +23,8 @@ const stores = [
     lng: 139.85265263558202,
     address: "山形県酒田市あきほ町120-1",
     tel: "0234-21-1400",
-    hours: "食品 8:00〜22:00／食品以外 9:00〜22:00（一部の売場・専門店は営業時間が異なります）",
-    updatedAt: "2026-10-20",
+    hours: "１階（食品・デリコン） 8:00〜22:00／１階（食品・デリコン以外） 9:00〜22:00／２階衣料品売場 9:00〜22:00／ドラッグ・調剤 9:00〜20:00（一部の売場・専門店は営業時間が異なります）",
+    updatedAt: "2026-10-27",
     flyerUrl: "https://tokubai.co.jp/イオン/12598",
     officialUrl: "https://aeontohoku.co.jp/stores/sakataminami?utm_source=sns&utm_medium=gbp&utm_campaign=year-round"
   },
@@ -76,7 +76,8 @@ const stores = [
     lat: 38.88922746190737,
     lng: 139.85278933743416,
     flyerUrl: null,
-    officialUrl: "https://nogawa-bikkuriichi.com/shop/94"
+    officialUrl: "https://nogawa-bikkuriichi.com/", // 本社のページ（ご本人が確認ずみ：これで合っている）
+    officialNote: "本社の ページが 新しく ひらきます" // 「お店の ページを 見る」ボタンの下に出す説明（書いたお店だけ）
   },
   {
     id: "sakata-007",
@@ -279,7 +280,7 @@ const stores = [
     lat: 38.81607713173052,
     lng: 139.83431160446654,
     flyerUrl: "https://tokubai.co.jp/イオン/12600",
-    officialUrl: "https://www.aeon.jp/sc/mikawa/"
+    officialUrl: "https://aeontohoku.co.jp/stores/mikawa"
   },
   {
     id: "mikawa-002",
