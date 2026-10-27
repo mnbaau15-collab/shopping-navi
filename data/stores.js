@@ -221,8 +221,8 @@ const stores = [
     lng: 139.9071073797518,
     address: "山形県飽海郡遊佐町遊佐字広表6-1",
     tel: "0234-72-3001",
-    hours: "9:30〜20:00（11月〜3月は 9:30〜19:00）",
-    updatedAt: "2026-10-20",
+    hours: "9:30～20:00 (冬季11～3月は19:00閉店)",
+    updatedAt: "2026-10-27",
     flyerUrl: null,
     officialUrl: "https://www.acoop-east-t.jp/store/list/store_63.html"
   },
@@ -235,6 +235,9 @@ const stores = [
     city: "庄内町",
     lat: 38.84789046909989,
     lng: 139.9060530556504,
+    tel: "0234-45-1508",
+    hours: "【月〜水・金〜土】9:30〜19:00 【日】9:00〜19:00 【毎週木曜日定休日】",
+    updatedAt: "2026-10-27",
     flyerUrl: null,
     officialUrl: "https://www.ja-amarume.or.jp/03_01.html"
   },
