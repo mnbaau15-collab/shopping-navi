@@ -179,5 +179,24 @@ check("同じ店番号のURLが重複していない", new Set(allStores.filter(
 const noUrl = api.createStoreCard({ id: "z", name: "URLなし", city: "酒田市", officialUrl: "javascript:alert(1)", lat: 38.9, lng: 139.8 });
 check("URLが安全でないお店は、お店のページボタンを出さない", linkBlocks(noUrl).length === 2);
 
+// ---- 現在地を調べている途中で画面を移ったとき、古い結果を使わない ----
+const pending = [];
+run({ getCurrentPosition: function (success, error) { pending.push({ success: success, error: error }); } });
+const position = { coords: { latitude: 38.9115, longitude: 139.8413 } };
+elements["button-location"].listeners.click();
+elements["button-use-location"].listeners.click();
+elements["back-to-top-from-location"].listeners.click();   // 調べている途中で、表紙にもどる
+pending[0].success(position);
+check("途中で画面を移ったあとに届いた古い結果は、使わない", elements["location-result-list"].children.length === 0);
+elements["button-location"].listeners.click();
+check("もう一度 現在地の画面を出すと、ボタンが押せる", elements["button-use-location"].disabled === false);
+elements["button-use-location"].listeners.click();           // 2回目の調べ
+pending[0].error({ code: 1 });
+check("古い調べの失敗は、新しい調べの表示を変えない", elements["location-message"]._text === "しらべています…" && elements["button-use-location"].disabled === true);
+pending[0].success(position);
+check("古い調べの成功は、新しい調べの表示を変えない", elements["location-result-list"].children.length === 0 && elements["button-use-location"].disabled === true);
+pending[1].success(position);
+check("新しい調べの結果は、ふつうに出る（22軒）", elements["location-result-list"].children.length === 22 && elements["button-use-location"].disabled === false);
+
 console.log(allOk ? "ALL OK" : "FAILED");
 process.exit(allOk ? 0 : 1);

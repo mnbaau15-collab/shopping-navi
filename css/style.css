@@ -110,6 +110,12 @@ body.is-top .site-header {
   white-space: nowrap;
 }
 
+/* 表紙では「最初の 画面に もどる」ボタンを、まるごと消す（Tabキーで見えないボタンに移ったり、読み上げに出たりしないように）。
+   見出し（h1）と説明文は、読み上げ用に、そのまま残す */
+body.is-top .header-home-button {
+  display: none;
+}
+
 .hero {
   display: none;
 }
@@ -475,8 +481,8 @@ a.big-button {
 /* 現在地を使う前の説明と、距離の注意書き */
 .location-explain {
   margin: 0 0 var(--space-large);
-  font-size: min(0.9rem, 4.6vw);   /* 2行が、スマホの横幅いっぱいに入る大きさ */
-  white-space: nowrap;
+  font-size: clamp(16px, 4.6vw, max(16px, 0.9rem)); /* 最低16px。狭い画面では折り返す */
+  white-space: normal;
 }
 
 .location-note {
@@ -504,8 +510,8 @@ a.big-button {
 }
 
 .form-label {
-  font-size: min(0.9rem, 4.6vw);   /* 2行が、スマホの横幅いっぱいに入る大きさ */
-  white-space: nowrap;
+  font-size: clamp(16px, 4.6vw, max(16px, 0.9rem)); /* 最低16px。狭い画面では折り返す */
+  white-space: normal;
   font-weight: 700;
 }
 
@@ -711,7 +717,13 @@ body[data-theme="name"] .section-title { text-shadow: 0 0.07em 0 #bfe0f7, 0 0.1e
 .store-card .button-label { font-size: min(0.75rem, 3.9vw); }
 .store-card .big-button { gap: 0.3rem; padding-left: 0.5rem; padding-right: 0.4rem; }
 .store-card .button-icon.icon-badge svg { width: 1.9rem; height: 1.9rem; }
-.store-card .button-label { font-size: min(0.75rem, 4.3vw); }
+/* 文字を縮めすぎず、アイコンの横の空き幅に合わせて折り返す */
+.store-card .button-label {
+  font-size: clamp(16px, 4.3vw, max(16px, 0.75rem));
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
 
 /* 画面の上の部分の「最初の 画面に もどる」ボタン */
 .header-home-button {
@@ -746,7 +758,13 @@ body[data-theme="name"] .section-title { text-shadow: 0 0.07em 0 #bfe0f7, 0 0.1e
 .flyer-none { padding: 0.5rem 0.4rem; }
 .flyer-none span:last-child { white-space: pre; font-size: min(0.95rem, 3.8vw); }
 .header-home-button { font-size: min(0.9rem, 5.2vw); }
-.flyer-none span:last-child { font-size: min(0.95rem, 3.4vw); }
+/* 元の改行を残し、長い行はカードの幅に合わせて折り返す */
+.flyer-none span:last-child {
+  font-size: clamp(16px, 3.4vw, max(16px, 0.95rem));
+  max-width: 100%;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
 
 /* ページの下の「最初の 画面に もどる」：1行で出す */
 .sub-button .button-label {

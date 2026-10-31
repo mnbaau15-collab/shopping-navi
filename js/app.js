@@ -48,6 +48,11 @@ function showScreen(name) {
   // 表紙のときだけ、大きな名前とイラストを出す（CSS が body の is-top を見て切りかえる）
   document.body.classList.toggle("is-top", name === "top");
 
+  // 現在地の画面から出るときは、調べの番号を進めて、あとから届く古い結果を無効にする
+  if (name !== "location") {
+    locationRequestId += 1;
+  }
+
   // 画面の一番上にもどす
   window.scrollTo(0, 0);
 
@@ -565,8 +570,12 @@ function sortStoresByDistance(lat, lng) {
   return { sorted: sorted, distances: distances };
 }
 
+// 現在地を調べた回数の番号。古い調べの結果が、あとから届いたときに、見分けるために使う
+let locationRequestId = 0;
+
 // 「いまいる場所からさがす」画面を出す（説明を出して、ボタンを待つ）
 function showLocationScreen() {
+  locationRequestId += 1; // 前に始めた調べの結果は、使わない
   document.getElementById("location-message").textContent = "";
   document.getElementById("location-note").textContent = "";
   document.getElementById("location-other-way").hidden = true;
@@ -596,6 +605,9 @@ function handleUseLocation() {
     return;
   }
 
+  locationRequestId += 1;
+  const myRequestId = locationRequestId; // この調べの番号（結果が届いたとき、いまの番号と同じか確かめる）
+
   button.disabled = true; // 何度も押されないようにする
   document.getElementById("location-note").textContent = "";
   document.getElementById("location-result-list").textContent = "";
@@ -603,10 +615,12 @@ function handleUseLocation() {
 
   navigator.geolocation.getCurrentPosition(
     function (position) {
+      if (myRequestId !== locationRequestId) return; // 古い調べの結果は、使わない
       button.disabled = false;
       showNearbyStores(position.coords.latitude, position.coords.longitude);
     },
     function (error) {
+      if (myRequestId !== locationRequestId) return; // 古い調べの結果は、使わない
       button.disabled = false;
       console.error("位置情報を取得できませんでした:", error); // くわしいことは console にだけ出す
       if (error.code === 1) {
