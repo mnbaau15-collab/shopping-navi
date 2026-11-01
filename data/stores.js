@@ -65,6 +65,10 @@ const stores = [
     city: "酒田市",
     lat: 38.91764149914794,
     lng: 139.85885822209008,
+    address: "山形県酒田市日の出町一丁目1番地の8",
+    tel: "0234-43-0103",
+    hours: "9:00-22:00",
+    updatedAt: "2026-11-01",
     flyerUrl: null,
     officialUrl: "https://kusuri-aoki-shop-info.com/result?searchword=&page=1&size=15&cityId=27&districtId=322&closeTime=0&openTime=0&listTags="
   },
@@ -182,6 +186,10 @@ const stores = [
     city: "遊佐町",
     lat: 39.016147378974104,
     lng: 139.90906624832007,
+    address: "山形県飽海郡遊佐町遊佐字京田90-1",
+    tel: "0234-72-3111",
+    hours: "日曜日から土曜日まで毎日 09:30～19:30",
+    updatedAt: "2026-11-01",
     flyerUrl: null,
     officialUrl: "https://sakata.mypl.net/shop/00000360414/"
   },
