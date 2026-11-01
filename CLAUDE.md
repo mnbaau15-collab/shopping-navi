@@ -50,6 +50,8 @@ shopping-navi/
 
 このほかに、アプリ本体と独立した宿題用の検証フォルダ `verify/`（`fetch-leaflets.js`・`route-check.html`・`coords-check.html` など）と、説明メモ `docs/explanation.md` がある。`verify/` はアプリに組み込まない。`verify/config.js` はAPIキーを貼る場所なので、キーを貼ったら他人に見せない・公開しない。
 
+**React版（`react-app/`）**：講師の宿題（2026-11-01）で作った、同じアプリのReact版。上の「フレームワークなし・ビルドなし」は、いまのアプリ（ルートの `index.html`）の方針で、`react-app/` だけは例外として React と Vite を使う（外部の部品は `react`・`react-dom`・`vite` の3つだけ）。データ（`data/stores.js`）・CSS（`css/style.css`）・画像は、コピーせず、いまのファイルを読み込む（`vite.config.js` の `exportStores` が、読むときだけ `export` を足す）。画面の文字や動きを変えるときは、`index.html`・`js/app.js` と `react-app/src/` の**両方**を直す。公開は `.github/workflows/deploy-pages.yml`（main に入ると、いまのアプリを `/`、React版を `/react/` に置く）。説明は `docs/react-guide.md`。
+
 ※ 実装開始時に必要に応じて調整してよいが、変更した場合はこの節も更新すること。
 
 ---

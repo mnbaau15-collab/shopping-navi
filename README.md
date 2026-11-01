@@ -8,6 +8,10 @@ https://mnbaau15-collab.github.io/shopping-navi/
 
 スマホのブラウザで開いてください。ダウンロードや登録は、いりません。
 
+React版：https://mnbaau15-collab.github.io/shopping-navi/react/
+
+見た目と動きは、同じです。React版のソースは `react-app/` にあります。
+
 ## 作った理由
 
 - 親が、スマホで「近くのお店」「今週のチラシ」「行き方」を調べるのに、迷ってしまう。
@@ -51,7 +55,8 @@ https://mnbaau15-collab.github.io/shopping-navi/
 
 - HTML・CSS・素のJavaScript（フレームワークなし、ビルドなし。ファイルを置くだけで動く）
 - お店のデータは、`data/stores.js` に書いた配列（サーバーもデータベースもなし）
-- 公開は GitHub Pages
+- React版は React と Vite で作り直したもの。データ・CSS・画像は、上と同じファイルを読み込む（説明は `docs/react-guide.md`）
+- 公開は GitHub Pages（`.github/workflows/deploy-pages.yml`）
 - 開発には Claude Code を活用
 
 ## 店舗データの更新の仕組み
@@ -80,11 +85,20 @@ python3 -m http.server 8000
 
 ブラウザで `http://localhost:8000` を開きます。現在地は、HTTPSまたは localhost でだけ使えます。
 
+React版は、次のとおりです。
+
+```
+cd react-app
+npm install
+npm run dev
+```
+
 ### 検査
 
 ```
 node tools/check-stores.js   # お店のデータの形を検査する
 node tools/test-app.js       # 画面の動きの自動テスト
+cd react-app && npm test     # React版の検索・距離の計算のテスト
 ```
 
 ## フォルダ
@@ -92,10 +106,11 @@ node tools/test-app.js       # 画面の動きの自動テスト
 | 場所 | 内容 |
 |---|---|
 | `index.html` `css/` `js/` `data/` `images/` | アプリ本体 |
+| `react-app/` | React版 |
 | `tools/` | データの検査・自動テスト・月1回の更新案づくり |
 | `.github/workflows/` | GitHub Actions の設定 |
 | `verify/` | 課題用の検証（アプリには組み込まない） |
-| `docs/` | 説明メモ（`explanation.md`、`auto-update-feasibility.md`） |
+| `docs/` | 説明メモ（`explanation.md`、`auto-update-feasibility.md`、`react-guide.md`） |
 | `CLAUDE.md` | 開発方針 |
 
 `verify/route-check.html` を動かすには、`verify/config.example.js` を `verify/config.js` にコピーして、自分のAPIキーを書いてください。`config.js` は `.gitignore` に入っていて、GitHubには上がりません。

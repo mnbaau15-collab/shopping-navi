@@ -1,0 +1,54 @@
+# サイトを GitHub Pages に公開する設定
+# ・いまのアプリは、これまでどおり https://…/shopping-navi/ に置く
+# ・React版は、変換（ビルド）してから https://…/shopping-navi/react/ に置く
+# ・main にコードが入るたびに動く（毎月の更新案を Merge したときも、ここを通って公開される）
+name: サイトの公開
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:       # 手動でも動かせる
+
+permissions:
+  contents: read
+  pages: write             # Pages に公開するために必要
+  id-token: write          # Pages に公開するために必要
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: React版のテストと変換
+        working-directory: react-app
+        run: |
+          npm ci
+          npm test
+          npm run build
+
+      - name: 公開するファイルをまとめる
+        run: |
+          mkdir _site
+          # Git に入っているファイルだけを置く（verify/config.js などの、入っていないファイルは出ない）
+          git archive HEAD | tar -x -C _site
+          rm -rf _site/react-app _site/.github
+          cp -R react-app/dist _site/react
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
