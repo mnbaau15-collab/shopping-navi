@@ -54,10 +54,10 @@ export default function NameScreen({ goTo }) {
 
   return (
     <section id="screen-name">
-      <h2 className="section-title" id="name-title" tabIndex={-1}>お店の名前で さがす</h2>
+      <h2 className="section-title" id="name-title" tabIndex={-1}>お店の名前で&#8203;さがす</h2>
 
       <form id="name-form" className="search-form" onSubmit={handleSubmit}>
-        <label htmlFor="name-input" className="form-label">名前の 最初の 文字を 入れてください。<br />ひらがな・カタカナで さがせます。</label>
+        <label htmlFor="name-input" className="form-label">名前の&#8203;最初の&#8203;文字を&#8203;入れてください。<br />ひらがな・カタカナで&#8203;さがせます。</label>
         <input type="text" id="name-input" className="text-input" autoComplete="off" enterKeyHint="search"
                ref={inputRef} value={query} onChange={handleInput} />
         {suggestions.length > 0 ? (
@@ -80,9 +80,9 @@ export default function NameScreen({ goTo }) {
       </form>
 
       <p id="name-message" className="search-message" role="status" aria-live="polite">
-        {result === "empty" ? "お店の名前を 入れてください。" : null}
-        {notFound ? "見つかりませんでした。\n文字を かえて もう一度 どうぞ。" : null}
-        {found.length > 0 ? <>お店が <span className="count-number">{found.length}</span> 軒 見つかりました。</> : null}
+        {result === "empty" ? "お店の名前を\u200b入れてください。" : null}
+        {notFound ? "見つかりませんでした。\n文字を\u200bかえて\u200bもう一度\u200bどうぞ。" : null}
+        {found.length > 0 ? <>お店が<span className="count-number">{found.length}</span>軒&#8203;見つかりました。</> : null}
       </p>
 
       <StoreCards id="name-result-list" storeList={found} />

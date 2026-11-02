@@ -82,7 +82,7 @@ const stores = [
     lng: 139.85278933743416,
     flyerUrl: "https://tokubai.co.jp/週末びっくり市/172445",
     officialUrl: "https://nogawa-bikkuriichi.com/", // 本社のページ（ご本人が確認ずみ：これで合っている）
-    officialNote: "本社の ページが 新しく ひらきます" // 「お店の ページを 見る」ボタンの下に出す説明（書いたお店だけ）
+    officialNote: "本社の\u200bページが\u200b新しく\u200bひらきます" // 「お店の ページを 見る」ボタンの下に出す説明（書いたお店だけ）
   },
   {
     id: "sakata-007",

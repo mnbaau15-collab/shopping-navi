@@ -31,7 +31,7 @@ function NoFlyerNotice() {
   return (
     <p className="flyer-none">
       <IconBadge name="ic-flyer" />
-      <span>{"こちらでは チラシが 検索できませんでした。\nお店の ページを ご確認ください。"}</span>
+      <span>{"こちらでは\u200bチラシが\u200b検索できませんでした。\nお店の\u200bページを\u200bご確認ください。"}</span>
     </p>
   );
 }
@@ -43,7 +43,7 @@ export default function StoreCard({ store, distanceKm }) {
       <h3 className="store-name">{breakableName(store.name)}</h3>
 
       {typeof distanceKm === "number" ? (
-        <p className="store-distance">{"ここから " + formatDistance(distanceKm)}</p>
+        <p className="store-distance">{"ここから" + formatDistance(distanceKm)}</p>
       ) : null}
 
       <p className="store-city">{store.city}</p>
@@ -52,15 +52,15 @@ export default function StoreCard({ store, distanceKm }) {
       {store.flyerUrl === null ? (
         <NoFlyerNotice />
       ) : (
-        <LinkButton icon="ic-flyer" label="チラシを さがす" url={getFlyerUrl(store)} />
+        <LinkButton icon="ic-flyer" label="チラシを&#8203;さがす" url={getFlyerUrl(store)} />
       )}
 
       {isSafeUrl(store.officialUrl) ? (
-        <LinkButton icon="ic-shop-page" label="お店の ページを 見る" url={store.officialUrl} note={store.officialNote} />
+        <LinkButton icon="ic-shop-page" label="お店の&#8203;ページを&#8203;見る" url={store.officialUrl} note={store.officialNote} />
       ) : null}
 
       {hasPosition(store) ? (
-        <LinkButton icon="ic-route" label="行き方を 調べる" url={createRouteUrl(store)} />
+        <LinkButton icon="ic-route" label="行き方を&#8203;調べる" url={createRouteUrl(store)} />
       ) : null}
     </article>
   );

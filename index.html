@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>かんたん お買い物ナビ</title>
-  <link rel="stylesheet" href="css/style.css?v=20261102c">
+  <link rel="stylesheet" href="css/style.css?v=20261102d">
 </head>
 <body class="is-top">
 
@@ -29,13 +29,13 @@
       <button type="button" class="header-home-button" id="back-to-top-from-header">
         <span aria-hidden="true">⬅</span> 最初の画面にもどる
       </button>
-      <p class="app-lead">近くのお店を、<br>かんたんに さがせます。</p>
+      <p class="app-lead">近くのお店を、<br>かんたんに&#8203;さがせます。</p>
     </div>
   </header>
 
   <!-- 表紙の画像（表紙のときだけ出ます）。Canva で作った表紙で、タイトルと説明文が、画像の中に入っています -->
   <div class="hero">
-    <img src="images/cover.jpg?v=20261102c" width="1024" height="796"
+    <img src="images/cover.jpg?v=20261102d" width="1024" height="796"
          alt="かんたん お買い物ナビ。近くのスーパーや、チラシを、かんたんに探せます。スーパーの前で、笑顔の家族が、買い物に来ています。">
   </div>
 
@@ -44,14 +44,14 @@
     <!-- ========== 画面1：表紙（さがし方をえらぶ） ========== -->
     <section id="screen-top">
 
-    <h2 class="visually-hidden" id="top-title" tabindex="-1">どうやって さがしますか？</h2>
+    <h2 class="visually-hidden" id="top-title" tabindex="-1">どうやって&#8203;さがしますか？</h2>
 
     <!-- 3つの探し方のボタン（表紙の絵の、カードの形） -->
     <div class="search-cards">
       <button type="button" class="search-card search-card-green" id="button-location">
         <span class="search-card-icon" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><use href="#ic-here"/></svg></span>
         <span class="search-card-text">
-          <span class="search-card-title">現在地から さがす</span>
+          <span class="search-card-title">現在地から&#8203;さがす</span>
         </span>
         <span class="search-card-arrow" aria-hidden="true">›</span>
       </button>
@@ -59,7 +59,7 @@
       <button type="button" class="search-card search-card-orange" id="button-city">
         <span class="search-card-icon" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><use href="#ic-town"/></svg></span>
         <span class="search-card-text">
-          <span class="search-card-title">市や町から さがす</span>
+          <span class="search-card-title">市や町から&#8203;さがす</span>
         </span>
         <span class="search-card-arrow" aria-hidden="true">›</span>
       </button>
@@ -67,7 +67,7 @@
       <button type="button" class="search-card search-card-blue" id="button-name">
         <span class="search-card-icon" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><use href="#ic-name"/></svg></span>
         <span class="search-card-text">
-          <span class="search-card-title">お店の 名前で さがす</span>
+          <span class="search-card-title">お店の&#8203;名前で&#8203;さがす</span>
         </span>
         <span class="search-card-arrow" aria-hidden="true">›</span>
       </button>
@@ -93,17 +93,17 @@
 
     <!-- ========== 画面：いまいる場所からさがす ========== -->
     <section id="screen-location" hidden>
-      <h2 class="section-title" id="location-title" tabindex="-1">現在地から さがす</h2>
+      <h2 class="section-title" id="location-title" tabindex="-1">現在地から&#8203;さがす</h2>
 
       <!-- 現在地を使う前に、目的を説明する -->
       <p class="location-explain">
-        現在地を 使って 近いお店を さがします。<br>
-        現在地は 保存も 送信も しません。
+        現在地を&#8203;使って&#8203;近いお店を&#8203;さがします。<br>
+        現在地は&#8203;保存も&#8203;送信も&#8203;しません。
       </p>
 
       <button type="button" class="big-button" id="button-use-location">
         <span class="button-icon icon-badge" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><use href="#ic-here"/></svg></span>
-        <span class="button-label">現在地から さがす</span>
+        <span class="button-label">現在地から&#8203;さがす</span>
       </button>
 
       <!-- 「しらべています…」「見つかりました」などの知らせ -->
@@ -113,11 +113,11 @@
       <div class="nav-buttons" id="location-other-way" hidden>
         <button type="button" class="big-button" id="location-to-city">
           <span class="button-icon icon-badge" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><use href="#ic-town"/></svg></span>
-          <span class="button-label">市や町から さがす</span>
+          <span class="button-label">市や町から&#8203;さがす</span>
         </button>
         <button type="button" class="big-button" id="location-to-name">
           <span class="button-icon icon-badge" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><use href="#ic-name"/></svg></span>
-          <span class="button-label">お店の名前で さがす</span>
+          <span class="button-label">お店の名前で&#8203;さがす</span>
         </button>
       </div>
 
@@ -137,11 +137,11 @@
 
     <!-- ========== 画面：お店の名前でさがす ========== -->
     <section id="screen-name" hidden>
-      <h2 class="section-title" id="name-title" tabindex="-1">お店の名前で さがす</h2>
+      <h2 class="section-title" id="name-title" tabindex="-1">お店の名前で&#8203;さがす</h2>
 
       <!-- form で囲むと、キーボードの Enter でも「さがす」が動きます -->
       <form id="name-form" class="search-form">
-        <label for="name-input" class="form-label">名前の 最初の 文字を 入れてください。<br>ひらがな・カタカナで さがせます。</label>
+        <label for="name-input" class="form-label">名前の&#8203;最初の&#8203;文字を&#8203;入れてください。<br>ひらがな・カタカナで&#8203;さがせます。</label>
         <input type="text" id="name-input" class="text-input" autocomplete="off" enterkeyhint="search" autofocus>
         <!-- 入力した文字に合うお店の名前が、ここに出ます（app.js が作ります） -->
         <div id="name-suggestions" class="suggestions" hidden></div>
@@ -175,7 +175,7 @@
       <div class="nav-buttons">
         <button type="button" class="big-button sub-button" id="back-to-city">
           <span class="button-icon" aria-hidden="true">⬅</span>
-          <span class="button-label">市や町を えらびなおす</span>
+          <span class="button-label">市や町を&#8203;えらびなおす</span>
         </button>
         <button type="button" class="big-button sub-button" id="back-to-top-from-list">
           <span class="button-icon icon-badge" aria-hidden="true"><svg viewBox="0 0 64 64" focusable="false"><use href="#ic-town"/></svg></span>
@@ -192,8 +192,8 @@
   </footer>
 
   <!-- お店の名簿（先に読み込む） → 画面を動かすプログラム、の順番です -->
-  <script src="data/stores.js?v=20261102c"></script>
-  <script src="js/app.js?v=20261102c"></script>
+  <script src="data/stores.js?v=20261102d"></script>
+  <script src="js/app.js?v=20261102d"></script>
 
 </body>
 </html>

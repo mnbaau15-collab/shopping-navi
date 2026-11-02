@@ -106,7 +106,7 @@ export function findStoresByName(storeList, query) {
 // ----- お店の名前を、自然な場所で折り返せるようにする -----
 // チェーンの名前のあとに、見えない区切り（ゼロ幅スペース U+200B）を入れる。表示のためだけで、検索には使わない
 const NAME_BREAK_PREFIXES = ["マックスバリュ", "ヤマザワ", "ザ・ビッグ", "スーパーの", "スーパー", "こぴあコープ", "Aコープ", "イオン", "ト一屋"];
-const NAME_BREAK_OVERRIDES = { "といちやいろは蔵パーク店": "といちや​いろは蔵​パーク店" };
+const NAME_BREAK_OVERRIDES = { "といちやいろは蔵パーク店": "といちや\u200bいろは蔵\u200bパーク店" };
 
 export function breakableName(name) {
   if (NAME_BREAK_OVERRIDES[name]) {
@@ -115,7 +115,7 @@ export function breakableName(name) {
   const prefix = NAME_BREAK_PREFIXES.find(function (p) {
     return name.startsWith(p) && name.length > p.length;
   });
-  return prefix ? prefix + "​" + name.slice(prefix.length) : name;
+  return prefix ? prefix + "\u200b" + name.slice(prefix.length) : name;
 }
 
 // ----- リンク -----
@@ -175,14 +175,14 @@ export function calcDistanceKm(lat1, lng1, lat2, lng2) {
   return earthRadiusKm * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-// 距離を、読みやすい文字にする（例：「約 1.2 km」「約 430 m」）
+// 距離を、読みやすい文字にする（例：「約1.2km」「約430m」）
 export function formatDistance(km) {
   // 10m単位に丸める。0m と表示されないよう、最小は 10m にする
   const meters = Math.max(10, Math.round(km * 100) * 10);
   if (meters < 1000) {
-    return "約 " + meters + " m";
+    return "約" + meters + "m";
   }
-  return "約 " + km.toFixed(1) + " km";
+  return "約" + km.toFixed(1) + "km";
 }
 
 // 緯度と経度が数字で入っているお店かどうか

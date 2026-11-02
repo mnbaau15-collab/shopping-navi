@@ -9,11 +9,11 @@ import BackToTopButton from "./BackToTopButton.jsx";
 
 // うまくいかなかったときの知らせ（status ごと）
 const PROBLEM_MESSAGES = {
-  unsupported: "この 機械では 現在地を つかえません。\n他の 方法で さがして 下さい。",
-  denied: "現在地を つかうことが\nゆるされませんでした。\nスマホの 設定で、\n位置情報を 「許可」にして 下さい。\nまたは 他の 方法で さがして 下さい。",
-  timeout: "現在地を しらべるのに\n時間が かかっています。\nもう一度 ボタンを おすか、\n他の 方法で さがして 下さい。",
-  unknown: "現在地が わかりませんでした。\n他の 方法で さがして 下さい。",
-  noData: "場所の データが あるお店が まだ ありません。\n下の ボタンから さがしてください。"
+  unsupported: "この\u200b機械では\u200b現在地を\u200bつかえません。\n他の\u200b方法で\u200bさがして\u200b下さい。",
+  denied: "現在地を\u200bつかうことが\nゆるされませんでした。\nスマホの\u200b設定で、\n位置情報を\u200b「許可」にして\u200b下さい。\nまたは\u200b他の\u200b方法で\u200bさがして\u200b下さい。",
+  timeout: "現在地を\u200bしらべるのに\n時間が\u200bかかっています。\nもう一度\u200bボタンを\u200bおすか、\n他の\u200b方法で\u200bさがして\u200b下さい。",
+  unknown: "現在地が\u200bわかりませんでした。\n他の\u200b方法で\u200bさがして\u200b下さい。",
+  noData: "場所の\u200bデータが\u200bあるお店が\u200bまだ\u200bありません。\n下の\u200bボタンから\u200bさがしてください。"
 };
 
 // 注意書きをつくる
@@ -21,11 +21,11 @@ function createNote(nearby) {
   const lines = [];
   const missingCount = stores.length - nearby.sorted.length;
   if (missingCount > 0) {
-    lines.push("場所の データが まだない お店（" + missingCount + " 軒）は、 ここには 出ません。\n" +
-               "「市や町から」 「お店の名前から」では、 すべての お店を さがせます。");
+    lines.push("場所の\u200bデータが\u200bまだない\u200bお店（" + missingCount + "軒）は、\u200bここには\u200b出ません。\n" +
+               "「市や町から」\u200b「お店の名前から」では、\u200bすべての\u200bお店を\u200bさがせます。");
   }
   if (nearby.distances[nearby.sorted[0].id] > 30) {
-    lines.push("いちばん 近い お店でも 30 km より 遠いので、 庄内地域から はなれているようです。");
+    lines.push("いちばん\u200b近い\u200bお店でも\u200b30km\u200bより\u200b遠いので、\u200b庄内地域から\u200bはなれているようです。");
   }
   return lines.join("\n");
 }
@@ -86,34 +86,34 @@ export default function LocationScreen({ goTo }) {
 
   return (
     <section id="screen-location">
-      <h2 className="section-title" id="location-title" tabIndex={-1}>現在地から さがす</h2>
+      <h2 className="section-title" id="location-title" tabIndex={-1}>現在地から&#8203;さがす</h2>
 
       {/* 現在地を使う前に、目的を説明する */}
       <p className="location-explain">
-        現在地を 使って 近いお店を さがします。<br />
-        現在地は 保存も 送信も しません。
+        現在地を&#8203;使って&#8203;近いお店を&#8203;さがします。<br />
+        現在地は&#8203;保存も&#8203;送信も&#8203;しません。
       </p>
 
       <button type="button" className="big-button" id="button-use-location" disabled={status === "searching"} onClick={handleUseLocation}>
         <IconBadge name="ic-here" />
-        <span className="button-label">現在地から さがす</span>
+        <span className="button-label">現在地から&#8203;さがす</span>
       </button>
 
       <p id="location-message" className="search-message" role="status" aria-live="polite">
         {status === "searching" ? "しらべています…" : null}
         {showOtherWay ? PROBLEM_MESSAGES[status] : null}
-        {status === "found" ? <>近い順に、 お店が <span className="count-number">{nearby.sorted.length}</span> 軒 見つかりました。</> : null}
+        {status === "found" ? <>近い順に、&#8203;お店が<span className="count-number">{nearby.sorted.length}</span>軒&#8203;見つかりました。</> : null}
       </p>
 
       {showOtherWay ? (
         <div className="nav-buttons" id="location-other-way">
           <button type="button" className="big-button" onClick={function () { goTo("city"); }}>
             <IconBadge name="ic-town" />
-            <span className="button-label">市や町から さがす</span>
+            <span className="button-label">市や町から&#8203;さがす</span>
           </button>
           <button type="button" className="big-button" onClick={function () { goTo("name"); }}>
             <IconBadge name="ic-name" />
-            <span className="button-label">お店の名前で さがす</span>
+            <span className="button-label">お店の名前で&#8203;さがす</span>
           </button>
         </div>
       ) : null}

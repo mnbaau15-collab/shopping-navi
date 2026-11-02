@@ -135,7 +135,7 @@ function createCityButton(city, count) {
 
   const note = document.createElement("span");
   note.className = "button-note";
-  fillCountMessage(note, ["お店が ", count, " 軒"]);
+  fillCountMessage(note, ["お店が", count, "軒"]);
 
   text.appendChild(label);
   text.appendChild(note);
@@ -152,7 +152,7 @@ function createCityButton(city, count) {
 
 // ----- 画面3：お店のカードを作って表示する -----
 function showStoreList(city) {
-  document.getElementById("list-title").textContent = city + " の お店";
+  document.getElementById("list-title").textContent = city + "の\u200bお店";
 
   // この市や町のお店だけを取り出す
   const cityStores = sortByKana(stores.filter(function (store) {
@@ -316,7 +316,7 @@ function showNameSuggestions() {
 function chooseSuggestedStore(store) {
   document.getElementById("name-input").value = store.name;
   hideNameSuggestions();
-  fillCountMessage(document.getElementById("name-message"), ["お店が ", 1, " 軒 見つかりました。"]);
+  fillCountMessage(document.getElementById("name-message"), ["お店が", 1, "軒\u200b見つかりました。"]);
   renderStoreCards(document.getElementById("name-result-list"), [store]);
   updateNameSubmitButton();
 }
@@ -332,7 +332,7 @@ function handleNameSearch(event) {
 
   // 何も入っていないとき
   if (normalizeText(query) === "") {
-    message.textContent = "お店の名前を 入れてください。";
+    message.textContent = "お店の名前を\u200b入れてください。";
     resultList.textContent = "";
     updateNameSubmitButton();
     return;
@@ -341,9 +341,9 @@ function handleNameSearch(event) {
   const found = sortByKana(findStoresByName(query));
 
   if (found.length === 0) {
-    message.textContent = "見つかりませんでした。\n文字を かえて もう一度 どうぞ。";
+    message.textContent = "見つかりませんでした。\n文字を\u200bかえて\u200bもう一度\u200bどうぞ。";
   } else {
-    fillCountMessage(message, ["お店が ", found.length, " 軒 見つかりました。"]);
+    fillCountMessage(message, ["お店が", found.length, "軒\u200b見つかりました。"]);
   }
   renderStoreCards(resultList, found);
   updateNameSubmitButton();
@@ -380,7 +380,7 @@ function createStoreCard(store, distanceKm) {
   if (typeof distanceKm === "number") {
     const distance = document.createElement("p");
     distance.className = "store-distance";
-    distance.textContent = "ここから " + formatDistance(distanceKm);
+    distance.textContent = "ここから" + formatDistance(distanceKm);
     card.appendChild(distance);
   }
 
@@ -400,20 +400,20 @@ function createStoreCard(store, distanceKm) {
     card.appendChild(createNoFlyerNotice());
   } else {
     const flyer = getFlyerLink(store);
-    card.appendChild(createLinkButton("ic-flyer", "チラシを さがす", flyer.url, flyer.note));
+    card.appendChild(createLinkButton("ic-flyer", "チラシを\u200bさがす", flyer.url, flyer.note));
   }
 
   // 2番目：「お店のページを見る」ボタン（URLが安全なときだけ出す）
   if (isSafeUrl(store.officialUrl)) {
     // officialNote を書いたお店（本社のページへ行くお店など）だけ、ボタンの下に説明を出す
-    card.appendChild(createLinkButton("ic-shop-page", "お店の ページを 見る", store.officialUrl,
-                                      "お店の ページが 新しく ひらきます", store.officialNote));
+    card.appendChild(createLinkButton("ic-shop-page", "お店の\u200bページを\u200b見る", store.officialUrl,
+                                      "お店の\u200bページが\u200b新しく\u200bひらきます", store.officialNote));
   }
 
   // 3番目：「行き方を調べる」ボタン（場所のデータがあるお店だけ）
   if (hasPosition(store)) {
-    card.appendChild(createLinkButton("ic-route", "行き方を 調べる", createRouteUrl(store),
-                                      "Googleマップが 新しく ひらきます"));
+    card.appendChild(createLinkButton("ic-route", "行き方を\u200b調べる", createRouteUrl(store),
+                                      "Googleマップが\u200b新しく\u200bひらきます"));
   }
 
   return card;
@@ -442,7 +442,7 @@ function createNoFlyerNotice() {
   const icon = createIconBadge("ic-flyer");
 
   const text = document.createElement("span");
-  text.textContent = "こちらでは チラシが 検索できませんでした。\nお店の ページを ご確認ください。";
+  text.textContent = "こちらでは\u200bチラシが\u200b検索できませんでした。\nお店の\u200bページを\u200bご確認ください。";
 
   notice.appendChild(icon);
   notice.appendChild(text);
@@ -454,12 +454,12 @@ function createNoFlyerNotice() {
 // このページは、チラシが替わっても URL が変わらない。だから、チラシ1枚ごとのURL（/leaflets/番号）は、登録しない
 function getFlyerLink(store) {
   if (OFFICIAL_FLYER_URLS.includes(store.flyerUrl)) {
-    return { url: store.flyerUrl, note: "お店の チラシの ページが 新しく ひらきます" };
+    return { url: store.flyerUrl, note: "お店の\u200bチラシの\u200bページが\u200b新しく\u200bひらきます" };
   }
   if (isTokubaiStoreUrl(store.flyerUrl)) {
-    return { url: store.flyerUrl, note: "トクバイの お店の ページが 新しく ひらきます" };
+    return { url: store.flyerUrl, note: "トクバイの\u200bお店の\u200bページが\u200b新しく\u200bひらきます" };
   }
-  return { url: FLYER_AREA_URL, note: "トクバイの 庄内地方の ページが 新しく ひらきます" };
+  return { url: FLYER_AREA_URL, note: "トクバイの\u200b庄内地方の\u200bページが\u200b新しく\u200bひらきます" };
 }
 
 // 「https://tokubai.co.jp/チェーン名/店番号」の形のURLだけを、OKにする（まちがったデータで、おかしなリンクを作らないため）
@@ -562,15 +562,15 @@ function calcDistanceKm(lat1, lng1, lat2, lng2) {
   return earthRadiusKm * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-// 距離を、読みやすい文字にする（例：「約 1.2 km」「約 430 m」）
+// 距離を、読みやすい文字にする（例：「約1.2km」「約430m」）
 function formatDistance(km) {
   // 10m単位に丸める。0m と表示されないよう、最小は 10m にする
   const meters = Math.max(10, Math.round(km * 100) * 10);
   if (meters < 1000) {
-    return "約 " + meters + " m";
+    return "約" + meters + "m";
   }
   // 995m 以上は丸めると 1000m になるので、km の表示にする（「約 1000 m」を避ける）
-  return "約 " + km.toFixed(1) + " km";
+  return "約" + km.toFixed(1) + "km";
 }
 
 // 緯度と経度が数字で入っているお店かどうか
@@ -626,7 +626,7 @@ function handleUseLocation() {
 
   // 使えない端末のとき
   if (!navigator.geolocation) {
-    setLocationMessage("この 機械では 現在地を つかえません。\n他の 方法で さがして 下さい。", true);
+    setLocationMessage("この\u200b機械では\u200b現在地を\u200bつかえません。\n他の\u200b方法で\u200bさがして\u200b下さい。", true);
     return;
   }
 
@@ -650,12 +650,12 @@ function handleUseLocation() {
       console.error("位置情報を取得できませんでした:", error); // くわしいことは console にだけ出す
       if (error.code === 1) {
         // 1 = 許可されなかった
-        setLocationMessage("現在地を つかうことが\nゆるされませんでした。\nスマホの 設定で、\n位置情報を 「許可」にして 下さい。\nまたは 他の 方法で さがして 下さい。", true);
+        setLocationMessage("現在地を\u200bつかうことが\nゆるされませんでした。\nスマホの\u200b設定で、\n位置情報を\u200b「許可」にして\u200b下さい。\nまたは\u200b他の\u200b方法で\u200bさがして\u200b下さい。", true);
       } else if (error.code === 3) {
         // 3 = 時間切れ
-        setLocationMessage("現在地を しらべるのに\n時間が かかっています。\nもう一度 ボタンを おすか、\n他の 方法で さがして 下さい。", true);
+        setLocationMessage("現在地を\u200bしらべるのに\n時間が\u200bかかっています。\nもう一度\u200bボタンを\u200bおすか、\n他の\u200b方法で\u200bさがして\u200b下さい。", true);
       } else {
-        setLocationMessage("現在地が わかりませんでした。\n他の 方法で さがして 下さい。", true);
+        setLocationMessage("現在地が\u200bわかりませんでした。\n他の\u200b方法で\u200bさがして\u200b下さい。", true);
       }
     },
     { timeout: 20000, maximumAge: 60000 } // 20秒たっても分からなければ、あきらめる。1分以内に調べた場所は、そのまま使う
@@ -670,11 +670,11 @@ function showNearbyStores(lat, lng) {
   const note = document.getElementById("location-note");
 
   if (result.sorted.length === 0) {
-    setLocationMessage("場所の データが あるお店が まだ ありません。\n下の ボタンから さがしてください。", true);
+    setLocationMessage("場所の\u200bデータが\u200bあるお店が\u200bまだ\u200bありません。\n下の\u200bボタンから\u200bさがしてください。", true);
     return;
   }
 
-  setLocationMessage(["近い順に、 お店が ", result.sorted.length, " 軒 見つかりました。"], false);
+  setLocationMessage(["近い順に、\u200bお店が", result.sorted.length, "軒\u200b見つかりました。"], false);
   renderStoreCards(resultList, result.sorted, result.distances);
 
   // 注意書きをつくる
@@ -682,13 +682,13 @@ function showNearbyStores(lat, lng) {
 
   const missingCount = stores.length - result.sorted.length;
   if (missingCount > 0) {
-    noteText += "場所の データが まだない お店（" + missingCount + " 軒）は、 ここには 出ません。\n" +
-                "「市や町から」 「お店の名前から」では、 すべての お店を さがせます。";
+    noteText += "場所の\u200bデータが\u200bまだない\u200bお店（" + missingCount + "軒）は、\u200bここには\u200b出ません。\n" +
+                "「市や町から」\u200b「お店の名前から」では、\u200bすべての\u200bお店を\u200bさがせます。";
   }
 
   const nearestKm = result.distances[result.sorted[0].id];
   if (nearestKm > 30) {
-    noteText += (noteText ? "\n" : "") + "いちばん 近い お店でも 30 km より 遠いので、 庄内地域から はなれているようです。";
+    noteText += (noteText ? "\n" : "") + "いちばん\u200b近い\u200bお店でも\u200b30km\u200bより\u200b遠いので、\u200b庄内地域から\u200bはなれているようです。";
   }
 
   note.textContent = noteText.trim();

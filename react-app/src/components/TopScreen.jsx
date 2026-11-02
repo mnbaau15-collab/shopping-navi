@@ -16,11 +16,11 @@ function SearchCard({ color, icon, title, onClick }) {
 export default function TopScreen({ goTo }) {
   return (
     <section id="screen-top">
-      <h2 className="visually-hidden" id="top-title" tabIndex={-1}>どうやって さがしますか？</h2>
+      <h2 className="visually-hidden" id="top-title" tabIndex={-1}>どうやって&#8203;さがしますか？</h2>
       <div className="search-cards">
-        <SearchCard color="green" icon="ic-here" title="現在地から さがす" onClick={function () { goTo("location"); }} />
-        <SearchCard color="orange" icon="ic-town" title="市や町から さがす" onClick={function () { goTo("city"); }} />
-        <SearchCard color="blue" icon="ic-name" title="お店の 名前で さがす" onClick={function () { goTo("name"); }} />
+        <SearchCard color="green" icon="ic-here" title="現在地から&#8203;さがす" onClick={function () { goTo("location"); }} />
+        <SearchCard color="orange" icon="ic-town" title="市や町から&#8203;さがす" onClick={function () { goTo("city"); }} />
+        <SearchCard color="blue" icon="ic-name" title="お店の&#8203;名前で&#8203;さがす" onClick={function () { goTo("name"); }} />
       </div>
     </section>
   );

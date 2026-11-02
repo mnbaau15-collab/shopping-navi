@@ -20,7 +20,7 @@ export default function CityScreen({ goTo, onChooseCity }) {
               <IconBadge name="ic-town" />
               <span className="button-text">
                 <span className="button-label">{city}</span>
-                <span className="button-note">お店が <span className="count-number">{counts[city]}</span> 軒</span>
+                <span className="button-note">お店が<span className="count-number">{counts[city]}</span>軒</span>
               </span>
             </button>
           );

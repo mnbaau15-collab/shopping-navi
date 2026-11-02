@@ -47,9 +47,9 @@ test("近い順に並ぶ（位置のないお店は出さない）", function ()
 });
 
 test("距離の書き方", function () {
-  assert.equal(formatDistance(0), "約 10 m");
-  assert.equal(formatDistance(0.43), "約 430 m");
-  assert.equal(formatDistance(1.25), "約 1.3 km");
+  assert.equal(formatDistance(0), "約10m");
+  assert.equal(formatDistance(0.43), "約430m");
+  assert.equal(formatDistance(1.25), "約1.3km");
 });
 
 test("リンクの安全確認", function () {

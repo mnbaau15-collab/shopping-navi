@@ -9,14 +9,14 @@ export default function ListScreen({ city, goTo }) {
 
   return (
     <section id="screen-list">
-      <h2 className="section-title" id="list-title" tabIndex={-1}>{city + " の お店"}</h2>
+      <h2 className="section-title" id="list-title" tabIndex={-1}>{city + "の\u200bお店"}</h2>
 
       <StoreCards id="store-list" storeList={cityStores} />
 
       <div className="nav-buttons">
         <button type="button" className="big-button sub-button" onClick={function () { goTo("city"); }}>
           <span className="button-icon" aria-hidden="true">⬅</span>
-          <span className="button-label">市や町を えらびなおす</span>
+          <span className="button-label">市や町を&#8203;えらびなおす</span>
         </button>
         <button type="button" className="big-button sub-button" onClick={function () { goTo("top"); }}>
           <IconBadge name="ic-town" />

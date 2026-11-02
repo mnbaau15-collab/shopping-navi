@@ -152,7 +152,7 @@ const labelOf = function (block) {
   return block.children[0].children[1].children.map(function (c) { return c._text !== undefined ? c._text : c.text; }).join("");
 };
 const order = linkBlocks(api.createStoreCard({ id: "o", name: "順番", city: "酒田市", officialUrl: "https://example.com/", lat: 38.9, lng: 139.8 })).map(labelOf);
-check("ボタンの順番：チラシ → お店のページ → 行き方", order.join("|") === "チラシを さがす|お店の ページを 見る|行き方を 調べる");
+check("ボタンの順番：チラシ → お店のページ → 行き方", order.join("|") === "チラシを\u200bさがす|お店の\u200bページを\u200b見る|行き方を\u200b調べる");
 
 // ---- チラシボタン・お店のページボタン ----
 const sample = api.createStoreCard({ id: "y", name: "テスト", city: "酒田市", officialUrl: "https://example.com/", lat: 38.9, lng: 139.8 });
@@ -174,7 +174,7 @@ check("エリアのページのURL（/prefectures/6）は、お店のページ�
 check("変な文字のURLでも、止まらずに庄内地方のページへ", flyerOf(Object.assign({}, base, { flyerUrl: "%%%" })) === FLYER_AREA);
 const none = api.createStoreCard(Object.assign({}, base, { flyerUrl: null }));
 const noneNotice = none.children.find(function (c) { return c.className === "flyer-none"; });
-check("flyerUrl が null のお店は、チラシボタンの代わりに「こちらでは チラシが 検索されませんでした…」", !!noneNotice && noneNotice.children[1]._text === "こちらでは チラシが 検索できませんでした。\nお店の ページを ご確認ください。" && linkBlocks(none).length === 2);
+check("flyerUrl が null のお店は、チラシボタンの代わりに「こちらでは チラシが 検索されませんでした…」", !!noneNotice && noneNotice.children[1]._text === "こちらでは\u200bチラシが\u200b検索できませんでした。\nお店の\u200bページを\u200bご確認ください。" && linkBlocks(none).length === 2);
 check("案内は、1番目（市や町の次）の位置に出る", none.children.findIndex(function (c) { return c.className === "flyer-none"; }) < none.children.findIndex(function (c) { return c.className === "link-button-block"; }));
 
 // ---- 本物のデータ ----
