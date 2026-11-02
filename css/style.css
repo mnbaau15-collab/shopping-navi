@@ -817,3 +817,18 @@ body[data-theme="name"] .section-title { text-shadow: 0 0.07em 0 #bfe0f7, 0 0.1e
 
 /* 現在地の画面では、上の「最初の画面にもどる」ボタンを出さない（下のボタンでもどれる） */
 body[data-theme="location"] .header-home-button { display: none; }
+
+/* 丸の中の矢印：文字の「›」は機種のフォントで上下にずれるので、文字を隠して、線で描く */
+.search-card-arrow,
+.link-arrow { font-size: 0; }
+.search-card-arrow::before,
+.link-arrow::before {
+  content: "";
+  box-sizing: border-box;
+  width: 0.62rem;
+  height: 0.62rem;
+  border-top: 0.17rem solid currentColor;
+  border-right: 0.17rem solid currentColor;
+  /* 45度回した形の見た目の中心が、丸の中心に来るよう、少し左へ寄せる */
+  transform: translateX(-18%) rotate(45deg);
+}
