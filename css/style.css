@@ -803,3 +803,14 @@ body[data-theme="name"] .section-title { text-shadow: 0 0.07em 0 #bfe0f7, 0 0.1e
   font-weight: 800;
   line-height: 1;
 }
+
+/* 矢印を2倍の大きさに（押せるボタンだと、はっきり分かるように） */
+.search-card-arrow,
+.link-arrow { width: 1.8rem; height: 1.8rem; font-size: 2rem; }
+/* 市や町のボタンの矢印は、文字の長さが違っても位置がそろうよう、右はしに固定する */
+.search-buttons > .big-button { position: relative; padding-right: 1.4rem; }
+.search-buttons > .big-button::after { position: absolute; top: 50%; right: 0.35rem; margin: 0; font-size: 3.2rem; transform: translateY(-50%); }
+
+/* 絵は1色のマーク。色は、置いた場所に合わせる */
+.search-card-icon { color: var(--card-title); }
+.button-icon.icon-badge { color: var(--color-button-bottom); }

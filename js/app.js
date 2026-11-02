@@ -258,6 +258,7 @@ function showNameScreen() {
   document.getElementById("name-message").textContent = "";
   document.getElementById("name-result-list").textContent = "";
   hideNameSuggestions();
+  updateNameSubmitButton();
   showScreen("name");
   // 開いたらすぐ入力できるように、入力欄にカーソルを置く
   document.getElementById("name-input").focus();
@@ -270,7 +271,14 @@ function hideNameSuggestions() {
   const box = document.getElementById("name-suggestions");
   box.textContent = "";
   box.hidden = true;
-  document.getElementById("name-submit").hidden = false;
+}
+
+// 「さがす」ボタンは、文字が入っていて、候補も結果も出ていないときだけ出す
+function updateNameSubmitButton() {
+  const hasText = normalizeText(document.getElementById("name-input").value) !== "";
+  const hasSuggestions = !document.getElementById("name-suggestions").hidden;
+  const hasResults = document.getElementById("name-result-list").children.length > 0;
+  document.getElementById("name-submit").hidden = !hasText || hasSuggestions || hasResults;
 }
 
 function showNameSuggestions() {
@@ -278,15 +286,19 @@ function showNameSuggestions() {
   const box = document.getElementById("name-suggestions");
   box.textContent = "";
 
+  // 文字を入れなおしたら、前にさがした結果は消す
+  document.getElementById("name-message").textContent = "";
+  document.getElementById("name-result-list").textContent = "";
+
   if (normalizeText(query) === "") {
     hideNameSuggestions();
+    updateNameSubmitButton();
     return;
   }
 
   const found = sortByKana(findStoresByName(query)).slice(0, MAX_SUGGESTIONS);
   box.hidden = (found.length === 0);
-  // 候補が出ているときは、「さがす」ボタンを出さない（候補を押せばよいため）
-  document.getElementById("name-submit").hidden = (found.length > 0);
+  updateNameSubmitButton();
 
   found.forEach(function (store) {
     const button = document.createElement("button");
@@ -306,6 +318,7 @@ function chooseSuggestedStore(store) {
   hideNameSuggestions();
   fillCountMessage(document.getElementById("name-message"), ["お店が ", 1, " 軒 見つかりました。"]);
   renderStoreCards(document.getElementById("name-result-list"), [store]);
+  updateNameSubmitButton();
 }
 
 // 「さがす」ボタンを押したときの動き
@@ -321,6 +334,7 @@ function handleNameSearch(event) {
   if (normalizeText(query) === "") {
     message.textContent = "お店の名前を 入れてください。";
     resultList.textContent = "";
+    updateNameSubmitButton();
     return;
   }
 
@@ -332,6 +346,7 @@ function handleNameSearch(event) {
     fillCountMessage(message, ["お店が ", found.length, " 軒 見つかりました。"]);
   }
   renderStoreCards(resultList, found);
+  updateNameSubmitButton();
 }
 
 // ----- お店の名前を、自然な場所で折り返せるようにする -----

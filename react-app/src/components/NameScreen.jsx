@@ -26,6 +26,7 @@ export default function NameScreen({ goTo }) {
   function handleInput(event) {
     setQuery(event.target.value);
     setShowSuggestions(true);
+    setResult(null); // 文字を入れなおしたら、前にさがした結果は消す
   }
 
   // 「さがす」ボタンを押したときの動き
@@ -48,6 +49,8 @@ export default function NameScreen({ goTo }) {
 
   const notFound = Array.isArray(result) && result.length === 0;
   const found = Array.isArray(result) ? result : [];
+  // 「さがす」ボタンは、文字が入っていて、候補も結果も出ていないときだけ出す
+  const showSubmit = normalizeText(query) !== "" && suggestions.length === 0 && found.length === 0;
 
   return (
     <section id="screen-name">
@@ -68,8 +71,7 @@ export default function NameScreen({ goTo }) {
             })}
           </div>
         ) : null}
-        {/* 候補が出ているときは、「さがす」ボタンを出さない（候補を押せばよいため） */}
-        {suggestions.length === 0 ? (
+        {showSubmit ? (
           <button type="submit" className="big-button" id="name-submit">
             <IconBadge name="ic-name" />
             <span className="button-label">さがす</span>

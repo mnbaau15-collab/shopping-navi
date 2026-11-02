@@ -111,6 +111,14 @@ check("候補が出ているときは「さがす」ボタンを出さない", e
 elements["name-input"].value = "ほげ";
 elements["name-input"].listeners.input();
 check("候補がないときは「さがす」ボタンを出す", elements["name-suggestions"].hidden === true && elements["name-submit"].hidden === false);
+search("まっくす");
+check("結果が出ているときは「さがす」ボタンを出さない", elements["name-result-list"].children.length === 4 && elements["name-submit"].hidden === true);
+elements["name-input"].value = "いおん";
+elements["name-input"].listeners.input();
+check("文字を入れなおすと、前の結果と知らせが消える", elements["name-result-list"].children.length === 0 && elements["name-message"]._text === "" && elements["name-suggestions"].hidden === false && elements["name-submit"].hidden === true);
+elements["name-input"].value = "";
+elements["name-input"].listeners.input();
+check("文字が空のときは「さがす」ボタンを出さない", elements["name-submit"].hidden === true && elements["name-suggestions"].hidden === true);
 search("   ");
 check("空→お願い表示", elements["name-message"]._text.includes("入れてください"));
 
