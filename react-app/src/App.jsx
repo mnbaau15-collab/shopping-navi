@@ -54,7 +54,7 @@ export default function App() {
         <div className="header-inner">
           <h1 className="app-title"><span className="title-sub">かんたん</span><br />お買い物<br />ナビ</h1>
           <button type="button" className="header-home-button" onClick={function () { setScreen("top"); }}>
-            <span aria-hidden="true">⬅</span> 最初の 画面に もどる
+            <span aria-hidden="true">⬅</span> 最初の画面にもどる
           </button>
           <p className="app-lead">近くのお店を、<br />かんたんに さがせます。</p>
         </div>

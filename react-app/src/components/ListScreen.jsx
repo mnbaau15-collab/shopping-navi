@@ -20,7 +20,7 @@ export default function ListScreen({ city, goTo }) {
         </button>
         <button type="button" className="big-button sub-button" onClick={function () { goTo("top"); }}>
           <IconBadge name="ic-town" />
-          <span className="button-label">最初の 画面に もどる</span>
+          <span className="button-label">最初の画面にもどる</span>
         </button>
       </div>
     </section>

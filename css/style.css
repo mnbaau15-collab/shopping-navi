@@ -814,3 +814,6 @@ body[data-theme="name"] .section-title { text-shadow: 0 0.07em 0 #bfe0f7, 0 0.1e
 /* 絵は1色のマーク。色は、置いた場所に合わせる */
 .search-card-icon { color: var(--card-title); }
 .button-icon.icon-badge { color: var(--color-button-bottom); }
+
+/* 現在地の画面では、上の「最初の画面にもどる」ボタンを出さない（下のボタンでもどれる） */
+body[data-theme="location"] .header-home-button { display: none; }
