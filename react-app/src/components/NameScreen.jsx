@@ -68,10 +68,13 @@ export default function NameScreen({ goTo }) {
             })}
           </div>
         ) : null}
-        <button type="submit" className="big-button">
-          <IconBadge name="ic-name" />
-          <span className="button-label">さがす</span>
-        </button>
+        {/* 候補が出ているときは、「さがす」ボタンを出さない（候補を押せばよいため） */}
+        {suggestions.length === 0 ? (
+          <button type="submit" className="big-button" id="name-submit">
+            <IconBadge name="ic-name" />
+            <span className="button-label">さがす</span>
+          </button>
+        ) : null}
       </form>
 
       <p id="name-message" className="search-message" role="status" aria-live="polite">
@@ -79,15 +82,6 @@ export default function NameScreen({ goTo }) {
         {notFound ? "見つかりませんでした。\n文字を かえて もう一度 どうぞ。" : null}
         {found.length > 0 ? <>お店が <span className="count-number">{found.length}</span> 軒 見つかりました。</> : null}
       </p>
-
-      {notFound ? (
-        <div className="nav-buttons" id="name-other-way">
-          <button type="button" className="big-button" onClick={function () { goTo("city"); }}>
-            <IconBadge name="ic-town" />
-            <span className="button-label">市や町から さがす</span>
-          </button>
-        </div>
-      ) : null}
 
       <StoreCards id="name-result-list" storeList={found} />
 

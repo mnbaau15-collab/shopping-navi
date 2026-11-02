@@ -34,6 +34,7 @@ const AREA = { latMin: 38.5, latMax: 39.2, lngMin: 139.5, lngMax: 140.1 }; // �
 const OLD_DAYS = 180;          // 確認日がこれより古いデータは「再確認」をすすめる
 const LINK_TIMEOUT_MS = 10000; // 1軒あたりの待ち時間
 const LINK_INTERVAL_MS = 1500; // 相手のサーバーに負担をかけないよう、1軒ごとに間をあける
+const OFFICIAL_FLYER_URLS = ["http://www.toichiya.co.jp/sale.html"]; // トクバイではなく、お店の公式のチラシページを使うURL（人が確認して登録）
 const USER_AGENT = "shopping-navi-link-check/1.0 (personal study; one request per URL)";
 
 // ---- data/stores.js を読み込む（中身は「const stores = [...]」なので、関数にして取り出す）----
@@ -80,7 +81,7 @@ function checkData(stores) {
     if (store.flyerUrl !== undefined && store.flyerUrl !== null && typeof store.flyerUrl !== "string") {
       errors.push(label + "：flyerUrl は、URLの文字か null にしてください");
     }
-    if (store.flyerUrl) {
+    if (store.flyerUrl && !OFFICIAL_FLYER_URLS.includes(store.flyerUrl)) {
       let path = "";
       try {
         const parsed = new URL(store.flyerUrl);

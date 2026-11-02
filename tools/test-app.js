@@ -89,7 +89,7 @@ function search(query) {
   elements["name-form"].listeners.submit({ preventDefault: function () {} });
 }
 search("まっくすばりゅ");
-check("まっくすばりゅ→4件", elements["name-result-list"].children.length === 4 && elements["name-other-way"].hidden === true);
+check("まっくすばりゅ→4件", elements["name-result-list"].children.length === 4);
 check("店名検索の結果も 読みがなの あいうえお順（あまるめ → ひがしいずみ → ひらた → ゆざ）", namesOf(elements["name-result-list"]).join("|") === "マックスバリュ余目店|マックスバリュ東泉店|マックスバリュ平田店|マックスバリュゆざエルパ店");
 const hitCount = function (q) { search(q); return elements["name-result-list"].children.length; };
 const hitNames = function (q) { search(q); return elements["name-result-list"].children.map(function (c) { return c.children[0]._text.replace(/\u200b/g, ""); }); };
@@ -104,7 +104,13 @@ check("単語の頭：「ゆざ」→2件（ゆざエルパ店・Aコープ遊�
 check("単語の途中の文字は見つからない：「ッグ」「るぱ」「ざわ」", hitCount("ッグ") === 0 && hitCount("るぱ") === 0 && hitCount("ざわ") === 0);
 search("まっくすばりゅ");
 search("ほげ");
-check("ほげ→0件・別の探し方ボタン表示", elements["name-result-list"].children.length === 0 && elements["name-other-way"].hidden === false);
+check("ほげ→0件・見つかりませんでしたと出る", elements["name-result-list"].children.length === 0 && elements["name-message"]._text.includes("見つかりませんでした"));
+elements["name-input"].value = "まっくす";
+elements["name-input"].listeners.input();
+check("候補が出ているときは「さがす」ボタンを出さない", elements["name-suggestions"].hidden === false && elements["name-submit"].hidden === true);
+elements["name-input"].value = "ほげ";
+elements["name-input"].listeners.input();
+check("候補がないときは「さがす」ボタンを出す", elements["name-suggestions"].hidden === true && elements["name-submit"].hidden === false);
 search("   ");
 check("空→お願い表示", elements["name-message"]._text.includes("入れてください"));
 
@@ -167,14 +173,21 @@ check("案内は、1番目（市や町の次）の位置に出る", none.childre
 const allStores = new Function(fs.readFileSync(path.join(root, "data", "stores.js"), "utf8") + "\nreturn stores;")();
 check("全22軒の flyerUrl が決まっている（URL か null）", allStores.length === 22 && allStores.every(function (s) { return s.flyerUrl === null || typeof s.flyerUrl === "string"; }));
 const nullIds = allStores.filter(function (s) { return s.flyerUrl === null; }).map(function (s) { return s.id; }).sort().join(",");
-check("トクバイに掲載なしの8軒（ト一屋2店・スーパーアオキ・週末びっくり市・いろは蔵パーク・Aコープ余目・Aコープ遊佐・グリーンストア）", nullIds === "sakata-002,sakata-003,sakata-005,sakata-006,sakata-010,shonai-001,yuza-001,yuza-004");
-check("トクバイのお店のページを登録しているのは14軒", allStores.filter(function (s) { return typeof s.flyerUrl === "string"; }).length === 14);
-check("flyerUrl のURLは、すべて https://tokubai.co.jp/チェーン名/店番号 の形", allStores.filter(function (s) { return typeof s.flyerUrl === "string"; }).every(function (s) {
+check("チラシのリンクなしの4軒（スーパーアオキ・Aコープ余目・Aコープ遊佐・グリーンストア）", nullIds === "sakata-005,shonai-001,yuza-001,yuza-004");
+const TOICHIYA_SALE = "http://www.toichiya.co.jp/sale.html";
+const flyerStores = allStores.filter(function (s) { return typeof s.flyerUrl === "string" && s.flyerUrl !== TOICHIYA_SALE; });
+check("ト一屋の3軒は、公式のチラシページへ", ["sakata-002", "sakata-003", "sakata-010"].every(function (id) {
+  const store = allStores.find(function (s) { return s.id === id; });
+  return store.flyerUrl === TOICHIYA_SALE && linkBlocks(api.createStoreCard(store))[0].children[0].href === TOICHIYA_SALE;
+}));
+check("週末びっくり市は、トクバイの店舗ページ（店番号 172445）", allStores.find(function (s) { return s.id === "sakata-006"; }).flyerUrl === "https://tokubai.co.jp/週末びっくり市/172445");
+check("トクバイのお店のページを登録しているのは15軒", flyerStores.length === 15);
+check("トクバイの flyerUrl は、すべて https://tokubai.co.jp/チェーン名/店番号 の形", flyerStores.every(function (s) {
   const u = new URL(s.flyerUrl);
   return u.protocol === "https:" && u.hostname === "tokubai.co.jp" && /^\/(?!prefectures|areas|leaflets|search)[^/]+\/\d+\/?$/.test(decodeURIComponent(u.pathname));
 }));
 check("イオン酒田南店は、トクバイの店舗ページ（店番号 12598）", allStores.find(function (s) { return s.id === "sakata-001"; }).flyerUrl === "https://tokubai.co.jp/イオン/12598");
-check("同じ店番号のURLが重複していない", new Set(allStores.filter(function (s) { return s.flyerUrl; }).map(function (s) { return s.flyerUrl.replace("Aコープ", "A"); })).size === allStores.filter(function (s) { return s.flyerUrl; }).length);
+check("同じ店番号のURLが重複していない", new Set(flyerStores.map(function (s) { return s.flyerUrl.replace("Aコープ", "A"); })).size === flyerStores.length);
 
 const noUrl = api.createStoreCard({ id: "z", name: "URLなし", city: "酒田市", officialUrl: "javascript:alert(1)", lat: 38.9, lng: 139.8 });
 check("URLが安全でないお店は、お店のページボタンを出さない", linkBlocks(noUrl).length === 2);

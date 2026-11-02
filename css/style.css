@@ -772,3 +772,34 @@ body[data-theme="name"] .section-title { text-shadow: 0 0.07em 0 #bfe0f7, 0 0.1e
   font-size: min(0.9rem, 5vw);
 }
 #button-use-location .button-label { white-space: nowrap; font-size: min(0.95rem, 5.4vw); }
+
+/* ===========================================
+   お店のカードの3つのボタン：何のボタンか、色・大きな絵・矢印で はっきり分かるようにする
+   =========================================== */
+/* ボタンごとの色（白い文字が 4.5:1 以上で読める濃さ。探し方の色には左右されない） */
+.store-card a.link-flyer { --color-button-top: #d32f2f; --color-button-bottom: #a81c1c; --color-main-pressed: #7a1212; }
+.store-card a.link-shop-page { --color-button-top: #2f6fd0; --color-button-bottom: #1d4ed8; --color-main-pressed: #1e3a8a; }
+.store-card a.link-route { --color-button-top: #237a31; --color-button-bottom: #1b6e2a; --color-main-pressed: #14531e; }
+
+.store-card a.big-button { min-height: 4.2rem; padding: 0.4rem 0.35rem 0.4rem 0.4rem; }
+
+/* 絵を大きく */
+.store-card .button-icon.icon-badge { flex: none; width: 2.7rem; height: 2.7rem; padding: 0.1rem; }
+.store-card .button-icon.icon-badge svg { width: 100%; height: 100%; }
+
+/* 右はしの丸い矢印 */
+.link-arrow {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-left: auto;
+  border-radius: 50%;
+  background-color: #ffffff;
+  color: var(--color-main-pressed);
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1;
+}

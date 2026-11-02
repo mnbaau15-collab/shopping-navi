@@ -6,7 +6,7 @@ import { breakableName, createRouteUrl, formatDistance, getFlyerUrl, hasPosition
 function LinkButton({ icon, label, url, note }) {
   return (
     <div className="link-button-block">
-      <a className="big-button" href={url} target="_blank" rel="noopener noreferrer">
+      <a className={"big-button " + icon.replace("ic-", "link-")} href={url} target="_blank" rel="noopener noreferrer">
         <IconBadge name={icon} />
         <span className="button-label">
           {/* 「チラシ」「お店」「行き方」だけ、大きな太い文字にする */}
@@ -17,6 +17,8 @@ function LinkButton({ icon, label, url, note }) {
             return part;
           })}
         </span>
+        {/* 右はしの丸い矢印（押せるボタンだと分かるように） */}
+        <span className="link-arrow" aria-hidden="true">›</span>
       </a>
       {/* ボタンの下の説明は、店ごとの特別な説明があるときだけ出す */}
       {note ? <p className="store-link-note">{note}</p> : null}

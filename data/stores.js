@@ -10,6 +10,7 @@
 //   ・null と書く … トクバイに掲載がないお店。ボタンの代わりに「トクバイに チラシが ありません」と出る
 //   ・書かない … まだ調べていないお店。庄内地方のページが開く
 //   チラシ1枚ごとのURL（/leaflets/番号）は、すぐ古くなるので、書きません
+//   ト一屋は、トクバイではなく、公式のチラシページ（http://www.toichiya.co.jp/sale.html）を書きます
 // ※ URLは、人が目で確認して手作業で登録します（自動で集めません）
 // ===========================================
 const stores = [
@@ -35,7 +36,7 @@ const stores = [
     city: "酒田市",
     lat: 38.9025119107743,
     lng: 139.85140536100081,
-    flyerUrl: null,
+    flyerUrl: "http://www.toichiya.co.jp/sale.html",
     officialUrl: "http://www.toichiya.co.jp/shop/mizuhodori.html"
   },
   {
@@ -45,7 +46,7 @@ const stores = [
     city: "酒田市",
     lat: 38.92336092827425,
     lng: 139.84748000702987,
-    flyerUrl: null,
+    flyerUrl: "http://www.toichiya.co.jp/sale.html",
     officialUrl: "http://www.toichiya.co.jp/shop/ekihigashi.html"
   },
   {
@@ -79,7 +80,7 @@ const stores = [
     city: "酒田市",
     lat: 38.88922746190737,
     lng: 139.85278933743416,
-    flyerUrl: null,
+    flyerUrl: "https://tokubai.co.jp/週末びっくり市/172445",
     officialUrl: "https://nogawa-bikkuriichi.com/", // 本社のページ（ご本人が確認ずみ：これで合っている）
     officialNote: "本社の ページが 新しく ひらきます" // 「お店の ページを 見る」ボタンの下に出す説明（書いたお店だけ）
   },
@@ -132,7 +133,7 @@ const stores = [
     city: "酒田市",
     lat: 38.91059623670809,
     lng: 139.83995610396858,
-    flyerUrl: null,
+    flyerUrl: "http://www.toichiya.co.jp/sale.html",
     officialUrl: "http://www.toichiya.co.jp/shop/irohagura.html"
   },
   {

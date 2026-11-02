@@ -57,5 +57,6 @@ test("リンクの安全確認", function () {
   assert.equal(isSafeUrl("javascript:alert(1)"), false);
   assert.equal(getFlyerUrl({ flyerUrl: "https://tokubai.co.jp/イオン/12598" }), "https://tokubai.co.jp/イオン/12598");
   assert.match(getFlyerUrl({ flyerUrl: "https://example.com/" }), /areas\/96/);   // まちがった形は、庄内地方のページへ
+  assert.equal(getFlyerUrl({ flyerUrl: "http://www.toichiya.co.jp/sale.html" }), "http://www.toichiya.co.jp/sale.html");
   assert.equal(createRouteUrl({ lat: 38.9, lng: 139.8 }), "https://www.google.com/maps/dir/?api=1&destination=38.9,139.8");
 });

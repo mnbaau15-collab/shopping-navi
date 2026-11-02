@@ -11,6 +11,9 @@ const CITY_ORDER = ["酒田市", "三川町", "庄内町", "遊佐町"];
 // ※ リンクを開くだけ。このアプリから、トクバイへ自動でアクセスすることはしません
 const FLYER_AREA_URL = "https://tokubai.co.jp/prefectures/6/areas/96/leaflet";
 
+// トクバイではなく、お店の公式ページのチラシを使うお店のURL（人が確認して登録したものだけ）
+const OFFICIAL_FLYER_URLS = ["http://www.toichiya.co.jp/sale.html"];
+
 // ----- お店を「あいうえお順」に並べる（読みがなで比べる）-----
 // Intl.Collator("ja") は、日本語の辞書の順番（あ→い→う…、濁点は「か」のあとに「が」）で比べる道具
 const kanaCollator = new Intl.Collator("ja");
@@ -253,7 +256,6 @@ function findStoresByName(query) {
 function showNameScreen() {
   document.getElementById("name-input").value = "";
   document.getElementById("name-message").textContent = "";
-  document.getElementById("name-other-way").hidden = true;
   document.getElementById("name-result-list").textContent = "";
   hideNameSuggestions();
   showScreen("name");
@@ -268,6 +270,7 @@ function hideNameSuggestions() {
   const box = document.getElementById("name-suggestions");
   box.textContent = "";
   box.hidden = true;
+  document.getElementById("name-submit").hidden = false;
 }
 
 function showNameSuggestions() {
@@ -276,12 +279,14 @@ function showNameSuggestions() {
   box.textContent = "";
 
   if (normalizeText(query) === "") {
-    box.hidden = true;
+    hideNameSuggestions();
     return;
   }
 
   const found = sortByKana(findStoresByName(query)).slice(0, MAX_SUGGESTIONS);
   box.hidden = (found.length === 0);
+  // 候補が出ているときは、「さがす」ボタンを出さない（候補を押せばよいため）
+  document.getElementById("name-submit").hidden = (found.length > 0);
 
   found.forEach(function (store) {
     const button = document.createElement("button");
@@ -299,7 +304,6 @@ function showNameSuggestions() {
 function chooseSuggestedStore(store) {
   document.getElementById("name-input").value = store.name;
   hideNameSuggestions();
-  document.getElementById("name-other-way").hidden = true;
   fillCountMessage(document.getElementById("name-message"), ["お店が ", 1, " 軒 見つかりました。"]);
   renderStoreCards(document.getElementById("name-result-list"), [store]);
 }
@@ -311,13 +315,11 @@ function handleNameSearch(event) {
 
   const query = document.getElementById("name-input").value;
   const message = document.getElementById("name-message");
-  const otherWay = document.getElementById("name-other-way");
   const resultList = document.getElementById("name-result-list");
 
   // 何も入っていないとき
   if (normalizeText(query) === "") {
     message.textContent = "お店の名前を 入れてください。";
-    otherWay.hidden = true;
     resultList.textContent = "";
     return;
   }
@@ -326,10 +328,8 @@ function handleNameSearch(event) {
 
   if (found.length === 0) {
     message.textContent = "見つかりませんでした。\n文字を かえて もう一度 どうぞ。";
-    otherWay.hidden = false;
   } else {
     fillCountMessage(message, ["お店が ", found.length, " 軒 見つかりました。"]);
-    otherWay.hidden = true;
   }
   renderStoreCards(resultList, found);
 }
@@ -438,6 +438,9 @@ function createNoFlyerNotice() {
 // store.flyerUrl は「そのお店のトクバイのページ」（https://tokubai.co.jp/チェーン名/店番号 の形）。
 // このページは、チラシが替わっても URL が変わらない。だから、チラシ1枚ごとのURL（/leaflets/番号）は、登録しない
 function getFlyerLink(store) {
+  if (OFFICIAL_FLYER_URLS.includes(store.flyerUrl)) {
+    return { url: store.flyerUrl, note: "お店の チラシの ページが 新しく ひらきます" };
+  }
   if (isTokubaiStoreUrl(store.flyerUrl)) {
     return { url: store.flyerUrl, note: "トクバイの お店の ページが 新しく ひらきます" };
   }
@@ -465,7 +468,7 @@ function createLinkButton(symbolId, labelText, url, noteText, extraNote) {
   wrapper.className = "link-button-block";
 
   const link = document.createElement("a");
-  link.className = "big-button";
+  link.className = "big-button " + symbolId.replace("ic-", "link-");   // ボタンごとの色（CSS の .link-flyer など）
   link.href = url;
   link.target = "_blank";                // 新しいタブで開く
   link.rel = "noopener noreferrer";      // 安全のためのおまじない
@@ -487,8 +490,15 @@ function createLinkButton(symbolId, labelText, url, noteText, extraNote) {
     }
   });
 
+  // 右はしの丸い矢印（押せるボタンだと分かるように）
+  const arrow = document.createElement("span");
+  arrow.className = "link-arrow";
+  arrow.setAttribute("aria-hidden", "true");
+  arrow.textContent = "›";
+
   link.appendChild(icon);
   link.appendChild(label);
+  link.appendChild(arrow);
   wrapper.appendChild(link);
 
   // ボタンの下の説明文は、ふつうは出さない（noteText は使わない）
@@ -681,7 +691,6 @@ document.getElementById("back-to-top-from-location").addEventListener("click", f
 });
 document.getElementById("name-form").addEventListener("submit", handleNameSearch);
 document.getElementById("name-input").addEventListener("input", showNameSuggestions);
-document.getElementById("name-to-city").addEventListener("click", showCityScreen);
 document.getElementById("back-to-top-from-name").addEventListener("click", function () {
   showScreen("top");
 });

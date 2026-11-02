@@ -7,6 +7,9 @@ export const CITY_ORDER = ["酒田市", "三川町", "庄内町", "遊佐町"];
 // ※ リンクを開くだけ。このアプリから、トクバイへ自動でアクセスすることはしない
 const FLYER_AREA_URL = "https://tokubai.co.jp/prefectures/6/areas/96/leaflet";
 
+// トクバイではなく、お店の公式ページのチラシを使うお店のURL（人が確認して登録したものだけ）
+const OFFICIAL_FLYER_URLS = ["http://www.toichiya.co.jp/sale.html"];
+
 // ----- あいうえお順に並べる（読みがなで比べる）-----
 const kanaCollator = new Intl.Collator("ja");
 
@@ -132,9 +135,12 @@ function isTokubaiStoreUrl(url) {
   }
 }
 
-// 「チラシを さがす」の行き先：お店のトクバイのページ。登録がなければ、庄内地方のページ
+// 「チラシを さがす」の行き先：お店の公式のチラシページか、トクバイのページ。登録がなければ、庄内地方のページ
 export function getFlyerUrl(store) {
-  return isTokubaiStoreUrl(store.flyerUrl) ? store.flyerUrl : FLYER_AREA_URL;
+  if (OFFICIAL_FLYER_URLS.includes(store.flyerUrl) || isTokubaiStoreUrl(store.flyerUrl)) {
+    return store.flyerUrl;
+  }
+  return FLYER_AREA_URL;
 }
 
 // URLが http:// か https:// で始まるものかを調べる（まちがったデータで、おかしなリンクを作らないため）
