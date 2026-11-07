@@ -8,8 +8,8 @@ import NameScreen from "./components/NameScreen.jsx";
 import LocationScreen from "./components/LocationScreen.jsx";
 import coverImage from "../../images/cover.jpg";
 
-// 画面ごとの色（緑・オレンジ・青）。お店の一覧は、市や町の画面と同じ色
-const THEMES = { city: "city", list: "city", name: "name", location: "location" };
+// 色を変える画面だけの名札（現在地＝緑、名前＝青）。ほかの画面は、いつものオレンジ（CSS の :root）
+const THEMES = { name: "name", location: "location" };
 
 export default function App() {
   const [screen, setScreen] = useState("top");   // いまの画面

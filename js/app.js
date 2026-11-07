@@ -41,11 +41,11 @@ function showScreen(name) {
     screens[key].hidden = (key !== name);
   });
 
-  // 探し方ごとの色（緑・オレンジ・青）。お店の一覧は、直前の探し方の色のまま
-  if (name === "top") {
-    document.body.removeAttribute("data-theme");
-  } else if (name !== "list") {
+  // 色を変えるのは、現在地（緑）と名前（青）の画面だけ。ほかの画面は、いつものオレンジ（CSS の :root）
+  if (name === "location" || name === "name") {
     document.body.setAttribute("data-theme", name);
+  } else {
+    document.body.removeAttribute("data-theme");
   }
 
   // 表紙のときだけ、大きな名前とイラストを出す（CSS が body の is-top を見て切りかえる）
